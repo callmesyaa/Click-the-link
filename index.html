@@ -3,33 +3,81 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Happy Birthday!</title>
+  <title>Spesial Buat Kamu!</title>
   <style>
     body {
+      margin: 0;
+      padding: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom right, #fceff9, #e0f7fa);
+      background: linear-gradient(to bottom right, #a7c5eb, #d5def5);
+      overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      margin: 0;
     }
+
+    .love {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      transform: rotate(45deg);
+      animation: floatUp 6s infinite ease-in;
+      opacity: 0.6;
+    }
+
+    .love::before, .love::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      border-radius: 50%;
+    }
+
+    .love::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .love::after {
+      left: -10px;
+      top: 0;
+    }
+
+    @keyframes floatUp {
+      0% {
+        bottom: -50px;
+        transform: translateX(0) rotate(45deg);
+      }
+      100% {
+        bottom: 110%;
+        transform: translateX(-50px) rotate(45deg);
+      }
+    }
+
     .container {
       text-align: center;
     }
+
     button {
       padding: 15px 30px;
       font-size: 1.2em;
       border: none;
-      border-radius: 8px;
-      background-color: #ffb3c6;
-      color: #fff;
+      border-radius: 10px;
+      background-color: #ff85b3;
+      color: white;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: 0.3s ease;
+      z-index: 2;
+      position: relative;
     }
+
     button:hover {
-      background-color: #ff94b8;
+      background-color: #ff5e9c;
     }
+
     .popup {
       display: none;
       position: fixed;
@@ -37,72 +85,115 @@
       left: 50%;
       transform: translate(-50%, -50%);
       background: white;
-      border-radius: 15px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
       padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
       max-width: 90%;
-      width: 400px;
-      z-index: 10;
-      text-align: left;
+      width: 450px;
+      z-index: 100;
     }
+
     .popup h2 {
       margin-top: 0;
-      color: #c2185b;
+      color: #d81b60;
     }
+
     .popup img {
-      max-width: 100%;
-      border-radius: 10px;
+      width: 100%;
+      border-radius: 12px;
       margin: 10px 0;
     }
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.3);
-      display: none;
-      z-index: 5;
+
+    .popup p {
+      text-align: left;
+      white-space: pre-line;
     }
+
     .close-btn {
       margin-top: 20px;
-      padding: 8px 15px;
-      background: #c2185b;
+      padding: 10px 20px;
+      background-color: #d81b60;
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 99;
     }
   </style>
 </head>
 <body>
 
+<!-- Heart decorations -->
+<div class="love" style="left:10%; animation-delay: 0s;"></div>
+<div class="love" style="left:30%; animation-delay: 2s;"></div>
+<div class="love" style="left:50%; animation-delay: 1s;"></div>
+<div class="love" style="left:70%; animation-delay: 3s;"></div>
+<div class="love" style="left:90%; animation-delay: 4s;"></div>
+
 <div class="container">
-  <button onclick="showPopup()">Klik di sini!</button>
+  <button onclick="showNextPopup()">Klik di sini dulu yaa!</button>
 </div>
 
 <div class="overlay" id="overlay"></div>
 
-<div class="popup" id="popup">
-  <h2>Selamat Ulang Tahun!</h2>
+<!-- POPUP 1 -->
+<div class="popup" id="popup1">
+  <h2>🎉 Ulang Tahunmu Hari Ini!</h2>
   <img src="https://i.ibb.co/GsStJrT/kucing-meme.jpg" alt="Meme Kucing Lucu">
+  <p>Stop lucu atau aku culik kamu!!</p>
+  <button class="close-btn" onclick="nextPopup(1)">Lanjut</button>
+</div>
+
+<!-- POPUP 2 -->
+<div class="popup" id="popup2">
+  <h2>💌 Pesan buat kamu</h2>
   <p>
-    Utututuuu level up dayy nggaa, aku ga lalii kok, mungkinnn iki sedikitt agakk alay dikit tp gpp lh, yoo sepurane mungkin cuma ikii sg iso tak gawe tapi setidake aku effort lo yo iki...<br><br>
-    Terimakasii untuk apapunn, gk usah ngeroso insecureee teruss yoo gk usah mikir aneh2 tentang aku nehh, awmu ki ws menang cah...<br><br>
-    Gawe kesehatanmu yo dijogo nk sekirane udan ki metu gawe hoodie mbe jas udan mben ra hanyeben muleh e ngko, nk sekirane kesel rausah dipekso.
+Utututuuu level up dayy nggaa, aku ga lalii kok, mungkinnn iki sedikitt agakk alay dikit tp gpp lh, yoo sepurane mungkin cuma ikii sg iso tak gawe tapi setidake aku effort lo yo iki...
+
+Umume ae cah TKJ ddi tk gaweo web coding an, yo mungkin aku gak iso ky cah cah ngonokuii sg ketoe penak nk petukan ngono, sebenere aku yo iso ae ky ngono toh yo aku ws eroh omahmu, tapi aku cahe drg iso ngonoki gk siap aku:(
   </p>
-  <button class="close-btn" onclick="closePopup()">Tutup</button>
+  <button class="close-btn" onclick="nextPopup(2)">Lanjut</button>
+</div>
+
+<!-- POPUP 3 -->
+<div class="popup" id="popup3">
+  <h2>💖 Penutup</h2>
+  <p>
+Terimakasii untuk apapunn, gk usah ngeroso insecureee teruss yoo gk usah mikir aneh2 tentang aku nehh, awmu ki ws menang cah awmu ki gk olehh bersaing ambe siapapunn nk awmu mikir aku cahe gampang seneng bocahh iyo tak akoni tp bocah e yo awmu...
+
+Wong awmu meneng ae aku yo ws kecintaan ikiii opo neh awmu polah, dadi aku ki smpe ra sempat menikmati keindahan lianee mergoo aku gk isoo ki ngelirik lianee ddi gk ush mikir aneh2 nehh yoo...
+
+Gawe kesehatanmu yo dijogo, Luv uu!!
+  </p>
+  <button class="close-btn" onclick="closeAll()">Tutup</button>
 </div>
 
 <script>
-  function showPopup() {
-    document.getElementById('popup').style.display = 'block';
-    document.getElementById('overlay').style.display = 'block';
+  function showNextPopup() {
+    document.getElementById("overlay").style.display = "block";
+    document.getElementById("popup1").style.display = "block";
   }
 
-  function closePopup() {
-    document.getElementById('popup').style.display = 'none';
-    document.getElementById('overlay').style.display = 'none';
+  function nextPopup(current) {
+    document.getElementById(`popup${current}`).style.display = "none";
+    const next = current + 1;
+    const nextPopup = document.getElementById(`popup${next}`);
+    if (nextPopup) {
+      nextPopup.style.display = "block";
+    }
+  }
+
+  function closeAll() {
+    document.getElementById("overlay").style.display = "none";
+    const popups = document.querySelectorAll(".popup");
+    popups.forEach(p => p.style.display = "none");
   }
 </script>
 
