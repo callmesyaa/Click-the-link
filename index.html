@@ -2,200 +2,230 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Special for you!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Selamat Ulang Tahun Arjingga!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom right, #a7c5eb, #d5def5);
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(to bottom right, #a1c4fd, #c2e9fb);
+      overflow-x: hidden;
+      color: #333;
     }
-
-    .ballon {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background: red;
-      transform: rotate(45deg);
-      animation: floatUp 6s infinite ease-in;
-      opacity: 0.6;
-    }
-
-    .ballon::before, .ballon::after {
-      content: "";
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background: purple;
-      border-radius: 50%;
-    }
-
-    .ballon::before {
-      top: -10px;
-      left: 0;
-    }
-
-    .ballon::after {
-      left: -10px;
+    .balloons {
+      position: fixed;
       top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
     }
-
-    @keyframes floatUp {
+    .balloon {
+      position: absolute;
+      bottom: -150px;
+      width: 50px;
+      height: 70px;
+      background-color: pink;
+      border-radius: 50% 50% 45% 45%;
+      animation: float 10s infinite ease-in;
+    }
+    @keyframes float {
       0% {
-        bottom: -50px;
-        transform: translateX(0) rotate(45deg);
+        transform: translateY(0);
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
       }
       100% {
-        bottom: 110%;
-        transform: translateX(-50px) rotate(45deg);
+        transform: translateY(-110vh);
+        opacity: 0;
       }
     }
-
-    .container {
-      text-align: center;
-    }
-
-    button {
-      padding: 15px 30px;
-      font-size: 1.2em;
-      border: none;
-      border-radius: 10px;
-      background-color: #ff85b3;
-      color: cream;
-      cursor: pointer;
-      transition: 0.3s ease;
-      z-index: 2;
-      position: relative;
-    }
-
-    button:hover {
-      background-color: #ff5e9c;
-    }
-
     .popup {
-      display: none;
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: white;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-      max-width: 90%;
-      width: 450px;
-      z-index: 100;
+      background: #fff9f0;
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      z-index: 999;
+      display: none;
     }
-
-    .popup h2 {
-      margin-top: 0;
-      color: #d81b60;
+    .popup.active {
+      display: block;
+      animation: popupFade 0.6s ease forwards;
     }
-
-    .popup img {
-      width: 100%;
-      border-radius: 12px;
-      margin: 10px 0;
+    @keyframes popupFade {
+      0% { opacity: 0; transform: translate(-50%, -40%); }
+      100% { opacity: 1; transform: translate(-50%, -50%); }
     }
-
-    .popup p {
-      text-align: left;
-      white-space: pre-line;
-    }
-
-    .close-btn {
-      margin-top: 20px;
+    .btn {
+      margin-top: 15px;
       padding: 10px 20px;
-      background-color: #d81b60;
-      color: white;
+      background: #ffafcc;
       border: none;
       border-radius: 8px;
+      font-weight: bold;
       cursor: pointer;
     }
-
-    .overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.4);
-      z-index: 99;
+    .scrap-image {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
+  <audio autoplay loop>
+    <source src="https://www.youtube.com/embed/AsSn69czDSU?si=eCOnCHx9gTnq4Rpp" type="audio/mpeg">
+  </audio>
+  <div class="balloons">
+    <div class="balloon" style="left:10%; background:#ffc0cb;"></div>
+    <div class="balloon" style="left:30%; background:#ffb6b9;"></div>
+    <div class="balloon" style="left:50%; background:#ffcccb;"></div>
+    <div class="balloon" style="left:70%; background:#ffcad4;"></div>
+    <div class="balloon" style="left:90%; background:#ffe0e9;"></div>
+  </div>
 
-<!-- Heart decorations -->
-<div class="ballon" style="left:10%; animation-delay: 0s;"></div>
-<div class="ballon" style="left:30%; animation-delay: 2s;"></div>
-<div class="ballon" style="left:50%; animation-delay: 1s;"></div>
-<div class="ballon" style="left:70%; animation-delay: 3s;"></div>
-<div class="ballon" style="left:90%; animation-delay: 4s;"></div>
+  <div id="popup-welcome" class="popup active">
+    <h2>Welcome Arjingga!</h2>
+    <p>Masukkan kata sandi untuk masuk</p>
+    <input type="password" id="password" placeholder="Masukkan sandi...">
+    <br>
+    <button class="btn" onclick="checkPassword()">Masuk</button>
+  </div>
 
-<div class="container">
-  <button onclick="showNextPopup()">Click the Button!</button>
-</div>
+  <div id="popup-calendar" class="popup">
+    <h3>Catatan Kalender Juli</h3>
+    <img src="https://i.pinimg.com/originals/37/1f/ed/371feda909fbebc601ad2e360e74b2bb.jpg" class="scrap-image" alt="Kalender Juli">
+    <p>Lingkari tanggal 25, yaa~</p>
+    <button class="btn" onclick="nextPopup('popup-1')">Next</button>
+  </div>
 
-<div class="overlay" id="overlay"></div>
+  <div id="popup-1" class="popup">
+    <img src="https://i.pinimg.com/originals/e1/f1/21/e1f1215f7725c73ea9b00f2cf68a7a2e.jpg" class="scrap-image" alt="Meme Ulang Tahun">
+    <button class="btn" onclick="nextPopup('popup-2')">Next</button>
+  </div>
 
-<!-- POPUP 1 -->
-<div class="popup" id="popup1">
-  <h2>19 Level Up!!</h2>
-  <img src="https://pin.it/o9sNLzWFK" alt="Meme Lucu">
-  <p>Kamu tiap hari makin lucuu, aku culik boleh gaa</p>
-  <button class="close-btn" onclick="nextPopup(1)">Next</button>
-</div>
+  <!-- Popup selanjutnya seperti notes akan ditambahkan nanti-->
 
-<!-- POPUP 2 -->
-<div class="popup" id="popup2">
-  <h2>💌 Message for you</h2>
-  <p>
-Utututuuu level up dayy nggaa, aku ga lalii kok, mungkinnn iki sedikitt agakk alay dikit tp gpp lh, yoo sepurane mungkin cuma ikii sg iso tak gawe tapi setidake aku effort lo yo iki...
-
-Umume ae cah TKJ ddi tk gaweo web coding an, yo mungkin aku gak iso ky cah cah ngonokuii sg ketoe penak nk petukan ngono, sebenere aku yo iso ae ky ngono toh yo aku ws eroh omahmu, tapi aku cahe drg iso ngonoki gk siap aku:(
-  </p>
-  <button class="close-btn" onclick="nextPopup(2)">Next</button>
-</div>
-
-<!-- POPUP 3 -->
-<div class="popup" id="popup3">
-  <h2>Close Page</h2>
-  <p>
-Terimakasii untuk apapunn, gk usah ngeroso insecureee teruss yoo gk usah mikir aneh2 tentang aku nehh, awmu ki ws menang cah awmu ki gk olehh bersaing ambe siapapunn nk awmu mikir aku cahe gampang seneng bocahh iyo tak akoni tp bocah e yo awmu...
-
-Wong awmu meneng ae aku yo ws kecintaan ikiii opo neh awmu polah, dadi aku ki smpe ra sempat menikmati keindahan lianee mergoo aku gk isoo ki ngelirik lianee ddi gk ush mikir aneh2 nehh yoo...
-
-Gawe kesehatanmu yo dijogo, Luv uu!!
-  </p>
-  <button class="close-btn" onclick="closeAll()">Finish</button>
-</div>
-
-<script>
-  function showNextPopup() {
-    document.getElementById("overlay").style.display = "block";
-    document.getElementById("popup1").style.display = "block";
-  }
-
-  function nextPopup(current) {
-    document.getElementById(`popup${current}`).style.display = "none";
-    const next = current + 1;
-    const nextPopup = document.getElementById(`popup${next}`);
-    if (nextPopup) {
-      nextPopup.style.display = "block";
+  <script>
+    function checkPassword() {
+      const pass = document.getElementById('password').value;
+      if (pass === 'A25072025') {
+        document.getElementById('popup-welcome').classList.remove('active');
+        document.getElementById('popup-calendar').classList.add('active');
+      } else {
+        alert('Sandi salah yaa 😜');
+      }
     }
-  }
 
-  function closeAll() {
-    document.getElementById("overlay").style.display = "none";
-    const popups = document.querySelectorAll(".popup");
-    popups.forEach(p => p.style.display = "none");
-  }
-</script>
-
+    function nextPopup(id) {
+      const activePopup = document.querySelector('.popup.active');
+      if (activePopup) activePopup.classList.remove('active');
+      document.getElementById(id).classList.add('active');
+    }
+  </script>
 </body>
+</html>
+<!DOCTYPE html><html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(to bottom right, #a8c0ff, #f8ffff);
+      overflow-x: hidden;
+    }
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff8ed;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      display: none;
+      z-index: 10;
+      text-align: center;
+      max-width: 90%;
+    }
+    .popup img {
+      max-width: 100%;
+      border-radius: 15px;
+    }
+    .popup p {
+      font-size: 1em;
+      margin-top: 10px;
+    }
+    .show {
+      display: block;
+      animation: fadeIn 1s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .next-btn {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #ffd6d6;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .balloon {
+      position: absolute;
+      bottom: -150px;
+      width: 50px;
+      animation: floatUp 8s infinite ease-in;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-120vh); }
+    }
+    #audio-player {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <audio id="audio-player" autoplay loop>
+    <source src="https://www.youtube.com/embed/AsSn69czDSU?si=eCOnCHx9gTnq4Rpp" type="audio/mp3">
+  </audio>  <!-- Balloons -->  <img src="https://i.pinimg.com/originals/0e/43/98/0e4398e1d9d7be6b45dc531d27fd361f.png" class="balloon" style="left: 10%; animation-delay: 0s;">
+  <img src="https://i.pinimg.com/originals/0e/43/98/0e4398e1d9d7be6b45dc531d27fd361f.png" class="balloon" style="left: 30%; animation-delay: 2s;">
+  <img src="https://i.pinimg.com/originals/0e/43/98/0e4398e1d9d7be6b45dc531d27fd361f.png" class="balloon" style="left: 60%; animation-delay: 4s;">  <!-- Scrapbook Popup 1 -->  <div class="popup show" id="popup1">
+    <img src="https://i.pinimg.com/564x/3a/b3/31/3ab331fbdf8fd5f172b90c3fc2343285.jpg" alt="Gambar pop up 1">
+    <p>Klik next yaa...</p>
+    <button class="next-btn" onclick="nextPopup('popup1', 'popup2')">Next</button>
+  </div>  <!-- Scrapbook Notes Popup 2 -->  <div class="popup" id="popup2">
+    <img src="https://i.pinimg.com/564x/1d/dc/5a/1ddc5a3f02974f4e7a6e449c4e8a9446.jpg" alt="Notes 1">
+    <p>happy b'day my world, can't describe how much i love you. Semoga level up today kamu bisa menggapai apa yang kamu mau, yaa? dan bisa jadi apa aja yang kamu harapkan, be better and just be yourself🤍 apapun keinginan kamu jugaa semoga terkabul yaa, you're shining especially bright todayy💐</p>
+    <button class="next-btn" onclick="nextPopup('popup2', 'popup3')">Next</button>
+  </div>  <!-- Scrapbook Notes Popup 3 (Gambar) -->  <div class="popup" id="popup3">
+    <img src="https://i.pinimg.com/564x/1d/ce/79/1dce79e6e85932c26238843ec3f16558.jpg" alt="Notes Gambar 2">
+    <p>how's ur day nggaa?? Apaa kamu capeee? Kalo kamu capee istirahatt yaa, jangan lupa makan sama banyakin minum air putihh</p>
+    <button class="next-btn" onclick="nextPopup('popup3', 'popup4')">Next</button>
+  </div>  <!-- Popup terusannya bisa ditambah nanti -->  <script>
+    function nextPopup(currentId, nextId) {
+      document.getElementById(currentId).classList.remove('show');
+      document.getElementById(currentId).style.display = 'none';
+      document.getElementById(nextId).classList.add('show');
+    }
+  </script></body>
 </html>
