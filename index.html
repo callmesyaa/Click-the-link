@@ -1,62 +1,141 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Arjingga!</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap');* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Fredoka', cursive;
+}
+
 body {
-    margin: 0;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-    background-image: url('https://pin.it/3YnH1R0E0');
-    background-size: cover;
-    height: 100vh;
-    overflow: hidden;
+  background: url('file-PVLepcfCDfewFVwiooGfZ7') no-repeat center center fixed;
+  background-size: cover;
+  overflow: hidden;
 }
 
 .popup {
-    display: none;
-    background-color: #f5f5dc; /* Cream background */
-    border-radius: 10px;
-    padding: 20px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    z-index: 10;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: #fff3e6;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: 80%;
+  max-width: 400px;
+  text-align: center;
+  transition: all 0.4s ease;
+  z-index: 10;
 }
 
-.notification {
-    display: none;
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #f5f5dc;
-    padding: 10px;
-    border-radius: 5px;
-    z-index: 10;
+.popup.active {
+  transform: translate(-50%, -50%) scale(1);
 }
 
-.background {
-    position: relative;
-    width: 100%;
-    height: 100%;
+.popup h2 {
+  color: #d85f87;
+  font-size: 24px;
+  margin-bottom: 20px;
 }
 
-.gift-box {
-    width: 100px;
-    height: 100px;
-    background-color: #ffcc00;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    border-radius: 10px;
-    margin: 20px auto;
+.popup input {
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  margin-bottom: 15px;
+  width: 80%;
 }
 
-.notes {
-    display: none;
-    position: relative;
-    width: 300px;
-    height: 400px;
-    overflow: hidden;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+.popup button {
+  padding: 10px 20px;
+  background-color: #d85f87;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
 }
+
+#calendar {
+  display: none;
+  width: 300px;
+  margin: 50px auto;
+  background: #fff3e6;
+  padding: 20px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+#calendar img {
+  width: 100%;
+  border-radius: 15px;
+}
+
+.balloons {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.balloon {
+  width: 50px;
+  height: 70px;
+  background: pink;
+  border-radius: 50% 50% 50% 50%;
+  position: absolute;
+  animation: float 6s ease-in-out infinite;
+  opacity: 0.8;
+}
+
+@keyframes float {
+  0% { transform: translateY(100vh); }
+  100% { transform: translateY(-10vh); }
+}
+
+  </style>
+</head>
+<body>  <!-- Background balloon animation -->  <div class="balloons">
+    <div class="balloon" style="left: 20%; background: #ffd1dc;"></div>
+    <div class="balloon" style="left: 40%; background: #f9c6d1;"></div>
+    <div class="balloon" style="left: 60%; background: #ffb3c6;"></div>
+    <div class="balloon" style="left: 80%; background: #ffaacc;"></div>
+  </div>  <!-- Welcome popup -->  <div class="popup active" id="passwordPopup">
+    <h2>Welcome Arjingga!</h2>
+    <input type="password" id="passwordInput" placeholder="Enter Password">
+    <br>
+    <button onclick="checkPassword()">Enter</button>
+  </div>  <!-- Calendar popup -->  <div id="calendar">
+    <h2>Juli 2025</h2>
+    <img src="https://i.pinimg.com/originals/d7/3b/cc/d73bcccd7271b9c0037467427d87fc9e.jpg" alt="Calendar">
+    <br><br>
+    <button onclick="goToPopup1()">Next</button>
+  </div>  <!-- Music -->  <audio autoplay loop>
+    <source src="https://youtu.be/AsSn69czDSU?si=eCOnCHx9gTnq4Rpp" type="audio/mpeg">
+  </audio>  <script>
+    function checkPassword() {
+      const input = document.getElementById('passwordInput').value;
+      if (input === "A25072025") {
+        document.getElementById('passwordPopup').classList.remove('active');
+        document.getElementById('calendar').style.display = 'block';
+      } else {
+        alert("Password kamu salah!");
+      }
+    }
+
+    function goToPopup1() {
+      window.location.href = "popup1.html"; // akan dibuat setelah ini
+    }
+  </script></body>
+</html>
