@@ -1,419 +1,226 @@
-<!DOCTYPE html>
-<html lang="id">
+<!DOCTYPE html><html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Happy Birthday Scrapbook</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap');
-  html, body {
-    margin:0; padding:0; height:100%;
-    font-family: 'Comic Neue', cursive;
-    overflow: hidden;
-    background: url('https://i.pinimg.com/originals/c1/0a/04/c10a04e5689ab0fae75a5ff30455f70c.jpg') no-repeat center center fixed;
-    background-size: cover;
-  }
+  <meta charset="UTF-8">
+  <title>Birthday Scrapbook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Pacifico', cursive;
+      background: url('https://i.pinimg.com/originals/0d/f2/55/0df255a9bc6c98df44ec9d5304aaf8f0.jpg') no-repeat center center fixed;
+      background-size: cover;
+      overflow: hidden;
+    }#balloons {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
 
-  /* Balloon styles */
-  .balloon {
-    position: fixed;
-    bottom: -150px;
-    width: 40px;
-    height: 60px;
-    background-color: rgba(255, 192, 203, 0.8);
-    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-    animation-name: floatUp;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-  }
-  .balloon::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 18px;
-    width: 4px;
-    height: 12px;
-    background: #d46c79;
-    border-radius: 2px;
-  }
-  @keyframes floatUp {
-    0% { transform: translateY(0) translateX(0); opacity: 1;}
-    100% { transform: translateY(-110vh) translateX(20px); opacity: 0;}
-  }
+.balloon {
+  position: absolute;
+  bottom: -150px;
+  width: 50px;
+  height: 70px;
+  background-color: rgba(255, 192, 203, 0.7);
+  border-radius: 50%;
+  animation: floatUp 10s linear infinite;
+}
 
-  /* Pop-up general */
-  .popup {
-    position: fixed;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff8e1; /* cream */
-    border-radius: 20px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-    padding: 25px 30px;
-    max-width: 400px;
-    text-align: center;
-    z-index: 1000;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.6s ease;
-  }
-  .popup.active {
+@keyframes floatUp {
+  0% {
+    transform: translateY(0);
     opacity: 1;
-    pointer-events: auto;
   }
+  100% {
+    transform: translateY(-1200px);
+    opacity: 0;
+  }
+}
 
-  .popup img {
-    max-width: 100%;
-    border-radius: 15px;
-    margin-bottom: 15px;
-  }
+#welcomeScreen {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
-  button, input[type="password"] {
-    font-family: 'Comic Neue', cursive;
-    font-size: 16px;
-    padding: 10px 18px;
-    border: none;
-    border-radius: 10px;
-    background-color: #ff87ab;
-    color: white;
-    cursor: pointer;
-    margin-top: 15px;
-    box-shadow: 0 3px 6px rgba(255, 135, 171, 0.5);
-    transition: background-color 0.3s ease;
-  }
-  button:hover {
-    background-color: #ff5e82;
-  }
-  input[type="password"] {
-    width: 80%;
-    margin-top: 10px;
-    outline: none;
-  }
+#welcomeScreen input {
+  padding: 10px;
+  font-size: 16px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
 
-  /* Calendar popup */
-  .calendar {
-    font-family: 'Comic Neue', cursive;
-    background-color: #fff8e1;
-    border-radius: 20px;
-    padding: 20px;
-    user-select: none;
-  }
-  .calendar h2 {
-    margin-bottom: 10px;
-  }
-  .calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 40px);
-    grid-gap: 5px;
-    justify-content: center;
-  }
-  .calendar-day {
-    width: 40px; height: 40px;
-    line-height: 40px;
-    text-align: center;
-    border-radius: 8px;
-    cursor: default;
-    background: #ffe9d6;
-    font-weight: 700;
-    color: #b86e4b;
-  }
-  .calendar-day.active {
-    border: 3px solid #ff87ab;
-    background-color: #fff0f5;
-    color: #d94f76;
-  }
+#calendarPopup {
+  display: none;
+  position: fixed;
+  z-index: 9;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fffbe6;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
 
-  /* Notes popup */
-  .notes-container {
-    position: relative;
-    width: 320px;
-    height: 400px;
-    perspective: 1200px;
-    margin: 0 auto;
-  }
-  .note-page {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: #fff8e1;
-    border-radius: 20px;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-    padding: 20px;
-    box-sizing: border-box;
-    transform-style: preserve-3d;
-    cursor: pointer;
-    user-select: none;
-    transition: transform 0.8s ease;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-  }
-  .note-page img {
-    max-width: 80%;
-    margin-bottom: 15px;
-    border-radius: 15px;
-  }
-  .note-page.flipped {
-    transform: rotateY(180deg);
-  }
-  .note-text {
-    font-size: 16px;
-    color: #6b4c3b;
-    white-space: pre-line;
-  }
-  /* Back of note style */
-  .note-back {
-    position: absolute;
-    top: 0; left: 0;
-    background: #ffdecc;
-    backface-visibility: hidden;
-    transform: rotateY(180deg);
-    border-radius: 20px;
-    padding: 20px;
-    box-sizing: border-box;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    font-size: 18px;
-    color: #d94f76;
-  }
+#mainContent {
+  display: none;
+  text-align: center;
+}
 
-  /* Next button in note */
-  .note-next-btn {
-    margin-top: auto;
-    background-color: #6b4c3b;
-  }
+.popup {
+  background-color: #fff9f0;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  padding: 20px;
+  max-width: 400px;
+  margin: 30px auto;
+  transition: all 0.6s ease-in-out;
+}
 
-  /* Transition popups */
-  .fadeOutDown {
-    animation: fadeOutDown 0.8s forwards;
-  }
-  @keyframes fadeOutDown {
-    0% {opacity: 1; transform: translateY(0);}
-    100% {opacity: 0; transform: translateY(200px);}
-  }
+.popup img {
+  max-width: 100%;
+  border-radius: 10px;
+}
 
-</style>
+.note-page {
+  display: none;
+  transition: transform 0.6s;
+}
+
+.note-page.active {
+  display: block;
+  transform: rotateY(0);
+}
+
+iframe {
+  position: absolute;
+  left: -9999px;
+}
+
+  </style>
 </head>
 <body>
-
-<!-- Background balloon container -->
-<div id="balloon-container"></div>
-
-<!-- Popups -->
-<div id="popup-password" class="popup active">
-  <h2>Welcome Arjingga!</h2>
-  <p>Masukkan kata sandi untuk masuk:</p>
-  <input type="password" id="password-input" placeholder="Ketik kata sandi..." autofocus />
-  <br />
-  <button id="password-submit">Submit</button>
-  <p id="password-error" style="color:#d94f76; margin-top:10px; display:none;">Kata sandi salah, coba lagi ya!</p>
+  <div id="balloons"></div>  <div id="welcomeScreen">
+    <h1>Welcome Arjingga!</h1>
+    <p>Masukkan kata sandi untuk melanjutkan</p>
+    <input type="password" id="passwordInput" placeholder="Password">
+    <button onclick="checkPassword()">Masuk</button>
+  </div>  <div id="calendarPopup">
+    <h2>Juli 2025</h2>
+    <img src="https://i.pinimg.com/originals/83/62/df/8362dfd6f185c7a7ee661eb5ff9b1cc5.jpg" width="300">
+    <p><strong>✅ Tanggal 25</strong></p>
+  </div>  <div id="mainContent">
+    <div class="popup" id="popup1">
+      <img src="https://i.pinimg.com/736x/62/b4/5b/62b45b3d4b48f3f1e917132b09e74a9c.jpg" alt="popup1">
+      <button onclick="nextPopup(2)">Next</button>
+    </div><div class="popup" id="popup2" style="display:none">
+  <img src="https://i.pinimg.com/736x/5a/b2/8c/5ab28c52e0621b5e71876c2fefafc34b.jpg" alt="Gift Box">
+  <p><strong>Click untuk buka notes 🎁</strong></p>
+  <button onclick="showNotePage(1)">Buka Notes</button>
 </div>
 
-<div id="popup-calendar" class="popup">
-  <div class="calendar">
-    <h2>Kalender Aesthetic Juli 2025</h2>
-    <div class="calendar-grid" id="calendar-grid">
-      <!-- Days will be generated by JS -->
-    </div>
-    <button id="calendar-next">Next</button>
+<div class="popup" id="notes" style="display:none">
+  <div class="note-page active" id="note1">
+    <p>Happy b'day my world... 💐</p>
+    <button onclick="showNotePage(2)">Next</button>
+  </div>
+  <div class="note-page" id="note2">
+    <img src="https://i.pinimg.com/736x/ba/95/37/ba95375b69a3138c98ee6352b2c23a44.jpg">
+    <button onclick="showNotePage(3)">Next</button>
+  </div>
+  <div class="note-page" id="note3">
+    <p>How's ur day ngga? Jangan lupa istirahat yaa 💧</p>
+    <button onclick="showNotePage(4)">Next</button>
+  </div>
+  <div class="note-page" id="note4">
+    <p>Mungkin kamu bosen dengan kata 'semangat'... 🫶</p>
+    <button onclick="showNotePage(5)">Next</button>
+  </div>
+  <div class="note-page" id="note5">
+    <p>Kamu jangan mikir aneh aneh yaa 😒 kamu itu pemenang!</p>
+    <button onclick="showNotePage(6)">Next</button>
+  </div>
+  <div class="note-page" id="note6">
+    <img src="https://i.pinimg.com/736x/10/87/c3/1087c3e21aeeb4c7d237dfe8a585f98a.jpg">
+    <button onclick="showNotePage(7)">Next</button>
+  </div>
+  <div class="note-page" id="note7">
+    <img src="https://i.pinimg.com/736x/b6/01/ff/b601ff2b04c6dbf4aaed0e75d3728ff2.jpg">
+    <button onclick="showNotePage(8)">Next</button>
+  </div>
+  <div class="note-page" id="note8">
+    <img src="https://i.pinimg.com/736x/71/86/f5/7186f5c8e97b4096e59d7c645de3c03e.jpg">
+    <button onclick="showNotePage(9)">Next</button>
+  </div>
+  <div class="note-page" id="note9">
+    <img src="https://i.pinimg.com/736x/f6/4e/6a/f64e6a8a8b6a29c6f79309fddc64d716.jpg">
+    <button onclick="endNotes()">Tutup Notes</button>
   </div>
 </div>
 
-<div id="popup-image1" class="popup">
-  <img id="image1" src="https://i.pinimg.com/originals/fc/8e/eb/fc8eeb941d667f3bf1eaa481ae4ef6f4.jpg" alt="Image 1" />
-  <button id="image1-next">Next</button>
+<div class="popup" id="finalNote" style="display:none">
+  <p>Nanti abis isya kamu coba keluar rumah yaaa i have something for youuu! &lt;3</p>
 </div>
 
-<div id="popup-gift" class="popup">
-  <img id="gift-box" src="https://i.pinimg.com/originals/69/52/eb/6952ebc9f0d003c782e0bb230ccf3c26.png" alt="Kotak Kado" style="width: 150px; cursor:pointer;" />
-  <p>Klik kotak kado untuk buka notes</p>
-</div>
-
-<div id="popup-notes" class="popup">
-  <div class="notes-container" id="notes-container">
-    <!-- Notes pages inserted by JS -->
-  </div>
-  <button id="notes-close" style="margin-top:20px; background:#ff87ab;">Tutup Notes</button>
-</div>
-
-<div id="popup-notification" class="popup">
-  <h2>Nanti abis isya kamu coba keluar rumah yaaa</h2>
-  <p>i have something for youuu! &lt;3</p>
-  <button id="notification-close">Oke</button>
-</div>
-
-<!-- Audio music -->
-<audio id="bg-music" src="https://www.youtube.com/watch?v=AsSn69czDSU&si=eCOnCHx9gTnq4Rpp" loop></audio>
-
-<script>
-  // For music from YouTube, normal audio src won't work directly from YouTube.
-  // So, instead of audio tag src, we embed youtube iframe muted autoplay with controls hidden.
-  // But as per request, we use the audio element with an mp3 file or embedded player.
-  // For now, let's create iframe embed and autoplay it muted.
-
-  // Remove default audio and create YouTube iframe player
-  document.getElementById('bg-music').remove();
-
-  const ytPlayerDiv = document.createElement('div');
-  ytPlayerDiv.style.position = 'fixed';
-  ytPlayerDiv.style.bottom = '0';
-  ytPlayerDiv.style.right = '0';
-  ytPlayerDiv.style.width = '1px';
-  ytPlayerDiv.style.height = '1px';
-  ytPlayerDiv.style.overflow = 'hidden';
-  ytPlayerDiv.style.zIndex = '0';
-
-  ytPlayerDiv.innerHTML = `<iframe width="1" height="1" src="https://www.youtube.com/embed/AsSn69czDSU?autoplay=1&loop=1&playlist=AsSn69czDSU&controls=0&mute=0" frameborder="0" allow="autoplay" allowfullscreen></iframe>`;
-  document.body.appendChild(ytPlayerDiv);
-
-  // Balloon generator
-  const balloonColors = ['#ff87ab', '#ffc0cb', '#ffb6c1', '#ff6f91', '#ff9a9e'];
-  const balloonContainer = document.getElementById('balloon-container');
-
-  function createBalloon() {
-    const balloon = document.createElement('div');
-    balloon.className = 'balloon';
-    balloon.style.backgroundColor = balloonColors[Math.floor(Math.random() * balloonColors.length)];
-    balloon.style.left = Math.random() * 100 + 'vw';
-    balloon.style.animationDuration = (8 + Math.random() * 7) + 's';
-    balloonContainer.appendChild(balloon);
-    setTimeout(() => balloon.remove(), 15000);
-  }
-  setInterval(createBalloon, 800);
-
-  // Password logic
-  const correctPassword = "A25072025";
-  const passwordInput = document.getElementById('password-input');
-  const passwordSubmit = document.getElementById('password-submit');
-  const passwordError = document.getElementById('password-error');
-  const popupPassword = document.getElementById('popup-password');
-  const popupCalendar = document.getElementById('popup-calendar');
-
-  passwordSubmit.addEventListener('click', () => {
-    const val = passwordInput.value.trim();
-    if(val === correctPassword){
-      passwordError.style.display = 'none';
-      popupPassword.classList.remove('active');
-      setTimeout(() => {
-        popupCalendar.classList.add('active');
-        animateCalendar();
-      }, 600);
-    } else {
-      passwordError.style.display = 'block';
-    }
-  });
-
-  passwordInput.addEventListener('keypress', (e) => {
-    if(e.key === 'Enter'){
-      passwordSubmit.click();
-    }
-  });
-
-  // Calendar generation & highlight July 25
-  const calendarGrid = document.getElementById('calendar-grid');
-  function animateCalendar(){
-    calendarGrid.innerHTML = '';
-    // July 2025 starts on Tuesday (index 2 if Sun=0)
-    const daysInJuly = 31;
-    const startDay = 2;
-
-    // fill blanks before start day
-    for(let i=0;i<startDay;i++){
-      const blank = document.createElement('div');
-      blank.className = 'calendar-day';
-      calendarGrid.appendChild(blank);
-    }
-
-    for(let d=1; d<=daysInJuly; d++){
-      const dayDiv = document.createElement('div');
-      dayDiv.className = 'calendar-day';
-      dayDiv.textContent = d;
-      if(d === 25){
-        dayDiv.classList.add('active');
+  </div>  <iframe width="0" height="0" src="https://www.youtube.com/embed/AsSn69czDSU?autoplay=1&loop=1&playlist=AsSn69czDSU" frameborder="0" allow="autoplay"></iframe>  <script>
+    function createBalloons(num) {
+      for (let i = 0; i < num; i++) {
+        let balloon = document.createElement('div');
+        balloon.className = 'balloon';
+        balloon.style.left = Math.random() * 100 + 'vw';
+        balloon.style.animationDuration = (5 + Math.random() * 5) + 's';
+        balloon.style.backgroundColor = 'hsl(' + Math.random() * 360 + ', 70%, 80%)';
+        document.getElementById('balloons').appendChild(balloon);
       }
-      calendarGrid.appendChild(dayDiv);
     }
-  }
 
-  // Calendar next button
-  const calendarNext = document.getElementById('calendar-next');
-  const popupImage1 = document.getElementById('popup-image1');
-  calendarNext.addEventListener('click', () => {
-    popupCalendar.classList.remove('active');
-    setTimeout(() => {
-      popupImage1.classList.add('active');
-    }, 600);
-  });
+    createBalloons(40);
 
-  // Popup image 1 next
-  const image1Next = document.getElementById('image1-next');
-  const popupGift = document.getElementById('popup-gift');
-  image1Next.addEventListener('click', () => {
-    popupImage1.classList.remove('active');
-    setTimeout(() => {
-      popupGift.classList.add('active');
-    }, 600);
-  });
-
-  // Gift box click -> show notes popup
-  const giftBox = document.getElementById('gift-box');
-  const popupNotes = document.getElementById('popup-notes');
-  const popupNotification = document.getElementById('popup-notification');
-
-  giftBox.addEventListener('click', () => {
-    popupGift.classList.remove('active');
-    setTimeout(() => {
-      popupNotes.classList.add('active');
-      currentNoteIndex = 0;
-      renderNote(currentNoteIndex);
-    }, 600);
-  });
-
-  // Notes data
-  const notesData = [
-    {type:'text', content:`happy b'day my world, can't describe how much i love you.\nSemoga level up today kamu bisa menggapai apa yang kamu mau, yaa? dan bisa jadi apa aja yang kamu harapkan, be better and just be yourself🤍\napapun keinginan kamu jugaa semoga terkabul yaa, you're shining especially bright todayy💐`, decorations: ['❤️','🪐']},
-    {type:'image', src:'https://i.pinimg.com/originals/1d/ce/jy/1dcejy.jpg'},
-    {type:'text', content:"how's ur day nggaa?? Apaa kamu capeee? Kalo kamu capee istirahatt yaa, jangan lupa makan sama banyakin minum air putihh"},
-    {type:'text', content:"Mungkinn kamu bosen dengan kata 'semangat' jadii berjuang terus yaa sampai kamu bisa mendapatkan apa yang kamu inginkan, jangan lupa bersyukur jugaa dan selalu sempatin buat apresiasi diri kamu karena sudah selalu berjuang untuk lebih baik kalo kamu capee butuh tempat ceritaa ada akuu jangan dipendem sendirii yaa?"},
-    {type:'text', content:"kamuu juga jangan berpikiran aneh aneh lagii yaa? Jangan ngambekan, Jangan cuek cuek nanti cepet tua😒 kamuu gabolee bersaing sama siapapun karnaaa mau gimanapun kamuu pemenangnya gaada orang lama, orang baru atau masalalu!!"},
-    {type:'image', src:'https://i.pinimg.com/originals/cp/fp/neecpfpnee.jpg'},
-    {type:'image', src:'https://i.pinimg.com/originals/2k/gw/tf82kgwtf8.jpg'},
-    {type:'image', src:'https://i.pinimg.com/originals/5s/yc/kxv5syckxv.jpg'},
-    {type:'image', src:'https://i.pinimg.com/originals/5m/pq/be05mpqbe0t.jpg'},
-  ];
-
-  let currentNoteIndex = 0;
-  const notesContainer = document.getElementById('notes-container');
-
-  function renderNote(index){
-    notesContainer.innerHTML = '';
-    if(index < 0 || index >= notesData.length) return;
-
-    const data = notesData[index];
-
-    const pageFront = document.createElement('div');
-    pageFront.className = 'note-page';
-    pageFront.tabIndex = 0;
-
-    if(data.type === 'text'){
-      let decorHtml = '';
-      if(data.decorations && data.decorations.length){
-        decorHtml = data.decorations.map(d => `<span style="font-size:24px; margin:0 5px;">${d}</span>`).join('');
+    function checkPassword() {
+      const input = document.getElementById("passwordInput").value;
+      if (input === "A25072025") {
+        document.getElementById("welcomeScreen").style.display = "none";
+        document.getElementById("calendarPopup").style.display = "block";
+        setTimeout(() => {
+          document.getElementById("calendarPopup").style.display = "none";
+          document.getElementById("mainContent").style.display = "block";
+        }, 3000);
+      } else {
+        alert("Kata sandi salah yaa, coba lagi!");
       }
-      pageFront.innerHTML = `<div class="note-text">${decorHtml}<br>${data.content.replace(/\n/g,'<br>')}</div>`;
-    } else if(data.type === 'image'){
-      const imgEl = document.createElement('img');
-      imgEl.src = data.src;
-      imgEl.alt = `Note image ${index+1}`;
-      pageFront.appendChild(imgEl);
     }
 
-    // Back side
-    const pageBack = document.createElement('div');
-    pageBack.className = 'note-back';
-    pageBack.textContent = "Klik lagi untuk balik halaman
+    function nextPopup(id) {
+      document.querySelector(`#popup${id - 1}`).style.display = 'none';
+      document.querySelector(`#popup${id}`).style.display = 'block';
+    }
+
+    function showNotePage(page) {
+      let notes = document.querySelectorAll('.note-page');
+      notes.forEach(n => n.classList.remove('active'));
+      let note = document.querySelector(`#note${page}`);
+      if (note) note.classList.add('active');
+      document.getElementById('notes').style.display = 'block';
+    }
+
+    function endNotes() {
+      document.getElementById('notes').style.display = 'none';
+      document.getElementById('finalNote').style.display = 'block';
+    }
+  </script></body>
+</html>
