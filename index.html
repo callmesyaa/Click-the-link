@@ -1,226 +1,62 @@
-<!DOCTYPE html><html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Birthday Scrapbook</title>
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Pacifico', cursive;
-      background: url('https://i.pinimg.com/originals/0d/f2/55/0df255a9bc6c98df44ec9d5304aaf8f0.jpg') no-repeat center center fixed;
-      background-size: cover;
-      overflow: hidden;
-    }#balloons {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  overflow: hidden;
-}
-
-.balloon {
-  position: absolute;
-  bottom: -150px;
-  width: 50px;
-  height: 70px;
-  background-color: rgba(255, 192, 203, 0.7);
-  border-radius: 50%;
-  animation: floatUp 10s linear infinite;
-}
-
-@keyframes floatUp {
-  0% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-1200px);
-    opacity: 0;
-  }
-}
-
-#welcomeScreen {
-  position: fixed;
-  z-index: 10;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(255, 255, 255, 0.9);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-#welcomeScreen input {
-  padding: 10px;
-  font-size: 16px;
-  margin-top: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
-
-#calendarPopup {
-  display: none;
-  position: fixed;
-  z-index: 9;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #fffbe6;
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-}
-
-#mainContent {
-  display: none;
-  text-align: center;
+body {
+    margin: 0;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background-image: url('https://pin.it/3YnH1R0E0');
+    background-size: cover;
+    height: 100vh;
+    overflow: hidden;
 }
 
 .popup {
-  background-color: #fff9f0;
-  border-radius: 15px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  padding: 20px;
-  max-width: 400px;
-  margin: 30px auto;
-  transition: all 0.6s ease-in-out;
+    display: none;
+    background-color: #f5f5dc; /* Cream background */
+    border-radius: 10px;
+    padding: 20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 10;
 }
 
-.popup img {
-  max-width: 100%;
-  border-radius: 10px;
+.notification {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #f5f5dc;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 10;
 }
 
-.note-page {
-  display: none;
-  transition: transform 0.6s;
+.background {
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
-.note-page.active {
-  display: block;
-  transform: rotateY(0);
+.gift-box {
+    width: 100px;
+    height: 100px;
+    background-color: #ffcc00;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 10px;
+    margin: 20px auto;
 }
 
-iframe {
-  position: absolute;
-  left: -9999px;
+.notes {
+    display: none;
+    position: relative;
+    width: 300px;
+    height: 400px;
+    overflow: hidden;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
-
-  </style>
-</head>
-<body>
-  <div id="balloons"></div>  <div id="welcomeScreen">
-    <h1>Welcome Arjingga!</h1>
-    <p>Masukkan kata sandi untuk melanjutkan</p>
-    <input type="password" id="passwordInput" placeholder="Password">
-    <button onclick="checkPassword()">Masuk</button>
-  </div>  <div id="calendarPopup">
-    <h2>Juli 2025</h2>
-    <img src="https://i.pinimg.com/originals/83/62/df/8362dfd6f185c7a7ee661eb5ff9b1cc5.jpg" width="300">
-    <p><strong>✅ Tanggal 25</strong></p>
-  </div>  <div id="mainContent">
-    <div class="popup" id="popup1">
-      <img src="https://i.pinimg.com/736x/62/b4/5b/62b45b3d4b48f3f1e917132b09e74a9c.jpg" alt="popup1">
-      <button onclick="nextPopup(2)">Next</button>
-    </div><div class="popup" id="popup2" style="display:none">
-  <img src="https://i.pinimg.com/736x/5a/b2/8c/5ab28c52e0621b5e71876c2fefafc34b.jpg" alt="Gift Box">
-  <p><strong>Click untuk buka notes 🎁</strong></p>
-  <button onclick="showNotePage(1)">Buka Notes</button>
-</div>
-
-<div class="popup" id="notes" style="display:none">
-  <div class="note-page active" id="note1">
-    <p>Happy b'day my world... 💐</p>
-    <button onclick="showNotePage(2)">Next</button>
-  </div>
-  <div class="note-page" id="note2">
-    <img src="https://i.pinimg.com/736x/ba/95/37/ba95375b69a3138c98ee6352b2c23a44.jpg">
-    <button onclick="showNotePage(3)">Next</button>
-  </div>
-  <div class="note-page" id="note3">
-    <p>How's ur day ngga? Jangan lupa istirahat yaa 💧</p>
-    <button onclick="showNotePage(4)">Next</button>
-  </div>
-  <div class="note-page" id="note4">
-    <p>Mungkin kamu bosen dengan kata 'semangat'... 🫶</p>
-    <button onclick="showNotePage(5)">Next</button>
-  </div>
-  <div class="note-page" id="note5">
-    <p>Kamu jangan mikir aneh aneh yaa 😒 kamu itu pemenang!</p>
-    <button onclick="showNotePage(6)">Next</button>
-  </div>
-  <div class="note-page" id="note6">
-    <img src="https://i.pinimg.com/736x/10/87/c3/1087c3e21aeeb4c7d237dfe8a585f98a.jpg">
-    <button onclick="showNotePage(7)">Next</button>
-  </div>
-  <div class="note-page" id="note7">
-    <img src="https://i.pinimg.com/736x/b6/01/ff/b601ff2b04c6dbf4aaed0e75d3728ff2.jpg">
-    <button onclick="showNotePage(8)">Next</button>
-  </div>
-  <div class="note-page" id="note8">
-    <img src="https://i.pinimg.com/736x/71/86/f5/7186f5c8e97b4096e59d7c645de3c03e.jpg">
-    <button onclick="showNotePage(9)">Next</button>
-  </div>
-  <div class="note-page" id="note9">
-    <img src="https://i.pinimg.com/736x/f6/4e/6a/f64e6a8a8b6a29c6f79309fddc64d716.jpg">
-    <button onclick="endNotes()">Tutup Notes</button>
-  </div>
-</div>
-
-<div class="popup" id="finalNote" style="display:none">
-  <p>Nanti abis isya kamu coba keluar rumah yaaa i have something for youuu! &lt;3</p>
-</div>
-
-  </div>  <iframe width="0" height="0" src="https://www.youtube.com/embed/AsSn69czDSU?autoplay=1&loop=1&playlist=AsSn69czDSU" frameborder="0" allow="autoplay"></iframe>  <script>
-    function createBalloons(num) {
-      for (let i = 0; i < num; i++) {
-        let balloon = document.createElement('div');
-        balloon.className = 'balloon';
-        balloon.style.left = Math.random() * 100 + 'vw';
-        balloon.style.animationDuration = (5 + Math.random() * 5) + 's';
-        balloon.style.backgroundColor = 'hsl(' + Math.random() * 360 + ', 70%, 80%)';
-        document.getElementById('balloons').appendChild(balloon);
-      }
-    }
-
-    createBalloons(40);
-
-    function checkPassword() {
-      const input = document.getElementById("passwordInput").value;
-      if (input === "A25072025") {
-        document.getElementById("welcomeScreen").style.display = "none";
-        document.getElementById("calendarPopup").style.display = "block";
-        setTimeout(() => {
-          document.getElementById("calendarPopup").style.display = "none";
-          document.getElementById("mainContent").style.display = "block";
-        }, 3000);
-      } else {
-        alert("Kata sandi salah yaa, coba lagi!");
-      }
-    }
-
-    function nextPopup(id) {
-      document.querySelector(`#popup${id - 1}`).style.display = 'none';
-      document.querySelector(`#popup${id}`).style.display = 'block';
-    }
-
-    function showNotePage(page) {
-      let notes = document.querySelectorAll('.note-page');
-      notes.forEach(n => n.classList.remove('active'));
-      let note = document.querySelector(`#note${page}`);
-      if (note) note.classList.add('active');
-      document.getElementById('notes').style.display = 'block';
-    }
-
-    function endNotes() {
-      document.getElementById('notes').style.display = 'none';
-      document.getElementById('finalNote').style.display = 'block';
-    }
-  </script></body>
-</html>
