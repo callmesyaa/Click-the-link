@@ -1,141 +1,159 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Happy Birthday Arjingga!</title>
+  <title>Pop-Up 2: Scrapbook Notes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap');* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Fredoka', cursive;
-}
+    body {
+      margin: 0;
+      padding: 0;
+      background-image: url('bg.jpg');
+      background-size: cover;
+      font-family: 'Patrick Hand', cursive;
+      overflow: hidden;
+    }
 
-body {
-  background: url('file-PVLepcfCDfewFVwiooGfZ7') no-repeat center center fixed;
-  background-size: cover;
-  overflow: hidden;
-}
+    .center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
 
-.popup {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  background: #fff3e6;
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  width: 80%;
-  max-width: 400px;
-  text-align: center;
-  transition: all 0.4s ease;
-  z-index: 10;
-}
+    .gift-box {
+      width: 120px;
+      cursor: pointer;
+      transition: transform 0.4s ease;
+    }
 
-.popup.active {
-  transform: translate(-50%, -50%) scale(1);
-}
+    .gift-box:hover {
+      transform: scale(1.1);
+    }
 
-.popup h2 {
-  color: #d85f87;
-  font-size: 24px;
-  margin-bottom: 20px;
-}
+    .note-book {
+      display: none;
+      width: 320px;
+      height: 420px;
+      background: #fff8dc;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      position: relative;
+      overflow: hidden;
+    }
 
-.popup input {
-  padding: 10px;
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
-  margin-bottom: 15px;
-  width: 80%;
-}
+    .note-page {
+      display: none;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      padding: 20px;
+      font-size: 1.1em;
+      line-height: 1.5;
+      text-align: left;
+      transition: opacity 0.6s ease;
+    }
 
-.popup button {
-  padding: 10px 20px;
-  background-color: #d85f87;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
-  cursor: pointer;
-}
+    .note-page img {
+      width: 100%;
+      border-radius: 10px;
+    }
 
-#calendar {
-  display: none;
-  width: 300px;
-  margin: 50px auto;
-  background: #fff3e6;
-  padding: 20px;
-  border-radius: 20px;
-  text-align: center;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-}
+    .nav-buttons {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+    }
 
-#calendar img {
-  width: 100%;
-  border-radius: 15px;
-}
+    .nav-buttons button {
+      font-family: 'Patrick Hand', cursive;
+      padding: 6px 12px;
+      margin: 0 5px;
+      font-size: 1em;
+      border: none;
+      background: #ffd1dc;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
 
-.balloons {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 1;
-}
-
-.balloon {
-  width: 50px;
-  height: 70px;
-  background: pink;
-  border-radius: 50% 50% 50% 50%;
-  position: absolute;
-  animation: float 6s ease-in-out infinite;
-  opacity: 0.8;
-}
-
-@keyframes float {
-  0% { transform: translateY(100vh); }
-  100% { transform: translateY(-10vh); }
-}
-
+    .nav-buttons button:hover {
+      background: #ffb3c6;
+    }
   </style>
 </head>
-<body>  <!-- Background balloon animation -->  <div class="balloons">
-    <div class="balloon" style="left: 20%; background: #ffd1dc;"></div>
-    <div class="balloon" style="left: 40%; background: #f9c6d1;"></div>
-    <div class="balloon" style="left: 60%; background: #ffb3c6;"></div>
-    <div class="balloon" style="left: 80%; background: #ffaacc;"></div>
-  </div>  <!-- Welcome popup -->  <div class="popup active" id="passwordPopup">
-    <h2>Welcome Arjingga!</h2>
-    <input type="password" id="passwordInput" placeholder="Enter Password">
-    <br>
-    <button onclick="checkPassword()">Enter</button>
-  </div>  <!-- Calendar popup -->  <div id="calendar">
-    <h2>Juli 2025</h2>
-    <img src="https://i.pinimg.com/originals/d7/3b/cc/d73bcccd7271b9c0037467427d87fc9e.jpg" alt="Calendar">
-    <br><br>
-    <button onclick="goToPopup1()">Next</button>
-  </div>  <!-- Music -->  <audio autoplay loop>
-    <source src="https://youtu.be/AsSn69czDSU?si=eCOnCHx9gTnq4Rpp" type="audio/mpeg">
-  </audio>  <script>
-    function checkPassword() {
-      const input = document.getElementById('passwordInput').value;
-      if (input === "A25072025") {
-        document.getElementById('passwordPopup').classList.remove('active');
-        document.getElementById('calendar').style.display = 'block';
-      } else {
-        alert("Password kamu salah!");
+<body>
+  <div class="center">
+    <img src="gift.png" alt="Kotak Kado" class="gift-box" onclick="openNotebook()">
+    <div class="note-book" id="noteBook">
+      <div class="note-page" id="page1">
+        <p>happy b'day my world, can't describe how much i love you. Semoga level up today kamu bisa menggapai apa yang kamu mau, yaa? dan bisa jadi apa aja yang kamu harapkan, be better and just be yourself🤍 apapun keinginan kamu jugaa semoga terkabul yaa, you're shining especially bright todayy💐</p>
+      </div>
+      <div class="note-page" id="page2">
+        <img src="lembar2.jpg" alt="Gambar Lembar 2">
+      </div>
+      <div class="note-page" id="page3">
+        <p>how's ur day nggaa?? Apaa kamu capeee? Kalo kamu capee istirahatt yaa, jangan lupa makan sama banyakin minum air putihh</p>
+      </div>
+      <div class="note-page" id="page4">
+        <p>Mungkinn kamu bosen dengan kata 'semangat' jadii berjuang terus yaa sampai kamu bisa mendapatkan apa yang kamu inginkan, jangan lupa bersyukur jugaa dan selalu sempatin buat apresiasi diri kamu karena sudah selalu berjuang untuk lebih baik kalo kamu capee butuh tempat ceritaa ada akuu jangan dipendem sendirii yaa?</p>
+      </div>
+      <div class="note-page" id="page5">
+        <p>kamuu juga jangan berpikiran aneh aneh lagii yaa? Jangan ngambekan, Jangan cuek cuek nanti cepet tua😒 kamuu gabolee bersaing sama siapapun karnaaa mau gimanapun kamuu pemenangnya gaada orang lama, orang baru atau masalalu!!</p>
+      </div>
+      <div class="note-page" id="page6">
+        <img src="lembar6.jpg" alt="Gambar Lembar 6">
+      </div>
+      <div class="note-page" id="page7">
+        <img src="lembar7.jpg" alt="Gambar Lembar 7">
+      </div>
+      <div class="note-page" id="page8">
+        <img src="lembar8.jpg" alt="Gambar Lembar 8">
+      </div>
+      <div class="note-page" id="page9">
+        <img src="lembar9.jpg" alt="Gambar Lembar 9">
+      </div>
+
+      <div class="nav-buttons">
+        <button onclick="prevPage()">Sebelumnya</button>
+        <button onclick="nextPage()">Berikutnya</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentPage = 1;
+    const totalPages = 9;
+
+    function openNotebook() {
+      document.querySelector('.gift-box').style.display = 'none';
+      document.getElementById('noteBook').style.display = 'block';
+      showPage(currentPage);
+    }
+
+    function showPage(num) {
+      for (let i = 1; i <= totalPages; i++) {
+        document.getElementById('page' + i).style.display = 'none';
+      }
+      document.getElementById('page' + num).style.display = 'block';
+    }
+
+    function nextPage() {
+      if (currentPage < totalPages) {
+        currentPage++;
+        showPage(currentPage);
       }
     }
 
-    function goToPopup1() {
-      window.location.href = "popup1.html"; // akan dibuat setelah ini
+    function prevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        showPage(currentPage);
+      }
     }
-  </script></body>
+  </script>
+</body>
 </html>
