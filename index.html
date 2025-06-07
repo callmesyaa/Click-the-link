@@ -3,157 +3,179 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pop-Up 2: Scrapbook Notes</title>
-  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+  <title>Halaman Spesial Arjingga</title>
   <style>
+    /* Gaya umum */
     body {
+      font-family: 'Arial', sans-serif;
       margin: 0;
       padding: 0;
-      background-image: url('bg.jpg');
+      background: url('https://i.pinimg.com/originals/8e/2b/ae/8e2bae399d31c7c5584e9df825d40447.jpg') no-repeat center center fixed;
       background-size: cover;
-      font-family: 'Patrick Hand', cursive;
-      overflow: hidden;
+      color: #333;
     }
-
-    .center {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-    }
-
-    .gift-box {
-      width: 120px;
-      cursor: pointer;
-      transition: transform 0.4s ease;
-    }
-
-    .gift-box:hover {
-      transform: scale(1.1);
-    }
-
-    .note-book {
-      display: none;
-      width: 320px;
-      height: 420px;
-      background: #fff8dc;
-      border-radius: 15px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .note-page {
-      display: none;
-      position: absolute;
+    /* Gaya untuk pop-up */
+    .popup-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      padding: 20px;
-      font-size: 1.1em;
-      line-height: 1.5;
-      text-align: left;
-      transition: opacity 0.6s ease;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
     }
-
-    .note-page img {
+    .popup-content {
+      background: #f9f3e3;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      max-width: 90%;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .popup-content img {
       width: 100%;
       border-radius: 10px;
+      margin-bottom: 15px;
     }
-
-    .nav-buttons {
-      position: absolute;
-      bottom: 10px;
-      width: 100%;
-      text-align: center;
-    }
-
-    .nav-buttons button {
-      font-family: 'Patrick Hand', cursive;
-      padding: 6px 12px;
-      margin: 0 5px;
-      font-size: 1em;
+    .popup-content button {
+      background: #ff6f91;
+      color: white;
       border: none;
-      background: #ffd1dc;
-      border-radius: 8px;
+      padding: 10px 20px;
+      border-radius: 5px;
       cursor: pointer;
-      transition: background 0.3s;
+      font-size: 16px;
     }
-
-    .nav-buttons button:hover {
-      background: #ffb3c6;
+    .popup-content button:hover {
+      background: #ff4a6f;
+    }
+    /* Gaya untuk input password */
+    .password-input {
+      margin: 20px 0;
+    }
+    .password-input input {
+      padding: 10px;
+      font-size: 16px;
+      width: 80%;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+    }
+    .password-input button {
+      padding: 10px 20px;
+      background: #ff6f91;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .password-input button:hover {
+      background: #ff4a6f;
     }
   </style>
 </head>
 <body>
-  <div class="center">
-    <img src="gift.png" alt="Kotak Kado" class="gift-box" onclick="openNotebook()">
-    <div class="note-book" id="noteBook">
-      <div class="note-page" id="page1">
-        <p>happy b'day my world, can't describe how much i love you. Semoga level up today kamu bisa menggapai apa yang kamu mau, yaa? dan bisa jadi apa aja yang kamu harapkan, be better and just be yourself🤍 apapun keinginan kamu jugaa semoga terkabul yaa, you're shining especially bright todayy💐</p>
-      </div>
-      <div class="note-page" id="page2">
-        <img src="lembar2.jpg" alt="Gambar Lembar 2">
-      </div>
-      <div class="note-page" id="page3">
-        <p>how's ur day nggaa?? Apaa kamu capeee? Kalo kamu capee istirahatt yaa, jangan lupa makan sama banyakin minum air putihh</p>
-      </div>
-      <div class="note-page" id="page4">
-        <p>Mungkinn kamu bosen dengan kata 'semangat' jadii berjuang terus yaa sampai kamu bisa mendapatkan apa yang kamu inginkan, jangan lupa bersyukur jugaa dan selalu sempatin buat apresiasi diri kamu karena sudah selalu berjuang untuk lebih baik kalo kamu capee butuh tempat ceritaa ada akuu jangan dipendem sendirii yaa?</p>
-      </div>
-      <div class="note-page" id="page5">
-        <p>kamuu juga jangan berpikiran aneh aneh lagii yaa? Jangan ngambekan, Jangan cuek cuek nanti cepet tua😒 kamuu gabolee bersaing sama siapapun karnaaa mau gimanapun kamuu pemenangnya gaada orang lama, orang baru atau masalalu!!</p>
-      </div>
-      <div class="note-page" id="page6">
-        <img src="lembar6.jpg" alt="Gambar Lembar 6">
-      </div>
-      <div class="note-page" id="page7">
-        <img src="lembar7.jpg" alt="Gambar Lembar 7">
-      </div>
-      <div class="note-page" id="page8">
-        <img src="lembar8.jpg" alt="Gambar Lembar 8">
-      </div>
-      <div class="note-page" id="page9">
-        <img src="lembar9.jpg" alt="Gambar Lembar 9">
-      </div>
 
-      <div class="nav-buttons">
-        <button onclick="prevPage()">Sebelumnya</button>
-        <button onclick="nextPage()">Berikutnya</button>
+  <!-- Pop-up untuk password -->
+  <div class="popup-bg" id="passwordPopup">
+    <div class="popup-content">
+      <h2>Selamat datang, Arjingga!</h2>
+      <p>Masukkan kata sandi untuk melanjutkan:</p>
+      <div class="password-input">
+        <input type="password" id="password" placeholder="Masukkan kata sandi">
+        <button onclick="checkPassword()">Masuk</button>
       </div>
     </div>
   </div>
 
+  <!-- Pop-up untuk kalender -->
+  <div class="popup-bg" id="calendarPopup">
+    <div class="popup-content">
+      <h2>Kalender Juli 2025</h2>
+      <p>Lingkari tanggal 25</p>
+      <img src="https://i.pinimg.com/originals/1d/ce/jy/1dcejy.jpg" alt="Kalender Juli 2025">
+      <button onclick="closePopup('calendarPopup')">Lanjutkan</button>
+    </div>
+  </div>
+
+  <!-- Pop-up untuk gambar -->
+  <div class="popup-bg" id="imagePopup">
+    <div class="popup-content">
+      <img src="https://i.pinimg.com/originals/29/ba/1d/29ba1dca32b9ab9ab3b2a3b54873a0a5.jpg" alt="Gambar Spesial">
+      <button onclick="closePopup('imagePopup')">Lanjutkan</button>
+    </div>
+  </div>
+
+  <!-- Pop-up untuk kotak kado -->
+  <div class="popup-bg" id="giftBoxPopup">
+    <div class="popup-content">
+      <h2>Kotak Kado</h2>
+      <p>Klik untuk membuka kotak kado:</p>
+      <button onclick="openGiftBox()">Buka Kotak</button>
+    </div>
+  </div>
+
+  <!-- Pop-up untuk notes -->
+  <div class="popup-bg" id="notesPopup">
+    <div class="popup-content">
+      <h2>Notes Spesial</h2>
+      <p>Selamat ulang tahun, Arjingga!</p>
+      <p>Semoga hari-harimu penuh kebahagiaan dan keberuntungan.</p>
+      <button onclick="closePopup('notesPopup')">Tutup</button>
+    </div>
+  </div>
+
   <script>
-    let currentPage = 1;
-    const totalPages = 9;
-
-    function openNotebook() {
-      document.querySelector('.gift-box').style.display = 'none';
-      document.getElementById('noteBook').style.display = 'block';
-      showPage(currentPage);
+    // Fungsi untuk menampilkan pop-up
+    function showPopup(id) {
+      const popup = document.getElementById(id);
+      popup.style.opacity = '1';
+      popup.style.pointerEvents = 'auto';
+      const content = popup.querySelector('.popup-content');
+      content.style.opacity = '1';
+      content.style.transform = 'translateY(0)';
     }
 
-    function showPage(num) {
-      for (let i = 1; i <= totalPages; i++) {
-        document.getElementById('page' + i).style.display = 'none';
+    // Fungsi untuk menutup pop-up
+    function closePopup(id) {
+      const popup = document.getElementById(id);
+      popup.style.opacity = '0';
+      popup.style.pointerEvents = 'none';
+      const content = popup.querySelector('.popup-content');
+      content.style.opacity = '0';
+      content.style.transform = 'translateY(50px)';
+    }
+
+    // Fungsi untuk memeriksa kata sandi
+    function checkPassword() {
+      const password = document.getElementById('password').value;
+      if (password === 'A25072025') {
+        closePopup('passwordPopup');
+        showPopup('calendarPopup');
+      } else {
+        alert('Kata sandi salah!');
       }
-      document.getElementById('page' + num).style.display = 'block';
     }
 
-    function nextPage() {
-      if (currentPage < totalPages) {
-        currentPage++;
-        showPage(currentPage);
-      }
+    // Fungsi untuk membuka kotak kado
+    function openGiftBox() {
+      closePopup('giftBoxPopup');
+      showPopup('notesPopup');
     }
 
-    function prevPage() {
-      if (currentPage > 1) {
-        currentPage--;
-        showPage(currentPage);
-      }
-    }
+    // Menampilkan pop-up password saat halaman dimuat
+    window.onload = function() {
+      showPopup('passwordPopup');
+    };
   </script>
+
 </body>
 </html>
