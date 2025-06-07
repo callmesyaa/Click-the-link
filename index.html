@@ -1,231 +1,419 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Selamat Ulang Tahun Arjingga!</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Quicksand', sans-serif;
-      background: linear-gradient(to bottom right, #a1c4fd, #c2e9fb);
-      overflow-x: hidden;
-      color: #333;
-    }
-    .balloons {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 0;
-    }
-    .balloon {
-      position: absolute;
-      bottom: -150px;
-      width: 50px;
-      height: 70px;
-      background-color: pink;
-      border-radius: 50% 50% 45% 45%;
-      animation: float 10s infinite ease-in;
-    }
-    @keyframes float {
-      0% {
-        transform: translateY(0);
-        opacity: 0;
-      }
-      50% {
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-110vh);
-        opacity: 0;
-      }
-    }
-    .popup {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #fff9f0;
-      border-radius: 15px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      z-index: 999;
-      display: none;
-    }
-    .popup.active {
-      display: block;
-      animation: popupFade 0.6s ease forwards;
-    }
-    @keyframes popupFade {
-      0% { opacity: 0; transform: translate(-50%, -40%); }
-      100% { opacity: 1; transform: translate(-50%, -50%); }
-    }
-    .btn {
-      margin-top: 15px;
-      padding: 10px 20px;
-      background: #ffafcc;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .scrap-image {
-      max-width: 100%;
-      border-radius: 10px;
-      margin-bottom: 10px;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Happy Birthday Scrapbook</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap');
+  html, body {
+    margin:0; padding:0; height:100%;
+    font-family: 'Comic Neue', cursive;
+    overflow: hidden;
+    background: url('https://i.pinimg.com/originals/c1/0a/04/c10a04e5689ab0fae75a5ff30455f70c.jpg') no-repeat center center fixed;
+    background-size: cover;
+  }
+
+  /* Balloon styles */
+  .balloon {
+    position: fixed;
+    bottom: -150px;
+    width: 40px;
+    height: 60px;
+    background-color: rgba(255, 192, 203, 0.8);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    animation-name: floatUp;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  .balloon::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 18px;
+    width: 4px;
+    height: 12px;
+    background: #d46c79;
+    border-radius: 2px;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(0) translateX(0); opacity: 1;}
+    100% { transform: translateY(-110vh) translateX(20px); opacity: 0;}
+  }
+
+  /* Pop-up general */
+  .popup {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff8e1; /* cream */
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    padding: 25px 30px;
+    max-width: 400px;
+    text-align: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+  }
+  .popup.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .popup img {
+    max-width: 100%;
+    border-radius: 15px;
+    margin-bottom: 15px;
+  }
+
+  button, input[type="password"] {
+    font-family: 'Comic Neue', cursive;
+    font-size: 16px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 10px;
+    background-color: #ff87ab;
+    color: white;
+    cursor: pointer;
+    margin-top: 15px;
+    box-shadow: 0 3px 6px rgba(255, 135, 171, 0.5);
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #ff5e82;
+  }
+  input[type="password"] {
+    width: 80%;
+    margin-top: 10px;
+    outline: none;
+  }
+
+  /* Calendar popup */
+  .calendar {
+    font-family: 'Comic Neue', cursive;
+    background-color: #fff8e1;
+    border-radius: 20px;
+    padding: 20px;
+    user-select: none;
+  }
+  .calendar h2 {
+    margin-bottom: 10px;
+  }
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 40px);
+    grid-gap: 5px;
+    justify-content: center;
+  }
+  .calendar-day {
+    width: 40px; height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 8px;
+    cursor: default;
+    background: #ffe9d6;
+    font-weight: 700;
+    color: #b86e4b;
+  }
+  .calendar-day.active {
+    border: 3px solid #ff87ab;
+    background-color: #fff0f5;
+    color: #d94f76;
+  }
+
+  /* Notes popup */
+  .notes-container {
+    position: relative;
+    width: 320px;
+    height: 400px;
+    perspective: 1200px;
+    margin: 0 auto;
+  }
+  .note-page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #fff8e1;
+    border-radius: 20px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    padding: 20px;
+    box-sizing: border-box;
+    transform-style: preserve-3d;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.8s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .note-page img {
+    max-width: 80%;
+    margin-bottom: 15px;
+    border-radius: 15px;
+  }
+  .note-page.flipped {
+    transform: rotateY(180deg);
+  }
+  .note-text {
+    font-size: 16px;
+    color: #6b4c3b;
+    white-space: pre-line;
+  }
+  /* Back of note style */
+  .note-back {
+    position: absolute;
+    top: 0; left: 0;
+    background: #ffdecc;
+    backface-visibility: hidden;
+    transform: rotateY(180deg);
+    border-radius: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 18px;
+    color: #d94f76;
+  }
+
+  /* Next button in note */
+  .note-next-btn {
+    margin-top: auto;
+    background-color: #6b4c3b;
+  }
+
+  /* Transition popups */
+  .fadeOutDown {
+    animation: fadeOutDown 0.8s forwards;
+  }
+  @keyframes fadeOutDown {
+    0% {opacity: 1; transform: translateY(0);}
+    100% {opacity: 0; transform: translateY(200px);}
+  }
+
+</style>
 </head>
 <body>
-  <audio autoplay loop>
-    <source src="https://www.youtube.com/embed/AsSn69czDSU?si=eCOnCHx9gTnq4Rpp" type="audio/mpeg">
-  </audio>
-  <div class="balloons">
-    <div class="balloon" style="left:10%; background:#ffc0cb;"></div>
-    <div class="balloon" style="left:30%; background:#ffb6b9;"></div>
-    <div class="balloon" style="left:50%; background:#ffcccb;"></div>
-    <div class="balloon" style="left:70%; background:#ffcad4;"></div>
-    <div class="balloon" style="left:90%; background:#ffe0e9;"></div>
+
+<!-- Background balloon container -->
+<div id="balloon-container"></div>
+
+<!-- Popups -->
+<div id="popup-password" class="popup active">
+  <h2>Welcome Arjingga!</h2>
+  <p>Masukkan kata sandi untuk masuk:</p>
+  <input type="password" id="password-input" placeholder="Ketik kata sandi..." autofocus />
+  <br />
+  <button id="password-submit">Submit</button>
+  <p id="password-error" style="color:#d94f76; margin-top:10px; display:none;">Kata sandi salah, coba lagi ya!</p>
+</div>
+
+<div id="popup-calendar" class="popup">
+  <div class="calendar">
+    <h2>Kalender Aesthetic Juli 2025</h2>
+    <div class="calendar-grid" id="calendar-grid">
+      <!-- Days will be generated by JS -->
+    </div>
+    <button id="calendar-next">Next</button>
   </div>
+</div>
 
-  <div id="popup-welcome" class="popup active">
-    <h2>Welcome Arjingga!</h2>
-    <p>Masukkan kata sandi untuk masuk</p>
-    <input type="password" id="password" placeholder="Masukkan sandi...">
-    <br>
-    <button class="btn" onclick="checkPassword()">Masuk</button>
+<div id="popup-image1" class="popup">
+  <img id="image1" src="https://i.pinimg.com/originals/fc/8e/eb/fc8eeb941d667f3bf1eaa481ae4ef6f4.jpg" alt="Image 1" />
+  <button id="image1-next">Next</button>
+</div>
+
+<div id="popup-gift" class="popup">
+  <img id="gift-box" src="https://i.pinimg.com/originals/69/52/eb/6952ebc9f0d003c782e0bb230ccf3c26.png" alt="Kotak Kado" style="width: 150px; cursor:pointer;" />
+  <p>Klik kotak kado untuk buka notes</p>
+</div>
+
+<div id="popup-notes" class="popup">
+  <div class="notes-container" id="notes-container">
+    <!-- Notes pages inserted by JS -->
   </div>
+  <button id="notes-close" style="margin-top:20px; background:#ff87ab;">Tutup Notes</button>
+</div>
 
-  <div id="popup-calendar" class="popup">
-    <h3>Catatan Kalender Juli</h3>
-    <img src="https://i.pinimg.com/originals/37/1f/ed/371feda909fbebc601ad2e360e74b2bb.jpg" class="scrap-image" alt="Kalender Juli">
-    <p>Lingkari tanggal 25, yaa~</p>
-    <button class="btn" onclick="nextPopup('popup-1')">Next</button>
-  </div>
+<div id="popup-notification" class="popup">
+  <h2>Nanti abis isya kamu coba keluar rumah yaaa</h2>
+  <p>i have something for youuu! &lt;3</p>
+  <button id="notification-close">Oke</button>
+</div>
 
-  <div id="popup-1" class="popup">
-    <img src="https://i.pinimg.com/originals/e1/f1/21/e1f1215f7725c73ea9b00f2cf68a7a2e.jpg" class="scrap-image" alt="Meme Ulang Tahun">
-    <button class="btn" onclick="nextPopup('popup-2')">Next</button>
-  </div>
+<!-- Audio music -->
+<audio id="bg-music" src="https://www.youtube.com/watch?v=AsSn69czDSU&si=eCOnCHx9gTnq4Rpp" loop></audio>
 
-  <!-- Popup selanjutnya seperti notes akan ditambahkan nanti-->
+<script>
+  // For music from YouTube, normal audio src won't work directly from YouTube.
+  // So, instead of audio tag src, we embed youtube iframe muted autoplay with controls hidden.
+  // But as per request, we use the audio element with an mp3 file or embedded player.
+  // For now, let's create iframe embed and autoplay it muted.
 
-  <script>
-    function checkPassword() {
-      const pass = document.getElementById('password').value;
-      if (pass === 'A25072025') {
-        document.getElementById('popup-welcome').classList.remove('active');
-        document.getElementById('popup-calendar').classList.add('active');
-      } else {
-        alert('Sandi salah yaa 😜');
+  // Remove default audio and create YouTube iframe player
+  document.getElementById('bg-music').remove();
+
+  const ytPlayerDiv = document.createElement('div');
+  ytPlayerDiv.style.position = 'fixed';
+  ytPlayerDiv.style.bottom = '0';
+  ytPlayerDiv.style.right = '0';
+  ytPlayerDiv.style.width = '1px';
+  ytPlayerDiv.style.height = '1px';
+  ytPlayerDiv.style.overflow = 'hidden';
+  ytPlayerDiv.style.zIndex = '0';
+
+  ytPlayerDiv.innerHTML = `<iframe width="1" height="1" src="https://www.youtube.com/embed/AsSn69czDSU?autoplay=1&loop=1&playlist=AsSn69czDSU&controls=0&mute=0" frameborder="0" allow="autoplay" allowfullscreen></iframe>`;
+  document.body.appendChild(ytPlayerDiv);
+
+  // Balloon generator
+  const balloonColors = ['#ff87ab', '#ffc0cb', '#ffb6c1', '#ff6f91', '#ff9a9e'];
+  const balloonContainer = document.getElementById('balloon-container');
+
+  function createBalloon() {
+    const balloon = document.createElement('div');
+    balloon.className = 'balloon';
+    balloon.style.backgroundColor = balloonColors[Math.floor(Math.random() * balloonColors.length)];
+    balloon.style.left = Math.random() * 100 + 'vw';
+    balloon.style.animationDuration = (8 + Math.random() * 7) + 's';
+    balloonContainer.appendChild(balloon);
+    setTimeout(() => balloon.remove(), 15000);
+  }
+  setInterval(createBalloon, 800);
+
+  // Password logic
+  const correctPassword = "A25072025";
+  const passwordInput = document.getElementById('password-input');
+  const passwordSubmit = document.getElementById('password-submit');
+  const passwordError = document.getElementById('password-error');
+  const popupPassword = document.getElementById('popup-password');
+  const popupCalendar = document.getElementById('popup-calendar');
+
+  passwordSubmit.addEventListener('click', () => {
+    const val = passwordInput.value.trim();
+    if(val === correctPassword){
+      passwordError.style.display = 'none';
+      popupPassword.classList.remove('active');
+      setTimeout(() => {
+        popupCalendar.classList.add('active');
+        animateCalendar();
+      }, 600);
+    } else {
+      passwordError.style.display = 'block';
+    }
+  });
+
+  passwordInput.addEventListener('keypress', (e) => {
+    if(e.key === 'Enter'){
+      passwordSubmit.click();
+    }
+  });
+
+  // Calendar generation & highlight July 25
+  const calendarGrid = document.getElementById('calendar-grid');
+  function animateCalendar(){
+    calendarGrid.innerHTML = '';
+    // July 2025 starts on Tuesday (index 2 if Sun=0)
+    const daysInJuly = 31;
+    const startDay = 2;
+
+    // fill blanks before start day
+    for(let i=0;i<startDay;i++){
+      const blank = document.createElement('div');
+      blank.className = 'calendar-day';
+      calendarGrid.appendChild(blank);
+    }
+
+    for(let d=1; d<=daysInJuly; d++){
+      const dayDiv = document.createElement('div');
+      dayDiv.className = 'calendar-day';
+      dayDiv.textContent = d;
+      if(d === 25){
+        dayDiv.classList.add('active');
       }
+      calendarGrid.appendChild(dayDiv);
+    }
+  }
+
+  // Calendar next button
+  const calendarNext = document.getElementById('calendar-next');
+  const popupImage1 = document.getElementById('popup-image1');
+  calendarNext.addEventListener('click', () => {
+    popupCalendar.classList.remove('active');
+    setTimeout(() => {
+      popupImage1.classList.add('active');
+    }, 600);
+  });
+
+  // Popup image 1 next
+  const image1Next = document.getElementById('image1-next');
+  const popupGift = document.getElementById('popup-gift');
+  image1Next.addEventListener('click', () => {
+    popupImage1.classList.remove('active');
+    setTimeout(() => {
+      popupGift.classList.add('active');
+    }, 600);
+  });
+
+  // Gift box click -> show notes popup
+  const giftBox = document.getElementById('gift-box');
+  const popupNotes = document.getElementById('popup-notes');
+  const popupNotification = document.getElementById('popup-notification');
+
+  giftBox.addEventListener('click', () => {
+    popupGift.classList.remove('active');
+    setTimeout(() => {
+      popupNotes.classList.add('active');
+      currentNoteIndex = 0;
+      renderNote(currentNoteIndex);
+    }, 600);
+  });
+
+  // Notes data
+  const notesData = [
+    {type:'text', content:`happy b'day my world, can't describe how much i love you.\nSemoga level up today kamu bisa menggapai apa yang kamu mau, yaa? dan bisa jadi apa aja yang kamu harapkan, be better and just be yourself🤍\napapun keinginan kamu jugaa semoga terkabul yaa, you're shining especially bright todayy💐`, decorations: ['❤️','🪐']},
+    {type:'image', src:'https://i.pinimg.com/originals/1d/ce/jy/1dcejy.jpg'},
+    {type:'text', content:"how's ur day nggaa?? Apaa kamu capeee? Kalo kamu capee istirahatt yaa, jangan lupa makan sama banyakin minum air putihh"},
+    {type:'text', content:"Mungkinn kamu bosen dengan kata 'semangat' jadii berjuang terus yaa sampai kamu bisa mendapatkan apa yang kamu inginkan, jangan lupa bersyukur jugaa dan selalu sempatin buat apresiasi diri kamu karena sudah selalu berjuang untuk lebih baik kalo kamu capee butuh tempat ceritaa ada akuu jangan dipendem sendirii yaa?"},
+    {type:'text', content:"kamuu juga jangan berpikiran aneh aneh lagii yaa? Jangan ngambekan, Jangan cuek cuek nanti cepet tua😒 kamuu gabolee bersaing sama siapapun karnaaa mau gimanapun kamuu pemenangnya gaada orang lama, orang baru atau masalalu!!"},
+    {type:'image', src:'https://i.pinimg.com/originals/cp/fp/neecpfpnee.jpg'},
+    {type:'image', src:'https://i.pinimg.com/originals/2k/gw/tf82kgwtf8.jpg'},
+    {type:'image', src:'https://i.pinimg.com/originals/5s/yc/kxv5syckxv.jpg'},
+    {type:'image', src:'https://i.pinimg.com/originals/5m/pq/be05mpqbe0t.jpg'},
+  ];
+
+  let currentNoteIndex = 0;
+  const notesContainer = document.getElementById('notes-container');
+
+  function renderNote(index){
+    notesContainer.innerHTML = '';
+    if(index < 0 || index >= notesData.length) return;
+
+    const data = notesData[index];
+
+    const pageFront = document.createElement('div');
+    pageFront.className = 'note-page';
+    pageFront.tabIndex = 0;
+
+    if(data.type === 'text'){
+      let decorHtml = '';
+      if(data.decorations && data.decorations.length){
+        decorHtml = data.decorations.map(d => `<span style="font-size:24px; margin:0 5px;">${d}</span>`).join('');
+      }
+      pageFront.innerHTML = `<div class="note-text">${decorHtml}<br>${data.content.replace(/\n/g,'<br>')}</div>`;
+    } else if(data.type === 'image'){
+      const imgEl = document.createElement('img');
+      imgEl.src = data.src;
+      imgEl.alt = `Note image ${index+1}`;
+      pageFront.appendChild(imgEl);
     }
 
-    function nextPopup(id) {
-      const activePopup = document.querySelector('.popup.active');
-      if (activePopup) activePopup.classList.remove('active');
-      document.getElementById(id).classList.add('active');
-    }
-  </script>
-</body>
-</html>
-<!DOCTYPE html><html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Happy Birthday!</title>
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Quicksand', sans-serif;
-      background: linear-gradient(to bottom right, #a8c0ff, #f8ffff);
-      overflow-x: hidden;
-    }
-    .popup {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #fff8ed;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      display: none;
-      z-index: 10;
-      text-align: center;
-      max-width: 90%;
-    }
-    .popup img {
-      max-width: 100%;
-      border-radius: 15px;
-    }
-    .popup p {
-      font-size: 1em;
-      margin-top: 10px;
-    }
-    .show {
-      display: block;
-      animation: fadeIn 1s ease;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.8); }
-      to { opacity: 1; transform: scale(1); }
-    }
-    .next-btn {
-      margin-top: 15px;
-      padding: 10px 20px;
-      background-color: #ffd6d6;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-    .balloon {
-      position: absolute;
-      bottom: -150px;
-      width: 50px;
-      animation: floatUp 8s infinite ease-in;
-    }
-    @keyframes floatUp {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-120vh); }
-    }
-    #audio-player {
-      display: none;
-    }
-  </style>
-</head>
-<body>
-  <audio id="audio-player" autoplay loop>
-    <source src="https://www.youtube.com/embed/AsSn69czDSU?si=eCOnCHx9gTnq4Rpp" type="audio/mp3">
-  </audio>  <!-- Balloons -->  <img src="https://i.pinimg.com/originals/0e/43/98/0e4398e1d9d7be6b45dc531d27fd361f.png" class="balloon" style="left: 10%; animation-delay: 0s;">
-  <img src="https://i.pinimg.com/originals/0e/43/98/0e4398e1d9d7be6b45dc531d27fd361f.png" class="balloon" style="left: 30%; animation-delay: 2s;">
-  <img src="https://i.pinimg.com/originals/0e/43/98/0e4398e1d9d7be6b45dc531d27fd361f.png" class="balloon" style="left: 60%; animation-delay: 4s;">  <!-- Scrapbook Popup 1 -->  <div class="popup show" id="popup1">
-    <img src="https://i.pinimg.com/564x/3a/b3/31/3ab331fbdf8fd5f172b90c3fc2343285.jpg" alt="Gambar pop up 1">
-    <p>Klik next yaa...</p>
-    <button class="next-btn" onclick="nextPopup('popup1', 'popup2')">Next</button>
-  </div>  <!-- Scrapbook Notes Popup 2 -->  <div class="popup" id="popup2">
-    <img src="https://i.pinimg.com/564x/1d/dc/5a/1ddc5a3f02974f4e7a6e449c4e8a9446.jpg" alt="Notes 1">
-    <p>happy b'day my world, can't describe how much i love you. Semoga level up today kamu bisa menggapai apa yang kamu mau, yaa? dan bisa jadi apa aja yang kamu harapkan, be better and just be yourself🤍 apapun keinginan kamu jugaa semoga terkabul yaa, you're shining especially bright todayy💐</p>
-    <button class="next-btn" onclick="nextPopup('popup2', 'popup3')">Next</button>
-  </div>  <!-- Scrapbook Notes Popup 3 (Gambar) -->  <div class="popup" id="popup3">
-    <img src="https://i.pinimg.com/564x/1d/ce/79/1dce79e6e85932c26238843ec3f16558.jpg" alt="Notes Gambar 2">
-    <p>how's ur day nggaa?? Apaa kamu capeee? Kalo kamu capee istirahatt yaa, jangan lupa makan sama banyakin minum air putihh</p>
-    <button class="next-btn" onclick="nextPopup('popup3', 'popup4')">Next</button>
-  </div>  <!-- Popup terusannya bisa ditambah nanti -->  <script>
-    function nextPopup(currentId, nextId) {
-      document.getElementById(currentId).classList.remove('show');
-      document.getElementById(currentId).style.display = 'none';
-      document.getElementById(nextId).classList.add('show');
-    }
-  </script></body>
-</html>
+    // Back side
+    const pageBack = document.createElement('div');
+    pageBack.className = 'note-back';
+    pageBack.textContent = "Klik lagi untuk balik halaman
