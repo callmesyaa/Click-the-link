@@ -1,292 +1,160 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Happy Birthday Arjingga!</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <!-- Background music -->
-  <audio autoplay loop>
-    <source src="audio/sempurna.mp3" type="audio/mp3">
-  </audio>
-
-  <!-- Welcome Password Popup -->
-  <div id="passwordPopup" class="popup">
-    <h2>Welcome Arjingga! 🎉</h2>
-    <input type="password" id="passwordInput" placeholder="Enter Password">
-    <button onclick="checkPassword()">Submit</button>
-    <p id="wrongPassMsg"></p>
-  </div>
-
-  <!-- Content Container (hidden until password is correct) -->
-  <div id="contentContainer" style="display: none;">
-
-    <!-- Kalender aesthetic dengan tanggal 25 dilingkari -->
-    <div class="popup" id="calendarPopup">
-      <img src="images/calendar-july.png" alt="Kalender Juli" class="calendar-img">
-    </div>
-
-    <!-- Pop-up 1: Gambar Pertama -->
-    <div class="popup" id="popup1">
-      <img src="images/popup1.png" alt="Popup 1">
-      <button onclick="nextPopup('popup1', 'giftBox')">Next</button>
-    </div>
-
-    <!-- Pop-up 2: Kotak Kado yang bisa dibuka -->
-    <div class="popup" id="giftBox" style="display: none;">
-      <img src="images/giftbox.png" alt="Gift Box" id="giftBoxImg" onclick="openGift()">
-    </div>
-
-    <!-- Notes muncul setelah gift box dibuka -->
-    <div id="notesContainer" style="display: none;">
-      <div class="note-page" id="note1">
-        <p>happy b'day my world, can't describe how much i love you. Semoga level up today kamu bisa menggapai apa yang kamu mau, yaa? dan bisa jadi apa aja yang kamu harapkan, be better and just be yourself🤍 apapun keinginan kamu jugaa semoga terkabul yaa, you're shining especially bright todayy💐</p>
-      </div>
-      <div class="note-page" id="note2">
-        <img src="images/lembar2.jpg" alt="Lembar 2">
-      </div>
-      <div class="note-page" id="note3">
-        <p>how's ur day nggaa?? Apaa kamu capeee? Kalo kamu capee istirahatt yaa, jangan lupa makan sama banyakin minum air putihh</p>
-      </div>
-      <div class="note-page" id="note4">
-        <p>Mungkinn kamu bosen dengan kata 'semangat' jadii berjuang terus yaa sampai kamu bisa mendapatkan apa yang kamu inginkan, jangan lupa bersyukur jugaa dan selalu sempatin buat apresiasi diri kamu karena sudah selalu berjuang untuk lebih baik kalo kamu capee butuh tempat ceritaa ada akuu jangan dipendem sendirii yaa?</p>
-      </div>
-      <div class="note-page" id="note5">
-        <p>kamuu juga jangan berpikiran aneh aneh lagii yaa? Jangan ngambekan, Jangan cuek cuek nanti cepet tua😒 kamuu gabolee bersaing sama siapapun karnaaa mau gimanapun kamuu pemenangnya gaada orang lama, orang baru atau masalalu!!</p>
-      </div>
-      <div class="note-page" id="note6">
-        <img src="images/lembar6.jpg" alt="Lembar 6">
-      </div>
-      <div class="note-page" id="note7">
-        <img src="images/lembar7.jpg" alt="Lembar 7">
-      </div>
-      <div class="note-page" id="note8">
-        <img src="images/lembar8.jpg" alt="Lembar 8">
-      </div>
-      <div class="note-page" id="note9">
-        <img src="images/lembar9.jpg" alt="Lembar 9">
-      </div>
-      <button onclick="closeNotes()">Tutup Notes</button>
-    </div>
-
-    <!-- Notifikasi terakhir -->
-    <div class="popup" id="finalNote" style="display: none;">
-      <p>Nanti abis isya kamu coba keluar rumah yaaa i have something for youuu! &lt;3</p>
-    </div>
-
-  </div>
-
-  <script src="script.js"></script>
-</body>
-</html>
-/* ======================
-   Global & Layout Styles
-   ====================== */
-
-body {
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday!</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');* {
   margin: 0;
   padding: 0;
-  font-family: 'Comic Sans MS', cursive, sans-serif;
-  background: url('background.jpg') no-repeat center center fixed;
+  box-sizing: border-box;
+  font-family: 'Indie Flower', cursive;
+}
+
+body {
+  background: url('https://i.pinimg.com/originals/9a/67/32/9a6732504eb8e888bda9d651d81efc98.gif') no-repeat center center fixed;
   background-size: cover;
   overflow: hidden;
 }
 
-.container {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  z-index: 1;
-}
-
-.popup, .calendar-popup, .message-popup, .scrapbook-popup {
-  background: #fff8e7;
-  border-radius: 20px;
-  padding: 20px;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  transform: scale(0);
-  transition: transform 0.5s ease-in-out;
-  z-index: 10;
-}
-
-.popup.active, .calendar-popup.active, .message-popup.active, .scrapbook-popup.active {
-  transform: scale(1);
-}
-
-input[type="password"] {
-  padding: 10px;
-  width: 80%;
-  margin-top: 10px;
-  border: 2px solid #f5cda7;
-  border-radius: 10px;
-  font-size: 16px;
-}
-
-button {
-  padding: 10px 20px;
-  margin-top: 20px;
-  background-color: #ffb3c6;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-button:hover {
-  background-color: #ff6f91;
-}
-
-.balloons {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  z-index: 0;
-}
-
 .balloon {
   position: absolute;
-  width: 50px;
-  height: 70px;
-  background: radial-gradient(circle, #ff69b4, #ff1493);
+  width: 60px;
+  height: 80px;
+  background: pink;
   border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-  animation: float 10s infinite ease-in-out;
-  opacity: 0.7;
+  animation: float 6s ease-in-out infinite;
+  opacity: 0.8;
 }
 
 @keyframes float {
   0% {
-    transform: translateY(100vh) scale(1);
+    transform: translateY(100vh) translateX(0);
+    opacity: 0.8;
   }
   100% {
-    transform: translateY(-100vh) scale(1.2);
-  }
-}
-
-.notes {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.note-page {
-  display: none;
-  background-color: #fff;
-  border-radius: 15px;
-  padding: 15px;
-  margin: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-}
-
-.note-page.active {
-  display: block;
-  animation: flip 0.6s ease-in-out;
-}
-
-@keyframes flip {
-  from {
-    transform: rotateY(90deg);
+    transform: translateY(-100vh) translateX(50px);
     opacity: 0;
   }
-  to {
-    transform: rotateY(0deg);
-    opacity: 1;
-  }
 }
 
-.note-img {
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff9f0;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  text-align: center;
+  display: none;
+  z-index: 10;
+}
+
+.popup.active {
+  display: block;
+  animation: fadeIn 1s ease;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: scale(0.8);}
+  to {opacity: 1; transform: scale(1);}
+}
+
+.calendar {
+  width: 300px;
+  margin: 20px auto;
+}
+
+.calendar table {
   width: 100%;
-  max-height: 300px;
-  object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 10px;
+  border-collapse: collapse;
 }
 
-.message-text {
+.calendar th, .calendar td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.highlight {
+  background-color: #ffd6d6;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+input[type="password"] {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: none;
+  background-color: #ff9a9e;
+  color: white;
   font-size: 16px;
-  color: #5e4b56;
-  line-height: 1.5;
+  border-radius: 10px;
+  cursor: pointer;
 }
-// JavaScript for popups, password validation, transitions, scrapbook, and audio
 
-// PASSWORD VALIDATION
-const passwordPopup = document.getElementById("passwordPopup");
-const passwordInput = document.getElementById("passwordInput");
-const enterBtn = document.getElementById("enterButton");
+  </style>
+</head>
+<body>
+  <audio autoplay loop>
+    <source src="Sempurna (Acoustic Instrumental) (320).mp3" type="audio/mp3" />
+  </audio>  <!-- Balon animasi -->  <div class="balloon" style="left: 10%; animation-delay: 0s;"></div>
+  <div class="balloon" style="left: 30%; animation-delay: 1s;"></div>
+  <div class="balloon" style="left: 50%; animation-delay: 2s;"></div>
+  <div class="balloon" style="left: 70%; animation-delay: 3s;"></div>
+  <div class="balloon" style="left: 90%; animation-delay: 4s;"></div>  <!-- Pop-up Password -->  <div class="popup active" id="passwordPopup">
+    <h2>Welcome Arjingga!</h2>
+    <p>Masukkan kata sandi untuk masuk:</p>
+    <input type="password" id="passwordInput" placeholder="Enter Password" />
+    <br />
+    <button onclick="checkPassword()">Masuk</button>
+  </div>  <!-- Pop-up Kalender -->  <div class="popup" id="calendarPopup">
+    <h2>📅 Juli 2025</h2>
+    <div class="calendar">
+      <table>
+        <tr>
+          <th>Min</th><th>Sen</th><th>Sel</th><th>Rab</th><th>Kam</th><th>Jum</th><th>Sab</th>
+        </tr>
+        <tr>
+          <td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td>
+        </tr>
+        <tr>
+          <td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td>
+        </tr>
+        <tr>
+          <td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td>
+        </tr>
+        <tr>
+          <td>21</td><td>22</td><td>23</td><td>24</td><td class="highlight">25</td><td>26</td><td>27</td>
+        </tr>
+        <tr>
+          <td>28</td><td>29</td><td>30</td><td>31</td><td></td><td></td><td></td>
+        </tr>
+      </table>
+    </div>
+    <button onclick="goToPopup1()">Next</button>
+  </div>  <script>
+    function checkPassword() {
+      const input = document.getElementById('passwordInput').value;
+      if (input === "A25072025") {
+        document.getElementById('passwordPopup').classList.remove('active');
+        document.getElementById('calendarPopup').classList.add('active');
+      } else {
+        alert("Kata sandi salah!");
+      }
+    }
 
-enterBtn.addEventListener("click", () => {
-  if (passwordInput.value === "A25072025") {
-    passwordPopup.classList.add("hide");
-    document.getElementById("calendarPopup").classList.add("show");
-    setTimeout(() => {
-      document.getElementById("popup1").classList.add("show");
-    }, 2000);
-  } else {
-    alert("Password salah, coba lagi ya!");
-  }
-});
-
-// POPUP 1 to NEXT
-const nextBtn1 = document.getElementById("next1");
-nextBtn1.addEventListener("click", () => {
-  document.getElementById("popup1").classList.remove("show");
-  document.getElementById("giftPopup").classList.add("show");
-});
-
-// GIFT BOX INTERACTION
-const giftBox = document.getElementById("giftBox");
-const notePopup = document.getElementById("notePopup");
-
-giftBox.addEventListener("click", () => {
-  document.getElementById("giftPopup").classList.remove("show");
-  notePopup.classList.add("show");
-});
-
-// SCRAPBOOK FLIPPING
-let currentPage = 0;
-const pages = document.querySelectorAll(".note-page");
-const nextNoteBtn = document.getElementById("nextNote");
-
-nextNoteBtn.addEventListener("click", () => {
-  if (currentPage < pages.length - 1) {
-    pages[currentPage].classList.remove("visible");
-    currentPage++;
-    pages[currentPage].classList.add("visible");
-  } else {
-    notePopup.classList.remove("show");
-    document.getElementById("finalPopup").classList.add("show");
-  }
-});
-
-// BALLOONS ANIMATION
-function createBalloon() {
-  const balloon = document.createElement("div");
-  balloon.className = "balloon";
-  balloon.style.left = Math.random() * 100 + "%";
-  document.body.appendChild(balloon);
-
-  setTimeout(() => {
-    balloon.remove();
-  }, 7000);
-}
-setInterval(createBalloon, 800);
-
-// AUDIO BACKGROUND
-window.addEventListener("DOMContentLoaded", () => {
-  const audio = document.getElementById("bgAudio");
-  audio.volume = 0.5;
-  audio.play();
-});
+    function goToPopup1() {
+      window.location.href = "popup1.html";
+    }
+  </script></body>
+</html>
