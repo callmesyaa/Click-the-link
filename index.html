@@ -69,6 +69,23 @@
       0% { transform: translateY(0); }
       100% { transform: translateY(-110vh); }
     }
+
+    /* Tambahan khusus untuk notes */
+    #notePages {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+      font-size: 20px;
+      line-height: 1.6;
+      padding: 20px;
+      max-width: 90%;
+      margin: auto;
+    }
+
+    #notePages.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
   </style>
 </head>
 <body>
@@ -160,13 +177,20 @@
 
     function nextNotePage() {
       const noteBox = document.getElementById("noteText");
-      if (noteStep < notes.length) {
-        noteBox.innerHTML = notes[noteStep];
-        noteStep++;
-      } else {
-        popup2.classList.add("hidden");
-        finalPopup.classList.remove("hidden");
-      }
+      const notePages = document.getElementById("notePages");
+
+      notePages.classList.remove("show"); // Reset animasi
+
+      setTimeout(() => {
+        if (noteStep < notes.length) {
+          noteBox.innerHTML = notes[noteStep];
+          noteStep++;
+          notePages.classList.add("show"); // Tambahkan animasi
+        } else {
+          popup2.classList.add("hidden");
+          finalPopup.classList.remove("hidden");
+        }
+      }, 100);
     }
   </script>
 </body>
