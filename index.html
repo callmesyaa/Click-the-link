@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,86 +13,104 @@
       background: url('background.jpg') no-repeat center center fixed;
       background-size: cover;
       overflow: hidden;
-    }.popup {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #fff5e6;
-  border-radius: 20px;
-  padding: 20px;
-  text-align: center;
-  box-shadow: 0 0 20px rgba(0,0,0,0.2);
-  transition: all 0.5s ease;
-  max-width: 90%;
-  z-index: 100;
-}
+    }
 
-.hidden {
-  display: none;
-}
+    .popup {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff5e6;
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      transition: all 0.5s ease;
+      max-width: 95%;
+      z-index: 100;
+      font-size: 18px;
+    }
 
-input[type="password"] {
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-}
+    .hidden {
+      display: none;
+    }
 
-button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 10px;
-  background-color: #ffd9b3;
-  border: none;
-  cursor: pointer;
-}
+    input[type="password"] {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
 
-img.note-img {
-  max-width: 100%;
-  border-radius: 10px;
-}
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 10px;
+      background-color: #ffd9b3;
+      border: none;
+      cursor: pointer;
+    }
 
-.balloon {
-  position: absolute;
-  bottom: -100px;
-  width: 50px;
-  animation: float 10s infinite;
-}
+    img.note-img {
+      max-width: 100%;
+      max-height: 70vh;
+      border-radius: 10px;
+    }
 
-@keyframes float {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-110vh); }
-}
+    .balloon {
+      position: absolute;
+      bottom: -100px;
+      width: 50px;
+      animation: float 10s infinite;
+    }
 
+    @keyframes float {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-110vh); }
+    }
   </style>
 </head>
-<body>  <!-- Background Music -->  <audio autoplay loop>
+<body>
+  <audio autoplay loop>
     <source src="sempurna.mp3" type="audio/mp3">
-  </audio>  <!-- Welcome Pop-up -->  <div id="welcomePopup" class="popup">
+  </audio>
+
+  <div id="welcomePopup" class="popup">
     <h2>Welcome Arjingga!</h2>
     <p>Masukkan kata sandi:</p>
     <input type="password" id="passwordInput" placeholder="Password...">
     <br>
     <button onclick="checkPassword()">Masuk</button>
-  </div>  <!-- Kalender Pop-up -->  <div id="calendarPopup" class="popup hidden">
+  </div>
+
+  <div id="calendarPopup" class="popup hidden">
     <img src="calendar-july.jpg" alt="Kalender Juli" class="note-img">
     <p>Tanggal 25 udah aku lingkarin~</p>
     <button onclick="nextPopup()">Next</button>
-  </div>  <!-- Pop-up 1 (gambar) -->  <div id="popup1" class="popup hidden">
+  </div>
+
+  <div id="popup1" class="popup hidden">
     <img src="popup1.jpg" alt="Popup 1" class="note-img">
     <button onclick="nextPopup()">Next</button>
-  </div>  <!-- Pop-up 2 (notes) -->  <div id="popup2" class="popup hidden">
+  </div>
+
+  <div id="popup2" class="popup hidden">
     <div id="notePages">
       <p id="noteText">Klik untuk mulai baca catatan 🎁</p>
     </div>
     <button onclick="nextNotePage()">Next Page</button>
-  </div>  <!-- Final Message -->  <div id="finalPopup" class="popup hidden">
+  </div>
+
+  <div id="finalPopup" class="popup hidden">
     <h2>Nanti abis isya kamu coba keluar rumah yaaa<br>i have something for youuu! &lt;3</h2>
-  </div>  <!-- Floating balloons -->  <img class="balloon" src="balloon1.png" style="left: 20%; animation-delay: 0s;">
+  </div>
+
+  <img class="balloon" src="balloon1.png" style="left: 20%; animation-delay: 0s;">
   <img class="balloon" src="balloon2.png" style="left: 40%; animation-delay: 3s;">
-  <img class="balloon" src="balloon3.png" style="left: 60%; animation-delay: 5s;">  <script>
+  <img class="balloon" src="balloon3.png" style="left: 60%; animation-delay: 5s;">
+
+  <script>
     const correctPassword = "A25072025";
     const welcomePopup = document.getElementById("welcomePopup");
     const calendarPopup = document.getElementById("calendarPopup");
@@ -149,5 +168,6 @@ img.note-img {
         finalPopup.classList.remove("hidden");
       }
     }
-  </script></body>
+  </script>
+</body>
 </html>
