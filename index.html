@@ -1,7 +1,8 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Created by Syaa</title>
   <link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">
   <style>
@@ -12,110 +13,117 @@
       background: url('background.jpg') no-repeat center center fixed;
       background-size: cover;
       overflow: hidden;
-    }.popup {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #fff5e6;
-  border-radius: 20px;
-  padding: 30px;
-  text-align: center;
-  box-shadow: 0 0 20px rgba(0,0,0,0.2);
-  transition: all 0.5s ease;
-  max-width: 90%;
-  z-index: 100;
-  font-size: 20px;
-}
-
-.hidden {
-  display: none;
-}
-
-input[type="password"] {
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-}
-
-button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 10px;
-  background-color: #ffd9b3;
-  border: none;
-  cursor: pointer;
-}
-
-img.note-img {
-  max-width: 100%;
-  max-height: 65vh;
-  border-radius: 10px;
-}
-
-.balloon {
-  position: absolute;
-  bottom: -100px;
-  width: 50px;
-  animation: float 10s infinite;
-}
-
-@keyframes float {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-110vh); }
-}
-
-.fade-in {
-  animation: fadeIn 0.8s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-#noteText {
-  font-size: 22px;
-  line-height: 1.6;
-  padding: 10px;
-}
-
+    }
+    .popup {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff5e6;
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      transition: all 0.5s ease;
+      max-width: 90%;
+      z-index: 100;
+      font-size: 20px;
+    }
+    .hidden {
+      display: none;
+    }
+    input[type="password"] {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 10px;
+      background-color: #ffd9b3;
+      border: none;
+      cursor: pointer;
+    }
+    img.note-img {
+      max-width: 100%;
+      max-height: 65vh;
+      border-radius: 10px;
+    }
+    .balloon {
+      position: absolute;
+      bottom: -100px;
+      width: 50px;
+      animation: float 10s infinite;
+    }
+    @keyframes float {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-110vh); }
+    }
+    .fade-in {
+      animation: fadeIn 0.8s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    #noteText {
+      font-size: 22px;
+      line-height: 1.6;
+      padding: 10px;
+    }
   </style>
 </head>
 <body>
-  <audio autoplay loop>
+  <!-- Musik, akan diputar setelah tombol 'Masuk' diklik -->
+  <audio id="bgMusic" loop>
     <source src="sempurna.mp3" type="audio/mp3">
-  </audio>  <div id="welcomePopup" class="popup">
+  </audio>
+
+  <div id="welcomePopup" class="popup">
     <h2>Welcome Arjingga!</h2>
     <p>Masukkan kata sandi:</p>
     <input type="password" id="passwordInput" placeholder="Password...">
     <br>
     <button onclick="checkPassword()">Masuk</button>
-  </div>  <div id="calendarPopup" class="popup hidden">
+  </div>
+
+  <div id="calendarPopup" class="popup hidden">
     <img src="calendar-july.jpg" alt="Kalender Juli" class="note-img">
     <p>This your dayy!</p>
     <button onclick="nextPopup()">Next</button>
-  </div>  <div id="popup1" class="popup hidden">
+  </div>
+
+  <div id="popup1" class="popup hidden">
     <img src="popup1.jpg" alt="Popup 1" class="note-img">
     <button onclick="nextPopup()">Next</button>
-  </div>  <div id="popup2" class="popup hidden">
+  </div>
+
+  <div id="popup2" class="popup hidden">
     <div id="notePages">
       <p id="noteText" class="fade-in">Klik untuk mulai baca catatan 🎁</p>
     </div>
     <button onclick="nextNotePage()">Next Page</button>
-  </div>  <div id="finalPopup" class="popup hidden">
+  </div>
+
+  <div id="finalPopup" class="popup hidden">
     <h2>Selamatt bobooo😙<br>luv uuu<3! &lt;3</h2>
-  </div>  <img class="balloon" src="balloon1.png" style="left: 20%; animation-delay: 0s;">
+  </div>
+
+  <img class="balloon" src="balloon1.png" style="left: 20%; animation-delay: 0s;">
   <img class="balloon" src="balloon2.png" style="left: 40%; animation-delay: 3s;">
-  <img class="balloon" src="balloon3.png" style="left: 60%; animation-delay: 5s;">  <script>
+  <img class="balloon" src="balloon3.png" style="left: 60%; animation-delay: 5s;">
+
+  <script>
     const correctPassword = "A25072025";
     const welcomePopup = document.getElementById("welcomePopup");
     const calendarPopup = document.getElementById("calendarPopup");
     const popup1 = document.getElementById("popup1");
     const popup2 = document.getElementById("popup2");
     const finalPopup = document.getElementById("finalPopup");
+    const audio = document.getElementById("bgMusic");
 
     let popupStep = 0;
     let noteStep = 0;
@@ -136,6 +144,11 @@ img.note-img {
       if (input === correctPassword) {
         welcomePopup.classList.add("hidden");
         calendarPopup.classList.remove("hidden");
+
+        // Mulai musik saat user masuk
+        audio.play().catch(err => {
+          console.log("Autoplay diblokir, user harus interaksi lagi:", err);
+        });
       } else {
         alert("Password salah yaa coba lagi");
       }
@@ -161,7 +174,7 @@ img.note-img {
       const noteBox = document.getElementById("noteText");
       if (noteStep < notes.length) {
         noteBox.classList.remove("fade-in");
-        void noteBox.offsetWidth; // reset animation
+        void noteBox.offsetWidth; // Reset animasi
         noteBox.innerHTML = notes[noteStep];
         noteBox.classList.add("fade-in");
         noteStep++;
@@ -170,5 +183,6 @@ img.note-img {
         finalPopup.classList.remove("hidden");
       }
     }
-  </script></body>
+  </script>
+</body>
 </html>
