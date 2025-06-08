@@ -2,337 +2,152 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Happy Birthday!</title>
+  <title>Created by Syaa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Indie Flower', cursive;
-}
-
-body {
-  background-image: url('background.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-position: center;
-}
-
-.balloon {
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Comic Neue', sans-serif;
+      background: url('background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      overflow: hidden;
+    }.popup {
   position: absolute;
-  width: 60px;
-  height: 80px;
-  background: purple;
-  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-  animation: float 6s ease-in-out infinite;
-  opacity: 0.8;
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(100vh) translateX(0);
-    opacity: 0.8;
-  }
-  100% {
-    transform: translateY(-100vh) translateX(50px);
-    opacity: 0;
-  }
-}
-
-.popup {
-  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #fff9f0;
-  padding: 30px;
+  background-color: #fff5e6;
   border-radius: 20px;
+  padding: 20px;
+  text-align: center;
   box-shadow: 0 0 20px rgba(0,0,0,0.2);
-  text-align: center;
+  transition: all 0.5s ease;
+  max-width: 90%;
+  z-index: 100;
+}
+
+.hidden {
   display: none;
-  z-index: 10;
-}
-
-.popup.active {
-  display: block;
-  animation: fadeIn 1s ease;
-}
-
-@keyframes fadeIn {
-  from {opacity: 0; transform: scale(0.8);}
-  to {opacity: 1; transform: scale(1);}
-}
-
-.calendar {
-  width: 300px;
-  margin: 20px auto;
-}
-
-.calendar table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.calendar th, .calendar td {
-  padding: 10px;
-  text-align: center;
-  border: 1px solid #ddd;
-}
-
-.highlight {
-  background-color: #ffd6d6;
-  border-radius: 50%;
-  font-weight: bold;
 }
 
 input[type="password"] {
   padding: 10px;
-  border-radius: 8px;
+  font-size: 16px;
+  border-radius: 10px;
   border: 1px solid #ccc;
-  margin-top: 10px;
 }
 
 button {
   margin-top: 10px;
   padding: 10px 20px;
-  border: none;
-  background-color: #ff9a9e;
-  color: white;
   font-size: 16px;
   border-radius: 10px;
-  cursor: pointer;
-}
-
-  </style>
-</head>
-<body>
-  <audio autoplay loop>
-    <source src="Sempurna (Acoustic Instrumental) (320).mp3" type="audio/mp3" />
-  </audio>  <!-- Balon animasi -->  <div class="balloon" style="left: 10%; animation-delay: 0s;"></div>
-  <div class="balloon" style="left: 30%; animation-delay: 1s;"></div>
-  <div class="balloon" style="left: 50%; animation-delay: 2s;"></div>
-  <div class="balloon" style="left: 70%; animation-delay: 3s;"></div>
-  <div class="balloon" style="left: 90%; animation-delay: 4s;"></div>  <!-- Pop-up Password -->  <div class="popup active" id="passwordPopup">
-    <h2>Welcome Arjingga!</h2>
-    <p>Masukkan kata sandi untuk masuk:</p>
-    <input type="password" id="passwordInput" placeholder="Enter Password" />
-    <br />
-    <button onclick="checkPassword()">Masuk</button>
-  </div>  <!-- Pop-up Kalender -->  <div class="popup" id="calendarPopup">
-    <h2>📅 Juli 2025</h2>
-    <div class="calendar">
-      <table>
-        <tr>
-          <th>Min</th><th>Sen</th><th>Sel</th><th>Rab</th><th>Kam</th><th>Jum</th><th>Sab</th>
-        </tr>
-        <tr>
-          <td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td>
-        </tr>
-        <tr>
-          <td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td>
-        </tr>
-        <tr>
-          <td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td>
-        </tr>
-        <tr>
-          <td>21</td><td>22</td><td>23</td><td>24</td><td class="highlight">25</td><td>26</td><td>27</td>
-        </tr>
-        <tr>
-          <td>28</td><td>29</td><td>30</td><td>31</td><td></td><td></td><td></td>
-        </tr>
-      </table>
-    </div>
-    <button onclick="goToPopup1()">Next</button>
-  </div>  <script>
-    function checkPassword() {
-      const input = document.getElementById('passwordInput').value;
-      if (input === "A25072025") {
-        document.getElementById('passwordPopup').classList.remove('active');
-        document.getElementById('calendarPopup').classList.add('active');
-      } else {
-        alert("Kata sandi salah!");
-      }
-    }
-
-    function goToPopup1() {
-      window.location.href = "popup1.html";
-    }
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Scrapbook Pop-Up</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Indie Flower', cursive;
-    }body {
-  background-color: #fffaf5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.popup1, .popup2, .popup3 {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  background: #fff9f0;
-  padding: 30px;
-  border-radius: 20px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.2);
-  animation: fadeIn 1s ease;
-}
-
-.popup1.active,
-.popup2.active,
-.popup3.active {
-  display: flex;
-}
-
-.popup1 img, .popup3 img {
-  width: 250px;
-  margin-bottom: 20px;
-  border-radius: 10px;
-}
-
-.next-btn {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #ff9a9e;
-  color: white;
+  background-color: #ffd9b3;
   border: none;
+  cursor: pointer;
+}
+
+img.note-img {
+  max-width: 100%;
   border-radius: 10px;
-  font-size: 16px;
-  cursor: pointer;
 }
 
-.gift-box {
-  width: 150px;
-  height: 150px;
-  background: pink;
-  border-radius: 15px;
-  position: relative;
-  cursor: pointer;
-  animation: upDown 1.5s infinite ease-in-out;
-}
-
-@keyframes upDown {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0); }
-}
-
-.notes-book {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
-  width: 300px;
-  height: 400px;
-  background-color: #ffece0;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.1);
-  overflow: hidden;
-  position: relative;
-}
-
-.note-page {
+.balloon {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  padding: 15px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
-  transition: transform 0.6s ease;
+  bottom: -100px;
+  width: 50px;
+  animation: float 10s infinite;
 }
 
-.hidden {
-  transform: translateX(100%);
-}
-
-.visible {
-  transform: translateX(0);
+@keyframes float {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-110vh); }
 }
 
   </style>
 </head>
-<body>
-  <!-- POPUP 1 -->
-  <div class="popup1 active" id="popup1">
-    <img src="popup1.jpg" alt="Popup 1" />
-    <button class="next-btn" onclick="showPopup2()">Next</button>
-  </div>  <!-- POPUP 2 - GIFT -->  <div class="popup2" id="popup2">
-    <div class="gift-box" onclick="openGift()"></div>
-    <div class="notes-book" id="notesBook">
-      <div class="note-page visible" id="page0">
-        <p>happy b'day my world, can't describe how much i love you...</p>
-      </div>
-      <div class="note-page hidden" id="page1">
-        <img src="lembar2.jpg" alt="lembar2" style="width:100%; height:auto; border-radius:10px;" />
-      </div>
-      <div class="note-page hidden" id="page2">
-        <p>how's ur day nggaa?? Apaa kamu capeee?</p>
-      </div>
-      <div class="note-page hidden" id="page3">
-        <p>Mungkinn kamu bosen dengan kata 'semangat'...</p>
-      </div>
-      <div class="note-page hidden" id="page4">
-        <p>kamuu juga jangan berpikiran aneh aneh lagii yaa?</p>
-      </div>
-      <div class="note-page hidden" id="page5">
-        <img src="lembar6.jpg" alt="lembar6" style="width:100%; height:auto; border-radius:10px;" />
-      </div>
-      <div class="note-page hidden" id="page6">
-        <img src="lembar7.jpg" alt="lembar7" style="width:100%; height:auto; border-radius:10px;" />
-      </div>
-      <div class="note-page hidden" id="page7">
-        <img src="lembar8.jpg" alt="lembar8" style="width:100%; height:auto; border-radius:10px;" />
-      </div>
-      <div class="note-page hidden" id="page8">
-        <img src="lembar9.jpg" alt="lembar9" style="width:100%; height:auto; border-radius:10px;" />
-      </div>
-      <button class="next-btn" onclick="nextPage()" style="margin-top: auto;">Next Page</button>
+<body>  <!-- Background Music -->  <audio autoplay loop>
+    <source src="sempurna.mp3" type="audio/mp3">
+  </audio>  <!-- Welcome Pop-up -->  <div id="welcomePopup" class="popup">
+    <h2>Welcome Arjingga!</h2>
+    <p>Masukkan kata sandi:</p>
+    <input type="password" id="passwordInput" placeholder="Password...">
+    <br>
+    <button onclick="checkPassword()">Masuk</button>
+  </div>  <!-- Kalender Pop-up -->  <div id="calendarPopup" class="popup hidden">
+    <img src="calendar-july.jpg" alt="Kalender Juli" class="note-img">
+    <p>Tanggal 25 udah aku lingkarin~</p>
+    <button onclick="nextPopup()">Next</button>
+  </div>  <!-- Pop-up 1 (gambar) -->  <div id="popup1" class="popup hidden">
+    <img src="popup1.jpg" alt="Popup 1" class="note-img">
+    <button onclick="nextPopup()">Next</button>
+  </div>  <!-- Pop-up 2 (notes) -->  <div id="popup2" class="popup hidden">
+    <div id="notePages">
+      <p id="noteText">Klik untuk mulai baca catatan 🎁</p>
     </div>
-  </div>  <!-- POPUP 3 -->  <div class="popup3" id="popup3">
+    <button onclick="nextNotePage()">Next Page</button>
+  </div>  <!-- Final Message -->  <div id="finalPopup" class="popup hidden">
     <h2>Nanti abis isya kamu coba keluar rumah yaaa<br>i have something for youuu! &lt;3</h2>
-  </div>  <script>
-    let currentPage = 0;
+  </div>  <!-- Floating balloons -->  <img class="balloon" src="balloon1.png" style="left: 20%; animation-delay: 0s;">
+  <img class="balloon" src="balloon2.png" style="left: 40%; animation-delay: 3s;">
+  <img class="balloon" src="balloon3.png" style="left: 60%; animation-delay: 5s;">  <script>
+    const correctPassword = "A25072025";
+    const welcomePopup = document.getElementById("welcomePopup");
+    const calendarPopup = document.getElementById("calendarPopup");
+    const popup1 = document.getElementById("popup1");
+    const popup2 = document.getElementById("popup2");
+    const finalPopup = document.getElementById("finalPopup");
 
-    function showPopup2() {
-      document.getElementById('popup1').classList.remove('active');
-      document.getElementById('popup2').classList.add('active');
-    }
+    let popupStep = 0;
+    let noteStep = 0;
+    const notes = [
+      "happy b'day my world, can't describe how much i love you. Semoga level up today kamu bisa menggapai apa yang kamu mau, yaa? dan bisa jadi apa aja yang kamu harapkan, be better and just be yourself🤍 apapun keinginan kamu jugaa semoga terkabul yaa, you're shining especially bright todayy💐",
+      "<img src='lembar2.jpg' class='note-img'>",
+      "how's ur day nggaa?? Apaa kamu capeee? Kalo kamu capee istirahatt yaa, jangan lupa makan sama banyakin minum air putihh",
+      "Mungkinn kamu bosen dengan kata 'semangat' jadii berjuang terus yaa sampai kamu bisa mendapatkan apa yang kamu inginkan, jangan lupa bersyukur jugaa dan selalu sempatin buat apresiasi diri kamu karena sudah selalu berjuang untuk lebih baik kalo kamu capee butuh tempat ceritaa ada akuu jangan dipendem sendirii yaa?",
+      "kamuu juga jangan berpikiran aneh aneh lagii yaa? Jangan ngambekan, Jangan cuek cuek nanti cepet tua😒 kamuu gabolee bersaing sama siapapun karnaaa mau gimanapun kamuu pemenangnya gaada orang lama, orang baru atau masalalu!!",
+      "<img src='lembar6.jpg' class='note-img'>",
+      "<img src='lembar7.jpg' class='note-img'>",
+      "<img src='lembar8.jpg' class='note-img'>",
+      "<img src='lembar9.jpg' class='note-img'>"
+    ];
 
-    function openGift() {
-      const notesBook = document.getElementById('notesBook');
-      notesBook.style.display = 'flex';
-    }
-
-    function nextPage() {
-      const current = document.getElementById('page' + currentPage);
-      current.classList.remove('visible');
-      current.classList.add('hidden');
-
-      currentPage++;
-
-      if (currentPage > 8) {
-        document.getElementById('popup2').classList.remove('active');
-        document.getElementById('popup3').classList.add('active');
-        return;
+    function checkPassword() {
+      const input = document.getElementById("passwordInput").value;
+      if (input === correctPassword) {
+        welcomePopup.classList.add("hidden");
+        calendarPopup.classList.remove("hidden");
+      } else {
+        alert("Password salah yaa coba lagi");
       }
+    }
 
-      const next = document.getElementById('page' + currentPage);
-      next.classList.remove('hidden');
-      next.classList.add('visible');
+    function nextPopup() {
+      popupStep++;
+      calendarPopup.classList.add("hidden");
+      popup1.classList.add("hidden");
+      popup2.classList.add("hidden");
+      finalPopup.classList.add("hidden");
+
+      if (popupStep === 1) {
+        popup1.classList.remove("hidden");
+      } else if (popupStep === 2) {
+        popup2.classList.remove("hidden");
+      } else {
+        finalPopup.classList.remove("hidden");
+      }
+    }
+
+    function nextNotePage() {
+      const noteBox = document.getElementById("noteText");
+      if (noteStep < notes.length) {
+        noteBox.innerHTML = notes[noteStep];
+        noteStep++;
+      } else {
+        popup2.classList.add("hidden");
+        finalPopup.classList.remove("hidden");
+      }
     }
   </script></body>
 </html>
