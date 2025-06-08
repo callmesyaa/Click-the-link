@@ -1,181 +1,133 @@
-<!DOCTYPE html>
-<html lang="id">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Halaman Spesial Arjingga</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday Arjingga!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <style>
-    /* Gaya umum */
     body {
-      font-family: 'Arial', sans-serif;
       margin: 0;
       padding: 0;
-      background: url('https://i.pinimg.com/originals/8e/2b/ae/8e2bae399d31c7c5584e9df825d40447.jpg') no-repeat center center fixed;
+      font-family: 'Pacifico', cursive;
+      background: url('background.jpg') no-repeat center center fixed;
       background-size: cover;
-      color: #333;
-    }
-    /* Gaya untuk pop-up */
-    .popup-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.5s ease;
-    }
-    .popup-content {
-      background: #f9f3e3;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      max-width: 90%;
-      text-align: center;
-      opacity: 0;
-      transform: translateY(50px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-    .popup-content img {
-      width: 100%;
-      border-radius: 10px;
-      margin-bottom: 15px;
-    }
-    .popup-content button {
-      background: #ff6f91;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    .popup-content button:hover {
-      background: #ff4a6f;
-    }
-    /* Gaya untuk input password */
-    .password-input {
-      margin: 20px 0;
-    }
-    .password-input input {
-      padding: 10px;
-      font-size: 16px;
-      width: 80%;
-      border: 2px solid #ccc;
-      border-radius: 5px;
-    }
-    .password-input button {
-      padding: 10px 20px;
-      background: #ff6f91;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    .password-input button:hover {
-      background: #ff4a6f;
-    }
+      overflow: hidden;
+    }#balloons {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.balloon {
+  position: absolute;
+  bottom: -100px;
+  width: 50px;
+  height: 70px;
+  background-color: pink;
+  border-radius: 50% 50% 50% 50%;
+  animation: float 10s infinite;
+  opacity: 0.7;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) rotate(0);
+  }
+  100% {
+    transform: translateY(-120vh) rotate(360deg);
+  }
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff8e7;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  z-index: 2;
+  text-align: center;
+  max-width: 90%;
+}
+
+.popup img {
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+.popup button {
+  margin-top: 10px;
+  background: pink;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  font-family: 'Pacifico', cursive;
+}
+
+#passwordPopup {
+  display: block;
+}
+
+audio {
+  display: none;
+}
+
   </style>
 </head>
 <body>
-
-  <!-- Pop-up untuk password -->
-  <div class="popup-bg" id="passwordPopup">
-    <div class="popup-content">
-      <h2>Selamat datang, Arjingga!</h2>
-      <p>Masukkan kata sandi untuk melanjutkan:</p>
-      <div class="password-input">
-        <input type="password" id="password" placeholder="Masukkan kata sandi">
-        <button onclick="checkPassword()">Masuk</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Pop-up untuk kalender -->
-  <div class="popup-bg" id="calendarPopup">
-    <div class="popup-content">
-      <h2>Kalender Juli 2025</h2>
-      <p>Lingkari tanggal 25</p>
-      <img src="https://i.pinimg.com/originals/1d/ce/jy/1dcejy.jpg" alt="Kalender Juli 2025">
-      <button onclick="closePopup('calendarPopup')">Lanjutkan</button>
-    </div>
-  </div>
-
-  <!-- Pop-up untuk gambar -->
-  <div class="popup-bg" id="imagePopup">
-    <div class="popup-content">
-      <img src="https://i.pinimg.com/originals/29/ba/1d/29ba1dca32b9ab9ab3b2a3b54873a0a5.jpg" alt="Gambar Spesial">
-      <button onclick="closePopup('imagePopup')">Lanjutkan</button>
-    </div>
-  </div>
-
-  <!-- Pop-up untuk kotak kado -->
-  <div class="popup-bg" id="giftBoxPopup">
-    <div class="popup-content">
-      <h2>Kotak Kado</h2>
-      <p>Klik untuk membuka kotak kado:</p>
-      <button onclick="openGiftBox()">Buka Kotak</button>
-    </div>
-  </div>
-
-  <!-- Pop-up untuk notes -->
-  <div class="popup-bg" id="notesPopup">
-    <div class="popup-content">
-      <h2>Notes Spesial</h2>
-      <p>Selamat ulang tahun, Arjingga!</p>
-      <p>Semoga hari-harimu penuh kebahagiaan dan keberuntungan.</p>
-      <button onclick="closePopup('notesPopup')">Tutup</button>
-    </div>
-  </div>
-
-  <script>
-    // Fungsi untuk menampilkan pop-up
-    function showPopup(id) {
-      const popup = document.getElementById(id);
-      popup.style.opacity = '1';
-      popup.style.pointerEvents = 'auto';
-      const content = popup.querySelector('.popup-content');
-      content.style.opacity = '1';
-      content.style.transform = 'translateY(0)';
-    }
-
-    // Fungsi untuk menutup pop-up
-    function closePopup(id) {
-      const popup = document.getElementById(id);
-      popup.style.opacity = '0';
-      popup.style.pointerEvents = 'none';
-      const content = popup.querySelector('.popup-content');
-      content.style.opacity = '0';
-      content.style.transform = 'translateY(50px)';
-    }
-
-    // Fungsi untuk memeriksa kata sandi
-    function checkPassword() {
-      const password = document.getElementById('password').value;
-      if (password === 'A25072025') {
-        closePopup('passwordPopup');
-        showPopup('calendarPopup');
-      } else {
-        alert('Kata sandi salah!');
+  <audio autoplay loop>
+    <source src="Sempurna (Acoustic Instrumental) (320).mp3" type="audio/mpeg">
+  </audio>  <div id="balloons"></div>  <div class="popup" id="passwordPopup">
+    <h2>Welcome Arjingga!</h2>
+    <p>Enter password to continue:</p>
+    <input type="password" id="passInput" />
+    <button onclick="checkPassword()">Enter</button>
+  </div>  <div class="popup" id="calendarPopup">
+    <img src="calendar-july.png" alt="Calendar">
+    <p>Lingkari tanggal 25 yaa~</p>
+    <button onclick="showPopup('popup1')">Next</button>
+  </div>  <div class="popup" id="popup1">
+    <img src="popup1.png" alt="Meme">
+    <button onclick="showPopup('scrapbook')">Next</button>
+  </div>  <div class="popup" id="scrapbook">
+    <img src="scrapbook.png" alt="Scrapbook">
+    <p>(Bagian scrapbook interaktif akan aku terusin ya di bagian lanjutannya nanti yaa)</p>
+    <button onclick="showPopup('finalNote')">Next</button>
+  </div>  <div class="popup" id="finalNote">
+    <p>Nanti abis isya kamu coba keluar rumah yaaa i have something for youuu! &lt;3</p>
+  </div>  <script>
+    function createBalloons() {
+      const container = document.getElementById('balloons');
+      for (let i = 0; i < 30; i++) {
+        const balloon = document.createElement('div');
+        balloon.className = 'balloon';
+        balloon.style.left = Math.random() * 100 + '%';
+        balloon.style.animationDelay = Math.random() * 5 + 's';
+        container.appendChild(balloon);
       }
     }
 
-    // Fungsi untuk membuka kotak kado
-    function openGiftBox() {
-      closePopup('giftBoxPopup');
-      showPopup('notesPopup');
+    function checkPassword() {
+      const input = document.getElementById('passInput').value;
+      if (input === 'A25072025') {
+        document.getElementById('passwordPopup').style.display = 'none';
+        showPopup('calendarPopup');
+      } else {
+        alert('Password salah!');
+      }
     }
 
-    // Menampilkan pop-up password saat halaman dimuat
-    window.onload = function() {
-      showPopup('passwordPopup');
-    };
-  </script>
+    function showPopup(id) {
+      const popups = document.querySelectorAll('.popup');
+      popups.forEach(p => p.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+    }
 
-</body>
+    createBalloons();
+  </script></body>
 </html>
