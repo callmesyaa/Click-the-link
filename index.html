@@ -158,5 +158,181 @@ button {
     function goToPopup1() {
       window.location.href = "popup1.html";
     }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scrapbook Pop-Up</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Indie Flower', cursive;
+    }body {
+  background-color: #fffaf5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.popup1, .popup2, .popup3 {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: #fff9f0;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  animation: fadeIn 1s ease;
+}
+
+.popup1.active,
+.popup2.active,
+.popup3.active {
+  display: flex;
+}
+
+.popup1 img, .popup3 img {
+  width: 250px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+
+.next-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #ff9a9e;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.gift-box {
+  width: 150px;
+  height: 150px;
+  background: pink;
+  border-radius: 15px;
+  position: relative;
+  cursor: pointer;
+  animation: upDown 1.5s infinite ease-in-out;
+}
+
+@keyframes upDown {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+
+.notes-book {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  width: 300px;
+  height: 400px;
+  background-color: #ffece0;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  overflow: hidden;
+  position: relative;
+}
+
+.note-page {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 15px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+  transition: transform 0.6s ease;
+}
+
+.hidden {
+  transform: translateX(100%);
+}
+
+.visible {
+  transform: translateX(0);
+}
+
+  </style>
+</head>
+<body>
+  <!-- POPUP 1 -->
+  <div class="popup1 active" id="popup1">
+    <img src="popup1.jpg" alt="Popup 1" />
+    <button class="next-btn" onclick="showPopup2()">Next</button>
+  </div>  <!-- POPUP 2 - GIFT -->  <div class="popup2" id="popup2">
+    <div class="gift-box" onclick="openGift()"></div>
+    <div class="notes-book" id="notesBook">
+      <div class="note-page visible" id="page0">
+        <p>happy b'day my world, can't describe how much i love you...</p>
+      </div>
+      <div class="note-page hidden" id="page1">
+        <img src="lembar2.jpg" alt="lembar2" style="width:100%; height:auto; border-radius:10px;" />
+      </div>
+      <div class="note-page hidden" id="page2">
+        <p>how's ur day nggaa?? Apaa kamu capeee?</p>
+      </div>
+      <div class="note-page hidden" id="page3">
+        <p>Mungkinn kamu bosen dengan kata 'semangat'...</p>
+      </div>
+      <div class="note-page hidden" id="page4">
+        <p>kamuu juga jangan berpikiran aneh aneh lagii yaa?</p>
+      </div>
+      <div class="note-page hidden" id="page5">
+        <img src="lembar6.jpg" alt="lembar6" style="width:100%; height:auto; border-radius:10px;" />
+      </div>
+      <div class="note-page hidden" id="page6">
+        <img src="lembar7.jpg" alt="lembar7" style="width:100%; height:auto; border-radius:10px;" />
+      </div>
+      <div class="note-page hidden" id="page7">
+        <img src="lembar8.jpg" alt="lembar8" style="width:100%; height:auto; border-radius:10px;" />
+      </div>
+      <div class="note-page hidden" id="page8">
+        <img src="lembar9.jpg" alt="lembar9" style="width:100%; height:auto; border-radius:10px;" />
+      </div>
+      <button class="next-btn" onclick="nextPage()" style="margin-top: auto;">Next Page</button>
+    </div>
+  </div>  <!-- POPUP 3 -->  <div class="popup3" id="popup3">
+    <h2>Nanti abis isya kamu coba keluar rumah yaaa<br>i have something for youuu! &lt;3</h2>
+  </div>  <script>
+    let currentPage = 0;
+
+    function showPopup2() {
+      document.getElementById('popup1').classList.remove('active');
+      document.getElementById('popup2').classList.add('active');
+    }
+
+    function openGift() {
+      const notesBook = document.getElementById('notesBook');
+      notesBook.style.display = 'flex';
+    }
+
+    function nextPage() {
+      const current = document.getElementById('page' + currentPage);
+      current.classList.remove('visible');
+      current.classList.add('hidden');
+
+      currentPage++;
+
+      if (currentPage > 8) {
+        document.getElementById('popup2').classList.remove('active');
+        document.getElementById('popup3').classList.add('active');
+        return;
+      }
+
+      const next = document.getElementById('page' + currentPage);
+      next.classList.remove('hidden');
+      next.classList.add('visible');
+    }
   </script></body>
 </html>
