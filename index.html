@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -77,112 +76,98 @@
   </style>
 </head>
 <body>
-  <!-- Musik, akan diputar setelah tombol 'Masuk' diklik -->
   <audio id="bgMusic" loop>
     <source src="sempurna.mp3" type="audio/mp3">
-  </audio>
-
-  <div id="welcomePopup" class="popup">
+  </audio>  <div id="welcomePopup" class="popup">
     <h2>Welcome Arjingga!</h2>
     <p>Aktifkan situs dekstop!</p>
     <input type="password" id="passwordInput" placeholder="Password...">
     <br>
     <button onclick="checkPassword()">Masuk</button>
-  </div>
-
-  <div id="calendarPopup" class="popup hidden">
+  </div>  <div id="calendarPopup" class="popup hidden">
     <img src="calendar-july.jpg" alt="Kalender Juli" class="note-img">
     <p>This your dayy!</p>
     <button onclick="nextPopup()">Next</button>
-  </div>
-
-  <div id="popup1" class="popup hidden">
+  </div>  <div id="popup1" class="popup hidden">
     <img src="popup1.jpg" alt="Popup 1" class="note-img">
     <button onclick="nextPopup()">Next</button>
-  </div>
-
-  <div id="popup2" class="popup hidden">
+  </div>  <div id="popup2" class="popup hidden">
     <div id="notePages">
       <p id="noteText" class="fade-in">Klik untuk mulai baca catatan 🎁</p>
     </div>
     <button onclick="nextNotePage()">🤍</button>
-  </div>
-
-  <div id="finalPopup" class="popup hidden">
+  </div>  <div id="finalPopup" class="popup hidden">
     <h2>Maaf yaa aku belum bisa kaya orang orang ngasi note book gitu tapii karena resiko kamu kenal aku yang anak TKJ jadii aku buatin nya bentuk web😋 aku buat ini effort lo aku belajar coding buat inii jadi semoga kamu sukaa, dah kamu skrg tidur yaa!! Selamatt bobooo😙<br>luv uuu<3! &lt;3</h2>
-  </div>
-
-  <img class="balloon" src="balloon1.png" style="left: 20%; animation-delay: 0s;">
+  </div>  <img class="balloon" src="balloon1.png" style="left: 20%; animation-delay: 0s;">
   <img class="balloon" src="balloon2.png" style="left: 40%; animation-delay: 3s;">
-  <img class="balloon" src="balloon3.png" style="left: 60%; animation-delay: 5s;">
+  <img class="balloon" src="balloon3.png" style="left: 60%; animation-delay: 5s;">  <script>
+    window.onload = function() {
+      const correctPassword = "A25072025";
+      const welcomePopup = document.getElementById("welcomePopup");
+      const calendarPopup = document.getElementById("calendarPopup");
+      const popup1 = document.getElementById("popup1");
+      const popup2 = document.getElementById("popup2");
+      const finalPopup = document.getElementById("finalPopup");
+      const audio = document.getElementById("bgMusic");
 
-  <script>
-    const correctPassword = "A25072025";
-    const welcomePopup = document.getElementById("welcomePopup");
-    const calendarPopup = document.getElementById("calendarPopup");
-    const popup1 = document.getElementById("popup1");
-    const popup2 = document.getElementById("popup2");
-    const finalPopup = document.getElementById("finalPopup");
-    const audio = document.getElementById("bgMusic");
+      let popupStep = 0;
+      let noteStep = 0;
+      const notes = [
+        "Utututu Happy b'day yaa, can't describe how much i love you. Level up todayy semogaa kamu bisa menggapai apa yang kamu mau, yaa? dan bisa jadi apa yang kamu harapkan, be better and just be yourself🤍 apapun keinginan kamu jugaa semoga terkabul yaa, you're shining especially bright todayy💐",
+        "<img src='lembar2.jpg' class='note-img'>",
+        "Gimana hari inii?? Capeee gaa? Kalo kamu capee istirahatt yaa, jangan lupa makan sama banyakin minum air putihh🤍",
+        "Dibukaa yaa kadonya semoga kamu sukaa😋 Semangat berjuang terus yaa sampai kamu bisa mendapatkan apa yang kamu mauu, jangan lupa bersyukur jugaa dan selalu sempatin buat apresiasi diri kamu karena sudah selalu berjuang untuk lebih baik pokoknyaa😙 kalo kamu capee butuh tempat ceritaa ada akuu jangan dipendem sendirii yaa?",
+        "Jangan suka berpikiran aneh aneh!, Jangan ngambekan!, Jangan cuek cuek nanti cepet tua!😒 Kamuu pokoknya gabolee bersaing sama siapapun karnaaa mau gimanapun kamuu tetap pemenangnya. Gaada orang lama, orang baru atau masalalu!! kalo kamu masih mikir gitu kamu kaya e harus tak culik terus tak sekap (dihatiku)🙂",
+        "<img src='lembar6.jpg' class='note-img'>",
+        "<img src='lembar7.jpg' class='note-img'>",
+        "<img src='lembar8.jpg' class='note-img'>",
+        "<img src='lembar9.jpg' class='note-img'>"
+      ];
 
-    let popupStep = 0;
-    let noteStep = 0;
-    const notes = [
-      "Utututu Happy b'day yaa, can't describe how much i love you. Level up todayy semogaa kamu bisa menggapai apa yang kamu mau, yaa? dan bisa jadi apa yang kamu harapkan, be better and just be yourself🤍 apapun keinginan kamu jugaa semoga terkabul yaa, you're shining especially bright todayy💐",
-      "<img src='lembar2.jpg' class='note-img'>",
-      "Gimana hari inii?? Capeee gaa? Kalo kamu capee istirahatt yaa, jangan lupa makan sama banyakin minum air putihh🤍",
-      "Dibukaa yaa kadonya semoga kamu sukaa😋 Semangat berjuang terus yaa sampai kamu bisa mendapatkan apa yang kamu mauu, jangan lupa bersyukur jugaa dan selalu sempatin buat apresiasi diri kamu karena sudah selalu berjuang untuk lebih baik pokoknyaa😙 kalo kamu capee butuh tempat ceritaa ada akuu jangan dipendem sendirii yaa?",
-      "Jangan suka berpikiran aneh aneh!, Jangan ngambekan!, Jangan cuek cuek nanti cepet tua!😒 Kamuu pokoknya gabolee bersaing sama siapapun karnaaa mau gimanapun kamuu tetap pemenangnya. Gaada orang lama, orang baru atau masalalu!! kalo kamu masih mikir gitu kamu kaya e harus tak culik terus tak sekap (dihatiku)🙂",
-      "<img src='lembar6.jpg' class='note-img'>",
-      "<img src='lembar7.jpg' class='note-img'>",
-      "<img src='lembar8.jpg' class='note-img'>",
-      "<img src='lembar9.jpg' class='note-img'>"
-    ];
-
-    function checkPassword() {
-      const input = document.getElementById("passwordInput").value;
-      if (input === correctPassword) {
-        welcomePopup.classList.add("hidden");
-        calendarPopup.classList.remove("hidden");
-
-        // Mulai musik saat user masuk
-        audio.play().catch(err => {
-          console.log("Autoplay diblokir, user harus interaksi lagi:", err);
-        });
-      } else {
-        alert("Password salah yaa coba lagi");
+      window.checkPassword = function() {
+        const input = document.getElementById("passwordInput").value;
+        if (input === correctPassword) {
+          welcomePopup.classList.add("hidden");
+          calendarPopup.classList.remove("hidden");
+          audio.play().catch(err => {
+            console.log("Autoplay diblokir, user harus interaksi lagi:", err);
+          });
+        } else {
+          alert("Password salah yaa coba lagi");
+        }
       }
-    }
 
-    function nextPopup() {
-      popupStep++;
-      calendarPopup.classList.add("hidden");
-      popup1.classList.add("hidden");
-      popup2.classList.add("hidden");
-      finalPopup.classList.add("hidden");
-
-      if (popupStep === 1) {
-        popup1.classList.remove("hidden");
-      } else if (popupStep === 2) {
-        popup2.classList.remove("hidden");
-      } else {
-        finalPopup.classList.remove("hidden");
-      }
-    }
-
-    function nextNotePage() {
-      const noteBox = document.getElementById("noteText");
-      if (noteStep < notes.length) {
-        noteBox.classList.remove("fade-in");
-        void noteBox.offsetWidth; // Reset animasi
-        noteBox.innerHTML = notes[noteStep];
-        noteBox.classList.add("fade-in");
-        noteStep++;
-      } else {
+      window.nextPopup = function() {
+        popupStep++;
+        calendarPopup.classList.add("hidden");
+        popup1.classList.add("hidden");
         popup2.classList.add("hidden");
-        finalPopup.classList.remove("hidden");
+        finalPopup.classList.add("hidden");
+
+        if (popupStep === 1) {
+          popup1.classList.remove("hidden");
+        } else if (popupStep === 2) {
+          popup2.classList.remove("hidden");
+        } else {
+          finalPopup.classList.remove("hidden");
+        }
+      }
+
+      window.nextNotePage = function() {
+        const noteBox = document.getElementById("noteText");
+        if (!noteBox) return;
+
+        if (noteStep < notes.length) {
+          noteBox.classList.remove("fade-in");
+          void noteBox.offsetWidth;
+          noteBox.innerHTML = notes[noteStep];
+          noteBox.classList.add("fade-in");
+          noteStep++;
+        } else {
+          popup2.classList.add("hidden");
+          finalPopup.classList.remove("hidden");
+        }
       }
     }
-  </script>
-</body>
+  </script></body>
 </html>
