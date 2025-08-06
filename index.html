@@ -2,228 +2,121 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Syy Stickers - Pembayaran QRIS</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    :root {
-      --popup-bg: #f7f1ea;
-      --shadow: 0 24px 48px -8px rgba(0,0,0,0.15);
-      font-family: sans-serif;
-      --transition: .35s ease;
-    }
-    * { box-sizing: border-box; }
     body {
       margin: 0;
-      min-height: 100vh;
-      background: #ece8e1 url('background1.jpg') center/cover no-repeat;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
+      padding: 0;
+      background-image: url('background1.jpg');
+      background-size: cover;
+      background-position: center;
+      font-family: Arial, sans-serif;
       overflow: hidden;
     }
+
     .popup {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      background: #fffaf2;
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      width: 80%;
+      max-width: 400px;
       z-index: 10;
       opacity: 0;
-      pointer-events: none;
-      transition: opacity var(--transition);
+      transition: all 0.5s ease;
     }
+
     .popup.active {
       opacity: 1;
-      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
     }
-    .card {
-      background: var(--popup-bg);
-      border-radius: 16px;
-      padding: 2rem;
-      width: 90%;
-      max-width: 400px;
-      box-shadow: var(--shadow);
-      transform: translateY(20px);
-      transition: transform var(--transition);
+
+    .popup h2 {
+      margin-bottom: 20px;
+      color: #5a4234;
     }
-    .popup.active .card {
-      transform: translateY(0);
-    }
-    h2 {
-      margin-top: 0;
-      font-size: 1.4rem;
-    }
-    p {
-      margin-bottom: 1rem;
-    }
-    .btn {
-      background: #333;
-      color: #fff;
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-    .input-group {
-      margin: 1rem 0;
-    }
-    input {
-      width: 100%;
-      padding: 0.75rem;
-      border-radius: 8px;
+
+    .popup input {
+      padding: 10px;
+      width: 80%;
+      margin-bottom: 15px;
       border: 1px solid #ccc;
-      font-size: 1rem;
+      border-radius: 8px;
     }
-    .balloons {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
+
+    .popup button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #c8a97e;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
     }
+
     .balloon {
       position: absolute;
-      background-repeat: no-repeat;
-      background-size: contain;
+      width: 80px;
+      animation: fly 4s linear infinite;
       opacity: 0.8;
-      animation: floatUp linear infinite;
     }
-    @keyframes floatUp {
+
+    @keyframes fly {
       0% {
-        transform: translateY(100%) scale(0.9);
-        opacity: 0;
-      }
-      10% {
-        opacity: 1;
+        bottom: -100px;
+        opacity: 0.5;
       }
       100% {
-        transform: translateY(-120%) scale(1.05);
-        opacity: 0;
+        bottom: 120%;
+        opacity: 1;
       }
     }
   </style>
 </head>
 <body>
+  <!-- Balon Terbang -->
+  <img src="haloo1.png" class="balloon" style="left: 10%; animation-delay: 0s;" />
+  <img src="haloo2.png" class="balloon" style="left: 40%; animation-delay: 1s;" />
+  <img src="haloo3.png" class="balloon" style="left: 70%; animation-delay: 2s;" />
 
-  <!-- BALLOON EFFECT -->
-  <div class="balloons">
-    <div class="balloon" style="
-      left: 10%;
-      bottom: -10%;
-      width: 60px;
-      height: 80px;
-      background-image: url('haloo1.png');
-      animation-duration: 14s;
-    "></div>
-    <div class="balloon" style="
-      left: 70%;
-      bottom: -5%;
-      width: 90px;
-      height: 110px;
-      background-image: url('haloo2.png');
-      animation-duration: 17s;
-    "></div>
-    <div class="balloon" style="
-      left: 40%;
-      bottom: -15%;
-      width: 75px;
-      height: 95px;
-      background-image: url('haloo3.png');
-      animation-duration: 13s;
-    "></div>
+  <!-- Pop-up -->
+  <div class="popup active" id="popup1">
+    <h2>Selamat datang di Syy Stickers!</h2>
+    <p>Silahkan lanjutkan untuk pembayaran QRIS anda.</p>
+    <button onclick="nextPopup(2)">Lanjutkan</button>
   </div>
 
-  <!-- POPUP 1: Selamat Datang -->
-  <div id="popup-1" class="popup active">
-    <div class="card">
-      <h2>Selamat datang di Syy Stickers</h2>
-      <p>Silahkan lanjutkan untuk pembayaran QRIS Anda.</p>
-      <button class="btn" id="btn-next-1">Lanjutkan</button>
-    </div>
+  <div class="popup" id="popup2">
+    <h2>Masukkan Nama Anda</h2>
+    <input type="text" id="nama" placeholder="Nama Lengkap" />
+    <br />
+    <button onclick="nextPopup(3)">Lanjutkan</button>
   </div>
 
-  <!-- POPUP 2: Nama -->
-  <div id="popup-2" class="popup">
-    <div class="card">
-      <h2>Masukkan Nama Anda</h2>
-      <div class="input-group">
-        <input type="text" id="input-nama" placeholder="Nama kamu..." />
-      </div>
-      <button class="btn" id="btn-next-2" disabled>Lanjutkan</button>
-    </div>
+  <div class="popup" id="popup3">
+    <h2>Masukkan Jumlah Pembayaran</h2>
+    <input type="number" id="jumlah" placeholder="Contoh: 25000" />
+    <br />
+    <button onclick="nextPopup(4)">Kirim</button>
   </div>
 
-  <!-- POPUP 3: Jumlah -->
-  <div id="popup-3" class="popup">
-    <div class="card">
-      <h2>Masukkan Jumlah Pembayaran</h2>
-      <div class="input-group">
-        <input type="number" id="input-jumlah" placeholder="Contoh: 50000" />
-      </div>
-      <button class="btn" id="btn-send" disabled>Kirim</button>
-    </div>
-  </div>
-
-  <!-- POPUP 4: Terima Kasih -->
-  <div id="popup-4" class="popup">
-    <div class="card">
-      <h2>Terima kasih telah berbelanja</h2>
-      <p>Pembayaran kamu berhasil disimulasikan.</p>
-      <button class="btn" id="btn-restart">Ulangi</button>
-    </div>
+  <div class="popup" id="popup4">
+    <h2>Terima kasih telah berbelanja!</h2>
+    <p>Pembayaran Anda sedang diproses 💖</p>
   </div>
 
   <script>
-    const delay = ms => new Promise(r => setTimeout(r, ms));
-
-    const p1 = document.getElementById('popup-1');
-    const p2 = document.getElementById('popup-2');
-    const p3 = document.getElementById('popup-3');
-    const p4 = document.getElementById('popup-4');
-
-    const btnNext1 = document.getElementById('btn-next-1');
-    const btnNext2 = document.getElementById('btn-next-2');
-    const btnSend = document.getElementById('btn-send');
-    const btnRestart = document.getElementById('btn-restart');
-
-    const inputNama = document.getElementById('input-nama');
-    const inputJumlah = document.getElementById('input-jumlah');
-
-    inputNama.addEventListener('input', () => {
-      btnNext2.disabled = inputNama.value.trim() === '';
-    });
-    inputJumlah.addEventListener('input', () => {
-      btnSend.disabled = inputJumlah.value.trim() === '' || Number(inputJumlah.value) <= 0;
-    });
-
-    btnNext1.addEventListener('click', async () => {
-      p1.classList.remove('active');
-      await delay(250);
-      p2.classList.add('active');
-    });
-
-    btnNext2.addEventListener('click', async () => {
-      p2.classList.remove('active');
-      await delay(250);
-      p3.classList.add('active');
-    });
-
-    btnSend.addEventListener('click', async () => {
-      p3.classList.remove('active');
-      await delay(250);
-      p4.classList.add('active');
-    });
-
-    btnRestart.addEventListener('click', () => {
-      inputNama.value = '';
-      inputJumlah.value = '';
-      btnNext2.disabled = true;
-      btnSend.disabled = true;
-      p4.classList.remove('active');
-      setTimeout(() => p1.classList.add('active'), 150);
-    });
+    function nextPopup(number) {
+      for (let i = 1; i <= 4; i++) {
+        document.getElementById("popup" + i).classList.remove("active");
+      }
+      document.getElementById("popup" + number).classList.add("active");
+    }
   </script>
-
 </body>
 </html>
