@@ -3,120 +3,112 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Syy Stickers - Pembayaran QRIS</title>
+  <title>Syy Stickers</title>
   <style>
     body {
       margin: 0;
-      padding: 0;
-      background-image: url('background1.jpg');
+      font-family: "Segoe UI", sans-serif;
+      background: url('background1.jpg') no-repeat center center fixed;
       background-size: cover;
-      background-position: center;
-      font-family: Arial, sans-serif;
       overflow: hidden;
     }
-
     .popup {
-      position: absolute;
+      position: fixed;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%) scale(0.8);
-      background: #fffaf2;
-      border-radius: 20px;
+      transform: translate(-50%, -50%);
+      background: #fff8f0;
       padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      width: 80%;
-      max-width: 400px;
-      z-index: 10;
-      opacity: 0;
-      transition: all 0.5s ease;
+      z-index: 100;
+      animation: fadeIn 0.8s ease;
     }
-
-    .popup.active {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
-    }
-
     .popup h2 {
       margin-bottom: 20px;
-      color: #5a4234;
+      font-size: 20px;
+      color: #333;
     }
-
     .popup input {
       padding: 10px;
       width: 80%;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       border: 1px solid #ccc;
-      border-radius: 8px;
+      border-radius: 10px;
     }
-
     .popup button {
       padding: 10px 20px;
+      background-color: #f3cba5;
       border: none;
-      background-color: #c8a97e;
-      color: white;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
+      font-weight: bold;
     }
-
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95) translate(-50%, -50%); }
+      to { opacity: 1; transform: scale(1) translate(-50%, -50%); }
+    }
     .balloon {
       position: absolute;
-      width: 80px;
-      animation: fly 4s linear infinite;
-      opacity: 0.8;
+      width: 50px;
+      animation: fly 10s linear infinite;
     }
-
     @keyframes fly {
-      0% {
-        bottom: -100px;
-        opacity: 0.5;
-      }
-      100% {
-        bottom: 120%;
-        opacity: 1;
-      }
+      0% { transform: translateY(100vh); opacity: 0; }
+      10% { opacity: 1; }
+      100% { transform: translateY(-120vh); opacity: 0; }
     }
   </style>
 </head>
 <body>
-  <!-- Balon Terbang -->
-  <img src="haloo1.png" class="balloon" style="left: 10%; animation-delay: 0s;" />
-  <img src="haloo2.png" class="balloon" style="left: 40%; animation-delay: 1s;" />
-  <img src="haloo3.png" class="balloon" style="left: 70%; animation-delay: 2s;" />
 
-  <!-- Pop-up -->
-  <div class="popup active" id="popup1">
-    <h2>Selamat datang di Syy Stickers!</h2>
-    <p>Silahkan lanjutkan untuk pembayaran QRIS anda.</p>
-    <button onclick="nextPopup(2)">Lanjutkan</button>
-  </div>
+<!-- BALLOONS -->
+<img src="haloo1.png" class="balloon" style="left: 10%;" />
+<img src="haloo2.png" class="balloon" style="left: 30%;" />
+<img src="haloo3.png" class="balloon" style="left: 50%;" />
+<img src="haloo1.png" class="balloon" style="left: 70%;" />
+<img src="haloo2.png" class="balloon" style="left: 85%;" />
 
-  <div class="popup" id="popup2">
-    <h2>Masukkan Nama Anda</h2>
-    <input type="text" id="nama" placeholder="Nama Lengkap" />
-    <br />
-    <button onclick="nextPopup(3)">Lanjutkan</button>
-  </div>
+<!-- POPUPS -->
+<div class="popup" id="popup1">
+  <h2>Selamat datang di Syy Stickers! Silakan lanjutkan untuk pembayaran QRIS Anda.</h2>
+  <button onclick="showPopup(2)">Lanjutkan</button>
+</div>
 
-  <div class="popup" id="popup3">
-    <h2>Masukkan Jumlah Pembayaran</h2>
-    <input type="number" id="jumlah" placeholder="Contoh: 25000" />
-    <br />
-    <button onclick="nextPopup(4)">Kirim</button>
-  </div>
+<div class="popup" id="popup2" style="display: none;">
+  <h2>Masukkan nama Anda</h2>
+  <input type="text" id="nama" placeholder="Nama kamu di sini"/>
+  <button onclick="showPopup(3)">Lanjutkan</button>
+</div>
 
-  <div class="popup" id="popup4">
-    <h2>Terima kasih telah berbelanja!</h2>
-    <p>Pembayaran Anda sedang diproses 💖</p>
-  </div>
+<div class="popup" id="popup3" style="display: none;">
+  <h2>Masukkan jumlah pembayaran</h2>
+  <input type="number" id="jumlah" placeholder="Contoh: 25000"/>
+  <button onclick="showPopup(4)">Kirim</button>
+</div>
 
-  <script>
-    function nextPopup(number) {
-      for (let i = 1; i <= 4; i++) {
-        document.getElementById("popup" + i).classList.remove("active");
-      }
-      document.getElementById("popup" + number).classList.add("active");
+<div class="popup" id="popup4" style="display: none;">
+  <h2>Terima kasih telah berbelanja 💖</h2>
+</div>
+
+<script>
+  function showPopup(num) {
+    for (let i = 1; i <= 4; i++) {
+      document.getElementById("popup" + i).style.display = "none";
     }
-  </script>
+    document.getElementById("popup" + num).style.display = "block";
+  }
+
+  // Optional: Membuat balon muncul terus secara acak
+  const balloons = document.querySelectorAll('.balloon');
+  balloons.forEach((balloon) => {
+    balloon.style.top = Math.floor(Math.random() * window.innerHeight) + 'px';
+    setInterval(() => {
+      balloon.style.left = Math.floor(Math.random() * 90) + '%';
+    }, 5000);
+  });
+</script>
+
 </body>
 </html>
