@@ -1,114 +1,341 @@
-<!DOCTYPE html>
+<!--
+Interactive Flipbook HTML
+How to use:
+- Password: "arjingga25" (you can change in JS: const CORRECT_PASSWORD)
+- Replace placeholder images/music/video/gif by editing the <img> or <audio>/<video> src attributes below.
+- Replace page texts in the `pages` array inside the script for easy editing.
+- Balloon images: replace 'balloon1.png' .. 'balloon4.png'
+- Background image: replace 'background.jpg'
+- Music: replace 'background-music.mp3'
+- GIF popup: replace 'popup-gift.gif'
+- Video popup: replace 'popup-video.mp4'
+
+This single-file HTML is ready to upload to GitHub Pages.
+--><!doctype html>
+
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Syy Stickers</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Flipbook Interaktif</title>
   <style>
-    body {
-      margin: 0;
-      font-family: "Segoe UI", sans-serif;
-      background: url('background1.jpg') no-repeat center center fixed;
-      background-size: cover;
-      overflow: hidden;
-    }
-    .popup {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #fff8f0;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-      text-align: center;
-      z-index: 100;
-      animation: fadeIn 0.2s ease;
-    }
-    .popup h2 {
-      margin-bottom: 40px;
-      font-size: 30px;
-      color: #333;
-    }
-    .popup input {
-      padding: 10px;
-      width: 90%;
-      margin-bottom: 40px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-    }
-    .popup button {
-      padding: 40px 50px;
-      background-color: #f3cba5;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.95) translate(-50%, -50%); }
-      to { opacity: 1; transform: scale(1) translate(-50%, -50%); }
-    }
-    .balloon {
-      position: absolute;
-      width: 400px;
-      animation: fly 10s linear infinite;
-    }
-    @keyframes fly {
-      0% { transform: translateY(100vh); opacity: 0; }
-      10% { opacity: 1; }
-      100% { transform: translateY(-120vh); opacity: 0; }
-    }
+    :root{--bg:#f7efe6;--card:#fff;--accent:#f0c;}
+    html,body{height:100%;margin:0;font-family:Inter, system-ui, Arial;background:#eee}
+    .stage{
+      position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;background-size:cover;background-position:center;
+    }/* balloons */
+.balloon{position:absolute;bottom:-120px;opacity:0.95;will-change:transform;}
+.balloon.anim{animation:floatUp linear infinite;}
+@keyframes floatUp{0%{transform:translateY(0)}100%{transform:translateY(-140vh)}}
+
+/* modal base */
+.modal-wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:50}
+.overlay{position:absolute;inset:0;background:rgba(0,0,0,0.6)}
+.modal{position:relative;background:rgba(255,255,255,0.98);padding:20px;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,0.25);max-width:92%;width:420px;text-align:center}
+.modal h3{margin:0 0 10px}
+.btn{display:inline-block;padding:8px 14px;border-radius:10px;background:#222;color:#fff;text-decoration:none;cursor:pointer;margin:6px}
+.btn.ghost{background:transparent;color:#222;border:1px solid #ddd}
+
+/* fingerprint */
+.finger{width:160px;height:160px;border-radius:12px;display:flex;align-items:center;justify-content:center;border:3px dashed #bbb;margin:8px auto;user-select:none}
+
+/* gift box */
+.gift{width:220px;height:220px;border-radius:12px;background:linear-gradient(180deg,#ffdede,#ffd2ff);display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer}
+.ribbon{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:70%;height:30px;background:#faa;border-radius:8px}
+
+/* book */
+.book-wrap{width:360px;height:260px;perspective:1400px;display:flex;align-items:center;justify-content:center}
+.book{position:relative;width:320px;height:230px;transform-style:preserve-3d;transition:transform 0.8s ease;cursor:pointer}
+.cover, .page{position:absolute;top:0;left:0;width:100%;height:100%;backface-visibility:hidden;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.18);overflow:hidden}
+.cover{background:linear-gradient(180deg,#fefefe,#ffe);display:flex;align-items:center;justify-content:center;font-weight:700}
+.page{background:#fff;padding:18px;font-size:16px;line-height:1.5}
+.page.hidden{display:none}
+.book.zoom{transform:scale(1.35)}
+
+/* gif popup */
+.gif-only{max-width:540px}
+
+/* floating video */
+.float-video{position:fixed;right:20px;bottom:40px;width:240px;height:140px;border-radius:12px;box-shadow:0 8px 22px rgba(0,0,0,0.25);z-index:45;display:flex;align-items:center;justify-content:center;animation:floatUpDown 4s ease-in-out infinite}
+@keyframes floatUpDown{0%{transform:translateY(0)}50%{transform:translateY(-14px)}100%{transform:translateY(0)}}
+
+/* small helpers */
+.small{font-size:13px;color:#555}
+.hidden-el{display:none}
+
+/* responsive tweaks */
+@media (max-width:480px){.book-wrap{width:300px;height:220px}.book{width:280px;height:200px}}
+
   </style>
 </head>
-<body>
+<body>  <div id="stage" class="stage">
+    <!-- background image: replace background.jpg -->
+    <img id="bgImg" src="background.jpg" alt="background" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1"><!-- balloons (replace balloon1.png..balloon4.png) -->
+<img src="balloon1.png" class="balloon anim" style="left:8%;width:80px;animation-duration:18s;" alt="balloon">
+<img src="balloon2.png" class="balloon anim" style="left:28%;width:70px;animation-duration:22s;" alt="balloon">
+<img src="balloon3.png" class="balloon anim" style="left:58%;width:90px;animation-duration:20s;" alt="balloon">
+<img src="balloon4.png" class="balloon anim" style="left:78%;width:75px;animation-duration:24s;" alt="balloon">
 
-<!-- BALLOONS -->
-<img src="haloo1.png" class="balloon" style="left: 10%;" />
-<img src="haloo2.png" class="balloon" style="left: 30%;" />
-<img src="haloo3.png" class="balloon" style="left: 50%;" />
-<img src="haloo1.png" class="balloon" style="left: 70%;" />
-<img src="haloo2.png" class="balloon" style="left: 85%;" />
-
-<!-- POPUPS -->
-<div class="popup" id="popup1">
-  <h2>Selamat datang di Syy Stickers! Silakan lanjutkan untuk pembayaran QRIS Anda.</h2>
-  <button onclick="showPopup(2)">Lanjutkan</button>
+<!-- book container (starts hidden until gift opened) -->
+<div id="bookArea" class="book-wrap hidden-el" style="z-index:20">
+  <div id="book" class="book" title="Klik untuk buka/perbesar">
+    <div id="cover" class="cover">Klik untuk buka buku</div>
+    <!-- pages will be injected here -->
+  </div>
 </div>
 
-<div class="popup" id="popup2" style="display: none;">
-  <h2>Masukkan nama Anda</h2>
-  <input type="text" id="nama" placeholder="Nama kamu di sini"/>
-  <button onclick="showPopup(3)">Lanjutkan</button>
+<!-- floating video (hidden until shown) -->
+<div id="floatVideo" class="float-video hidden-el">
+  <video id="videoEl" src="popup-video.mp4" playsinline loop muted style="width:100%;height:100%;object-fit:cover;border-radius:12px"></video>
 </div>
 
-<div class="popup" id="popup3" style="display: none;">
-  <h2>Masukkan jumlah pembayaran</h2>
-  <input type="number" id="jumlah" placeholder="Contoh: 25000"/>
-  <button onclick="showPopup(4)">Kirim</button>
+<!-- Audio controls -->
+<div style="position:fixed;left:14px;bottom:14px;z-index:60;background:rgba(255,255,255,0.85);padding:8px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.15)">
+  <div class="small">Music background (ganti file: background-music.mp3)</div>
+  <audio id="bgMusic" src="background-music.mp3" loop></audio>
+  <div style="margin-top:6px">
+    <button id="playMusic" class="btn">Play</button>
+    <button id="pauseMusic" class="btn ghost">Pause</button>
+  </div>
 </div>
 
-<div class="popup" id="popup4" style="display: none;">
-  <h2>Terima kasih telah berbelanja Lopyuu💖</h2>
-</div>
+  </div>  <!-- Modal 1: password -->  <div id="modalPassword" class="modal-wrap">
+    <div class="overlay"></div>
+    <div class="modal">
+      <h3>Masukkan sandi</h3>
+      <input id="pwdInput" placeholder="ketik sandi di sini" style="width:88%;padding:10px;border-radius:8px;border:1px solid #ddd;margin:8px 0;">
+      <div>
+        <button id="pwdNext" class="btn">Next</button>
+      </div>
+      <div id="pwdMsg" class="small" style="margin-top:8px;color:#b33"></div>
+    </div>
+  </div>  <!-- Modal 2: fingerprint (fake) -->  <div id="modalFinger" class="modal-wrap hidden-el">
+    <div class="overlay"></div>
+    <div class="modal">
+      <h3>Verifikasi Sidik Jari</h3>
+      <div class="finger" id="fingerArea">Tekan & tahan</div>
+      <div class="small">Tahan selama 2 detik untuk melanjutkan</div>
+    </div>
+  </div>  <!-- Gift popup (click to open) -->  <div id="modalGift" class="modal-wrap hidden-el">
+    <div class="overlay"></div>
+    <div class="modal">
+      <h3>Kotak Hadiah</h3>
+      <div class="gift" id="giftBox">
+        <div class="ribbon"></div>
+        <div class="small">Klik kotak untuk buka</div>
+      </div>
+      <div style="margin-top:10px" class="small">Klik lagi buku yang muncul untuk memperbesar</div>
+    </div>
+  </div>  <!-- GIF popup (no chrome) -->  <div id="gifOnly" class="modal-wrap hidden-el" style="pointer-events:auto">
+    <div class="overlay" style="background:transparent"></div>
+    <div class="modal gif-only">
+      <!-- Replace popup-gift.gif -->
+      <img id="giftGif" src="popup-gift.gif" alt="gift gif" style="width:100%;height:auto;border-radius:8px">
+      <div style="margin-top:8px" class="small">Teks untuk GIF (ganti di file)</div>
+      <div style="margin-top:8px"><button class="btn" id="closeGif">Tutup</button></div>
+    </div>
+  </div>  <!-- Final popup -->  <div id="finalPopup" class="modal-wrap hidden-el">
+    <div class="overlay"></div>
+    <div class="modal">
+      <h3 id="finalText">Teks akhiran di sini (ganti di file)</h3>
+      <div style="margin-top:10px"><button class="btn" id="closeFinal">Selesai</button></div>
+    </div>
+  </div>  <script>
+    // ========== CONFIG ==========
+    const CORRECT_PASSWORD = 'arjingga25'; // ganti di sini bila perlu
+    const HOLD_MS = 1700; // lama tahan fingerprint (ms)
 
-<script>
-  function showPopup(num) {
-    for (let i = 1; i <= 4; i++) {
-      document.getElementById("popup" + i).style.display = "none";
+    // Pages content -> ganti teks sesuai kebutuhan
+    const pages = [
+      'Halaman 1 - Tulis teksmu di sini. Ganti langsung array ini.',
+      'Halaman 2 - Lorem ipsum dolor sit amet.',
+      'Halaman 3 - Teks bisa panjang, atur ukuran font jika perlu.',
+      'Halaman 4 - Tulis cerita atau pesan di sini.',
+      'Halaman 5 - Lanjutkan isi cerita.',
+      'Halaman 6 - Isi yang ingin kamu tampilkan.',
+      'Halaman 7 - Jangan lupa ganti sesuai konsepmu.',
+      'Halaman 8 - Kamu bebas mengganti teks ini.',
+      'Halaman 9 - Hampir selesai...',
+      'Halaman 10 - Terima kasih! Setelah ini buku akan menutup dan menghilang.'
+    ];
+
+    // ========== ELEMENTS ==========
+    const modalPassword = document.getElementById('modalPassword');
+    const pwdInput = document.getElementById('pwdInput');
+    const pwdNext = document.getElementById('pwdNext');
+    const pwdMsg = document.getElementById('pwdMsg');
+
+    const modalFinger = document.getElementById('modalFinger');
+    const fingerArea = document.getElementById('fingerArea');
+
+    const modalGift = document.getElementById('modalGift');
+    const giftBox = document.getElementById('giftBox');
+
+    const bookArea = document.getElementById('bookArea');
+    const bookEl = document.getElementById('book');
+    const coverEl = document.getElementById('cover');
+
+    const gifOnly = document.getElementById('gifOnly');
+    const closeGif = document.getElementById('closeGif');
+
+    const floatVideo = document.getElementById('floatVideo');
+    const videoEl = document.getElementById('videoEl');
+
+    const finalPopup = document.getElementById('finalPopup');
+    const closeFinal = document.getElementById('closeFinal');
+
+    const bgMusic = document.getElementById('bgMusic');
+    document.getElementById('playMusic').addEventListener('click',()=>bgMusic.play());
+    document.getElementById('pauseMusic').addEventListener('click',()=>bgMusic.pause());
+
+    // ========== PASSWORD FLOW ==========
+    pwdNext.addEventListener('click',()=>{
+      const val = pwdInput.value.trim();
+      if(val === CORRECT_PASSWORD){
+        modalPassword.classList.add('hidden-el');
+        showFingerprint();
+      } else {
+        pwdMsg.textContent = 'Kata sandi salah.';
+      }
+    });
+
+    // allow Enter
+    pwdInput.addEventListener('keydown',e=>{if(e.key==='Enter')pwdNext.click()});
+
+    // ========== FINGERPRINT (fake hold) ==========
+    function showFingerprint(){
+      modalFinger.classList.remove('hidden-el');
+      let holdTimer = null;
+      const success = ()=>{
+        modalFinger.classList.add('hidden-el');
+        showGift();
+      };
+
+      const startHold = (e)=>{
+        e.preventDefault();
+        fingerArea.textContent = 'Menahan...';
+        holdTimer = setTimeout(()=>{fingerArea.textContent = 'Terkonfirmasi'; success();}, HOLD_MS);
+      };
+      const cancelHold = ()=>{fingerArea.textContent = 'Tekan & tahan'; clearTimeout(holdTimer);};
+
+      fingerArea.addEventListener('mousedown', startHold);
+      fingerArea.addEventListener('touchstart', startHold);
+      window.addEventListener('mouseup', cancelHold);
+      window.addEventListener('touchend', cancelHold);
     }
-    document.getElementById("popup" + num).style.display = "block";
-  }
 
-  // Optional: Membuat balon muncul terus secara acak
-  const balloons = document.querySelectorAll('.balloon');
-  balloons.forEach((balloon) => {
-    balloon.style.top = Math.floor(Math.random() * window.innerHeight) + 'px';
-    setInterval(() => {
-      balloon.style.left = Math.floor(Math.random() * 90) + '%';
-    }, 5000);
-  });
-</script>
+    // ========== GIFT FLOW ==========
+    function showGift(){
+      modalGift.classList.remove('hidden-el');
+    }
 
-</body>
+    giftBox.addEventListener('click',()=>{
+      // simulate opening: hide gift modal and reveal book
+      modalGift.classList.add('hidden-el');
+      openBook();
+    });
+
+    // ========== BOOK / FLIPBOOK ==========
+    let currentPage = -1; // -1 = closed (show cover); 0..9 pages
+    const totalPages = pages.length;
+
+    function openBook(){
+      bookArea.classList.remove('hidden-el');
+      // build pages
+      buildPages();
+      setTimeout(()=>{
+        bookEl.classList.add('zoom');
+      },120);
+      // first click will open cover to page 0
+    }
+
+    function buildPages(){
+      // clear existing
+      bookEl.innerHTML = '';
+      // cover
+      const cover = document.createElement('div'); cover.className='cover'; cover.textContent='Cover Buku (Klik untuk buka)';
+      bookEl.appendChild(cover);
+      // pages
+      for(let i=0;i<totalPages;i++){
+        const p = document.createElement('div'); p.className='page hidden-el'; p.dataset.index=i; p.innerHTML = `<div style="height:100%;overflow:auto">${pages[i]}</div>`;
+        bookEl.appendChild(p);
+      }
+      // click handler
+      bookEl.addEventListener('click',onBookClick);
+    }
+
+    function onBookClick(){
+      if(currentPage < 0){
+        // opening cover -> show first page
+        currentPage = 0;
+        renderPages();
+        return;
+      }
+      // advance page
+      currentPage++;
+      if(currentPage >= totalPages){
+        // finished: close and fade out book
+        bookEl.classList.remove('zoom');
+        bookEl.style.transition='opacity 1s ease';
+        bookEl.style.opacity='0';
+        setTimeout(()=>{bookArea.classList.add('hidden-el'); bookEl.style.opacity=''; bookEl.innerHTML=''; currentPage=-1; showGifPopup();},1000);
+        return;
+      }
+      renderPages();
+    }
+
+    function renderPages(){
+      const children = Array.from(bookEl.children);
+      // children[0] is cover, children[1..] pages
+      children.forEach((ch,idx)=>{
+        if(idx===0){
+          ch.style.display = currentPage<0 ? 'flex' : 'none';
+        } else {
+          const pIndex = idx-1;
+          if(pIndex === currentPage){ ch.style.display='block'; ch.classList.remove('hidden-el'); }
+          else ch.style.display='none';
+        }
+      });
+    }
+
+    // ========== GIF popup ==========
+    function showGifPopup(){
+      gifOnly.classList.remove('hidden-el');
+    }
+    closeGif.addEventListener('click',()=>{gifOnly.classList.add('hidden-el'); showVideoFloating();});
+
+    // ========== Floating video popup ==========
+    function showVideoFloating(){
+      floatVideo.classList.remove('hidden-el');
+      // play if available
+      videoEl.play().catch(()=>{});
+      // after some time show final popup
+      setTimeout(()=>{floatVideo.classList.add('hidden-el'); showFinal();},6000);
+    }
+
+    // ========== Final popup ==========
+    function showFinal(){
+      finalPopup.classList.remove('hidden-el');
+    }
+    closeFinal.addEventListener('click',()=>{finalPopup.classList.add('hidden-el');});
+
+    // ========== start ========
+    // show password modal on load (already visible by default)
+    // center balloons randomly (tiny random offsets)
+    document.querySelectorAll('.balloon').forEach((el,i)=>{
+      const left = parseFloat(el.style.left) + (Math.random()*6-3);
+      el.style.left = left+'%';
+      el.style.bottom = (-80 - Math.random()*40)+'px';
+    });
+
+    // small UX: if user clicks outside modals, do nothing to keep flow controlled
+
+    // Prevent accidental text selection during long-press
+    fingerArea.addEventListener('selectstart',e=>e.preventDefault());
+
+    // Optional: allow clicking cover to toggle zoom
+    coverEl.addEventListener('click', (e)=>{ e.stopPropagation(); currentPage=0; renderPages(); });
+
+    // END
+  </script></body>
 </html>
