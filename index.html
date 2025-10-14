@@ -1,98 +1,107 @@
 <!--
-Interactive Flipbook HTML — Updated
+Interactive Flipbook HTML — REVISI: realistic 3D page curl + sequential popups
 Catatan singkat:
 - Semua teks dan asset paths berada di bagian EDITABLE VARIABLES di dalam <script>.
-- Jika "BG_IMAGE" dikosongkan (''), halaman akan menggunakan gradasi crem sebagai background.
-- Ganti asset (balloon, gif, video, music, bg) dengan URL raw GitHub atau file di repo.
 - Password default: arjingga25
+- Gunakan URL raw GitHub (raw.githubusercontent.com) atau relative paths untuk assets.
+- Upload file ini sebagai index.html di repo dan aktifkan GitHub Pages.
 
-Upload 1 file ini ke repo GitHub (mis. index.html) lalu aktifkan GitHub Pages untuk dapatkan link.
+Fitur utama (sesuai permintaan):
+1) Modal password -> fingerprint -> gift -> open book -> realistic 3D page-turn flipbook (bisa maju/mundur klik) -> gif -> video -> penutup (tampil berurutan, tidak numpuk)
+2) Fingerprint dan styling cream tetap dipertahankan
+3) 4 balon di background
+4) Musik player
+5) Semua teks/asset mudah diganti di variabel EDITABLE
 --><!doctype html>
 
 <html lang="id">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Flipbook Interaktif - Sempurna</title>
+  <title>Flipbook Interaktif - Revisi 3D</title>
   <style>
-    :root{
-      --cream-a: #fbf5ec; --cream-b: #f3eadc; --accent:#c9a98a; --muted:#6b5b4a;
-      --popup-radius:16px; font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
-    }
-    html,body{height:100%;margin:0;background:#f6f1ea;color:var(--muted)}/* Stage: uses image if provided by JS otherwise fallback gradient */
-.stage{position:relative;min-height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:28px;background-size:cover;background-position:center center}
-
-/* Balloons */
-.balloon{position:absolute;bottom:-200px;width:120px;opacity:0.95;animation:rise linear infinite;pointer-events:none}
-.balloon.x1{left:6%;animation-duration:18s;animation-delay:0s}
+    :root{--cream-a:#fbf5ec;--cream-b:#f3eadc;--accent:#c69c71;--muted:#54463a;--popup-radius:16px}
+    *{box-sizing:border-box}
+    body,html{height:100%;margin:0;font-family:Poppins,system-ui,Arial;color:var(--muted);background:#f6f1ea}
+    .stage{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px;background-size:cover;background-position:center}/* balloons */
+.balloon{position:absolute;bottom:-220px;opacity:0.95;animation:rise linear infinite;pointer-events:none}
+.balloon.x1{left:6%;width:120px;animation-duration:18s;animation-delay:0s}
 .balloon.x2{left:22%;width:90px;animation-duration:15s;animation-delay:2s}
 .balloon.x3{left:60%;width:110px;animation-duration:20s;animation-delay:1s}
 .balloon.x4{left:80%;width:100px;animation-duration:16s;animation-delay:3s}
 @keyframes rise{0%{transform:translateY(0) rotate(-6deg);}100%{transform:translateY(-140vh) rotate(10deg);} }
 
-/* modal / popup (cream gradient) */
-.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:80;min-width:300px;max-width:92vw;padding:18px;border-radius:var(--popup-radius);box-shadow:0 18px 50px rgba(0,0,0,0.18);background:linear-gradient(180deg,var(--cream-a),var(--cream-b));display:none}
+/* modal */
+.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:999;min-width:320px;max-width:92vw;padding:18px;border-radius:var(--popup-radius);box-shadow:0 18px 50px rgba(0,0,0,0.18);background:linear-gradient(180deg,var(--cream-a),var(--cream-b));display:none}
 .modal.show{display:block}
-.modal h3{margin:6px 0 8px;font-size:18px;text-align:center}
-.modal p{margin:0 0 12px;line-height:1.4;text-align:center}
+.modal h3{margin:6px 0 8px;text-align:center}
+.modal p{text-align:center;margin:0 0 12px}
 .buttons{display:flex;gap:10px;justify-content:center}
 button.btn{background:var(--accent);border:none;padding:8px 14px;border-radius:10px;color:#fff;font-weight:700;cursor:pointer}
-input[type="password"],input[type="text"],input[type="number"]{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);margin-bottom:8px;background:transparent}
+input[type=text],input[type=password]{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);background:transparent}
 
 /* fingerprint */
-.fingerprint-area{display:flex;align-items:center;flex-direction:column;gap:12px;padding:12px}
+.fingerprint-area{display:flex;align-items:center;flex-direction:column;gap:12px}
 .fingerprint-btn{width:84px;height:84px;border-radius:50%;background:rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:30px}
 .finger-progress{width:72px;height:8px;background:rgba(0,0,0,0.06);border-radius:20px;overflow:hidden}
 .finger-progress > i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#d2ad88,#b78c6b);}
-
-/* center area */
-.center{display:flex;align-items:center;justify-content:center}
 
 /* gift box */
 .gift{width:180px;height:140px;background:#fff;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.12);position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .gift .ribbon{position:absolute;top:14px;left:18px;right:18px;height:18px;background:linear-gradient(90deg,#d3a87a,#b78c6b);border-radius:8px}
 .gift .bow{position:absolute;top:6px;left:50%;transform:translateX(-50%);width:46px;height:46px;border-radius:50%;background:linear-gradient(90deg,#cfa07a,#a97c60)}
 
-/* book area (3D-like) */
-.book-area{position:relative;display:flex;align-items:center;justify-content:center;gap:12px;margin-top:18px}
-.book{width:420px;height:280px;background:#fbf9f6;border-radius:10px;box-shadow:0 18px 50px rgba(0,0,0,0.16);position:relative;overflow:hidden;transform-origin:center;transition:transform .28s ease}
-.book.zoom{transform:scale(1.18)}
-.cover{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:800}
+/* Book wrapper */
+.book-wrap{width:820px;max-width:92vw;height:520px;max-height:76vh;position:relative;perspective:2000px;display:flex;align-items:center;justify-content:center}
+.book{width:620px;height:420px;position:relative;transform-style:preserve-3d}
 
-.page{position:absolute;inset:0;padding:26px;box-sizing:border-box;background:#fff;backface-visibility:hidden;transform-origin:left;transition:transform .6s ease, opacity .4s ease;display:flex;align-items:center;justify-content:center}
-.page .txt{max-width:92%;font-size:18px;line-height:1.6;color:var(--muted)}
-.page.flipped{transform:rotateY(-180deg);}
+/* Each sheet represents two pages: left (back) and right (front) */
+.sheet{position:absolute;left:0;top:0;width:100%;height:100%;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.2,.9,.2,1);pointer-events:auto}
+.sheet .side{position:absolute;width:50%;height:100%;top:0;overflow:hidden;background:#fff;box-shadow:inset 0 0 40px rgba(0,0,0,0.06)}
+.sheet .left{left:0;transform-origin:right center;z-index:2;border-right:1px solid rgba(0,0,0,0.04)}
+.sheet .right{right:0;left:auto;transform-origin:left center;z-index:3;border-left:1px solid rgba(0,0,0,0.04)}
 
-.book.fadeout{animation:fadeAway .9s forwards}
-@keyframes fadeAway{to{opacity:0;transform:scale(.9);filter:blur(2px);}}
+/* appearance of page content */
+.page-inner{padding:28px;font-size:18px;line-height:1.6;color:var(--muted);height:100%;display:flex;flex-direction:column;justify-content:center}
 
-/* floating gif/video */
-.floating{width:320px;height:200px;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,0.15);overflow:hidden;display:flex;align-items:center;justify-content:center}
-.floating.video{width:420px;height:260px}
+/* folded state (flipped to left) -> rotateY(-180deg) for right side */
+.sheet.flipped{transform:translateX(-50%) rotateY(-180deg);z-index:0}
 
-/* music control */
-.music{position:fixed;left:14px;bottom:14px;background:linear-gradient(180deg,rgba(255,255,255,0.9),rgba(250,245,238,0.9));padding:8px 12px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.12);display:flex;gap:8px;align-items:center;z-index:70}
-.music input[type="range"]{width:140px}
+/* shadow/shine to emulate curve */
+.sheet::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(0,0,0,0.06),transparent);opacity:0;transition:opacity .35s}
+.sheet.flipped::after{opacity:0.7}
 
-@media (max-width:600px){.book{width:86vw;height:56vw}.floating{width:86vw;height:46vw}}
+/* controls */
+.controls{position:fixed;right:18px;bottom:18px;z-index:120;display:flex;gap:8px}
+
+/* floating gif/video modals */
+.floating{width:360px;height:220px;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,0.15);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.floating.video{width:520px;height:300px}
+
+/* music */
+.music{position:fixed;left:14px;bottom:14px;background:linear-gradient(180deg,rgba(255,255,255,0.95),rgba(250,245,238,0.95));padding:8px 12px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.12);display:flex;gap:8px;align-items:center;z-index:120}
+.music input[type=range]{width:140px}
+
+/* responsive */
+@media (max-width:900px){.book-wrap{height:58vh}.book{width:86vw;height:56vh}}
 
   </style>
 </head>
 <body>
   <div class="stage" id="stage">
-    <!-- balloons (replace src in script) -->
+    <!-- balloons -->
     <img id="balloon1" class="balloon x1" src="" alt="b1">
     <img id="balloon2" class="balloon x2" src="" alt="b2">
     <img id="balloon3" class="balloon x3" src="" alt="b3">
-    <img id="balloon4" class="balloon x4" src="" alt="b4"><div id="centerContent" class="center" style="flex-direction:column;z-index:2">
-  <div id="giftBox" class="gift" title="Klik untuk buka hadiah">
-    <div class="ribbon"></div>
-    <div class="bow"></div>
+    <img id="balloon4" class="balloon x4" src="" alt="b4"><!-- center content: gift and book -->
+<div id="centerContent" style="z-index:20;display:flex;flex-direction:column;align-items:center;gap:16px">
+  <div id="giftBox" class="gift" title="Klik kotak untuk buka hadiah"></div>
+  <div id="bookArea" class="book-wrap" style="display:none">
+    <div id="book" class="book"></div>
   </div>
-  <div id="bookContainer" class="book-area" style="display:none"></div>
 </div>
 
-<!-- music control -->
+<!-- music -->
 <div class="music" id="musicBox">
   <button id="playBtn" class="btn">Play</button>
   <div style="font-size:13px">Music: <span id="musicLabel">[ganti di script]</span></div>
@@ -100,12 +109,10 @@ input[type="password"],input[type="text"],input[type="number"]{width:100%;paddin
 </div>
 
   </div>  <!-- MODALS -->  <div id="pwdModal" class="modal show">
-    <h3><!-- Ganti judul pop up di sini -->Masukkan sandi</h3>
-    <p><!-- Ganti keterangan -->Masukkan kata sandi untuk membuka hadiah.</p>
+    <h3>Masukkan sandi</h3>
+    <p>Masukkan kata sandi untuk membuka hadiah.</p>
     <input id="pwdInput" type="password" placeholder="ketik sandi di sini">
-    <div class="buttons">
-      <button id="pwdNext" class="btn">Next</button>
-    </div>
+    <div class="buttons"><button id="pwdNext" class="btn">Next</button></div>
   </div>  <div id="pwdWrong" class="modal">
     <h3>Kata sandi salah</h3>
     <p>Silakan coba lagi.</p>
@@ -113,141 +120,152 @@ input[type="password"],input[type="text"],input[type="number"]{width:100%;paddin
   </div>  <div id="fingerModal" class="modal">
     <h3>Verifikasi Sidik Jari</h3>
     <p>Tahan tombol sidik jari selama beberapa detik untuk melanjutkan.</p>
-    <div class="fingerprint-area">
-      <div class="fingerprint-btn" id="fingerBtn">🔒</div>
-      <div class="finger-progress"><i id="fingerFill"></i></div>
-    </div>
+    <div class="fingerprint-area"><div class="fingerprint-btn" id="fingerBtn">🔒</div><div class="finger-progress"><i id="fingerFill"></i></div></div>
   </div>  <div id="giftModal" class="modal">
     <h3>Hadiah</h3>
     <p>Klik kotak untuk membukanya.</p>
     <div class="center" style="margin-top:8px"><div id="giftModalBox" class="gift"><div class="ribbon"></div><div class="bow"></div></div></div>
-  </div>  <div id="gifModal" class="modal">
-    <div class="floating center" id="gifContent">
-      <img id="gifImg" src="" alt="gif" style="max-width:100%;max-height:100%">
-    </div>
-  </div>  <div id="videoModal" class="modal">
-    <div class="floating video center">
-      <video id="floatVideo" src="" controls loop style="max-width:100%;max-height:100%"></video>
-    </div>
-  </div>  <div id="endModal" class="modal">
-    <h3>Penutup</h3>
-    <p id="endText">Terima kasih — ganti teks penutup di script.</p>
-    <div class="buttons"><button id="endClose" class="btn">Tutup</button></div>
-  </div><audio id="bgMusic" loop preload="auto" src=""></audio>
+  </div>  <div id="gifModal" class="modal"><div class="floating" id="gifContent"><img id="gifImg" src="" style="max-width:100%;max-height:100%"></div></div>
+  <div id="videoModal" class="modal"><div class="floating video" id="videoContent"><video id="floatVideo" src="" controls loop style="max-width:100%;max-height:100%"></video></div></div>
+  <div id="endModal" class="modal"><h3>Penutup</h3><p id="endText">Terima kasih — ganti teks penutup di script.</p><div class="buttons"><button id="endClose" class="btn">Tutup</button></div></div><audio id="bgMusic" loop preload="auto" src=""></audio>
 
-  <script>
-    /* ===== EDITABLE VARIABLES =====
-       Ganti nilai-nilai di bawah ini.
-    */
+  <div class="controls">
+    <button id="prevBtn" class="btn" style="display:none">Prev</button>
+    <button id="nextBtn" class="btn" style="display:none">Next</button>
+  </div>  <script>
+    /* ===== EDITABLE VARIABLES ===== */
     const PASSWORD = 'arjingga25';
     const MUSIC_LABEL = 'Sempurna (ganti)';
-    const MUSIC_SRC = ''; // ganti path music
-    const BG_IMAGE = ''; // ganti url image; jika kosong -> akan pakai gradasi crem
-    const BALLOONS = ['','','','']; // ganti 4 url balloon
+    const MUSIC_SRC = ''; // isi dengan path or raw github
+    const BG_IMAGE = ''; // jika kosong pakai gradasi crem
+    const BALLOONS = ['','','','']; // ganti url balloon
     const GIF_SRC = '';
     const VIDEO_SRC = '';
-
+    // PAGES: total sheets = Math.ceil(PAGES.length/2)
     const PAGES = [
-      'Halaman 1 - Ganti teks ini di script',
-      'Halaman 2 - Ganti teks ini di script',
-      'Halaman 3 - Ganti teks ini di script',
-      'Halaman 4 - Ganti teks ini di script',
-      'Halaman 5 - Ganti teks ini di script',
-      'Halaman 6 - Ganti teks ini di script',
-      'Halaman 7 - Ganti teks ini di script',
-      'Halaman 8 - Ganti teks ini di script',
-      'Halaman 9 - Ganti teks ini di script',
-      'Halaman 10 - Ganti teks ini di script'
+      'Halaman 1 - ganti teks di script',
+      'Halaman 2 - ganti teks di script',
+      'Halaman 3 - ganti teks di script',
+      'Halaman 4 - ganti teks di script',
+      'Halaman 5 - ganti teks di script',
+      'Halaman 6 - ganti teks di script',
+      'Halaman 7 - ganti teks di script',
+      'Halaman 8 - ganti teks di script',
+      'Halaman 9 - ganti teks di script',
+      'Halaman 10 - ganti teks di script'
     ];
-
-    const GIF_TEXT = 'Ganti teks GIF di script';
-    const VIDEO_TEXT = 'Ganti teks Video di script';
     const END_TEXT = 'Ganti teks penutup di script';
     /* ===== END EDITABLE ===== */
 
-    // setup assets
+    // apply assets
     document.getElementById('musicLabel').textContent = MUSIC_LABEL;
     if(MUSIC_SRC) document.getElementById('bgMusic').src = MUSIC_SRC;
     if(GIF_SRC) document.getElementById('gifImg').src = GIF_SRC;
     if(VIDEO_SRC) document.getElementById('floatVideo').src = VIDEO_SRC;
     document.getElementById('endText').textContent = END_TEXT;
 
-    // stage background: if BG_IMAGE provided use it, else gradient crem
+    // background & balloons
     const stage = document.getElementById('stage');
-    if(BG_IMAGE && BG_IMAGE.trim()!==''){
-      stage.style.backgroundImage = `url('${BG_IMAGE}')`;
-    } else {
-      stage.style.backgroundImage = `linear-gradient(180deg,var(--cream-a),var(--cream-b))`;
-    }
+    if(BG_IMAGE && BG_IMAGE.trim()!=='') stage.style.backgroundImage = `url('${BG_IMAGE}')`;
+    else stage.style.backgroundImage = `linear-gradient(180deg,var(--cream-a),var(--cream-b))`;
+    BALLOONS.forEach((s,i)=>{const el=document.getElementById('balloon'+(i+1)); if(el){ el.src = s || ''; if(!s) el.style.opacity = 0.05 }});
 
-    // balloons
-    BALLOONS.forEach((src,i)=>{const el=document.getElementById('balloon'+(i+1)); if(el){ el.src = src || ''; if(!src) el.style.opacity=0.06 }});
-
-    // modal helpers
+    // modal helpers (sequential display)
     function show(id){document.getElementById(id).classList.add('show')}
     function hide(id){document.getElementById(id).classList.remove('show')}
 
-    // password flow
+    // PASSWORD -> FINGERPRINT -> GIFT flow
     const pwdInput = document.getElementById('pwdInput');
     document.getElementById('pwdNext').addEventListener('click', checkPwd);
-    pwdInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter') checkPwd(); });
-    function checkPwd(){ if(pwdInput.value === PASSWORD){ hide('pwdModal'); setTimeout(()=>show('fingerModal'),300); } else { hide('pwdModal'); show('pwdWrong'); } }
-    document.getElementById('pwdRetry').addEventListener('click', ()=>{ hide('pwdWrong'); show('pwdModal'); pwdInput.value=''; pwdInput.focus(); });
+    pwdInput.addEventListener('keydown',(e)=>{ if(e.key==='Enter') checkPwd(); });
+    function checkPwd(){ if(pwdInput.value === PASSWORD){ hide('pwdModal'); setTimeout(()=>show('fingerModal'),300); } else { hide('pwdModal'); show('pwdWrong'); }}
+    document.getElementById('pwdRetry').addEventListener('click',()=>{ hide('pwdWrong'); show('pwdModal'); pwdInput.value=''; pwdInput.focus(); });
 
-    // fingerprint press-and-hold
+    // fingerprint hold (keep as requested)
     const fingerBtn = document.getElementById('fingerBtn');
     const fingerFill = document.getElementById('fingerFill');
     let fillInt=null, fill=0;
-    function fingerStart(){ fill=0; fingerFill.style.width='0%'; fillInt = setInterval(()=>{ fill+=4; fingerFill.style.width = fill+'%'; if(fill>=100){ fingerComplete(); } },90); }
+    function fingerStart(){ fill=0; fingerFill.style.width='0%'; fillInt=setInterval(()=>{ fill+=4; fingerFill.style.width = fill+'%'; if(fill>=100){ fingerComplete(); } },90);}    
     function fingerStop(){ clearInterval(fillInt); fingerFill.style.width='0%'; }
     function fingerComplete(){ clearInterval(fillInt); fingerFill.style.width='100%'; hide('fingerModal'); setTimeout(()=>show('giftModal'),350); }
-    fingerBtn.addEventListener('mousedown', fingerStart); fingerBtn.addEventListener('touchstart', fingerStart);
-    document.addEventListener('mouseup', fingerStop); document.addEventListener('touchend', fingerStop);
+    fingerBtn.addEventListener('mousedown',fingerStart); fingerBtn.addEventListener('touchstart',fingerStart);
+    document.addEventListener('mouseup',fingerStop); document.addEventListener('touchend',fingerStop);
 
-    // gift -> open book
-    const giftBox = document.getElementById('giftBox');
-    const giftModalBox = document.getElementById('giftModalBox');
-    giftBox.addEventListener('click', ()=>{ show('giftModal'); });
-    giftModalBox.addEventListener('click', openBookSequence);
+    // gift open -> build book
+    document.getElementById('giftBox').addEventListener('click', ()=>{ show('giftModal'); });
+    document.getElementById('giftModalBox').addEventListener('click', openBookSequence);
 
-    function openBookSequence(){ hide('giftModal'); const bc = document.getElementById('bookContainer'); buildBook(bc); bc.style.display='flex'; }
+    function openBookSequence(){ hide('giftModal'); // reveal book area sequentially
+      const bookArea = document.getElementById('bookArea'); bookArea.style.display='flex'; buildBook(); }
 
-    function buildBook(container){ container.innerHTML='';
-      const book = document.createElement('div'); book.className='book'; book.id='mainBook';
-      const cover = document.createElement('div'); cover.className='cover'; cover.textContent='Klik untuk buka buku'; book.appendChild(cover);
-      // create pages (stacked)
-      PAGES.forEach((txt,i)=>{
-        const p = document.createElement('div'); p.className='page'; p.dataset.index = i; p.style.zIndex = 200 - i; p.innerHTML = `<div class="txt">${txt}</div>`;
-        book.appendChild(p);
-      });
-      container.appendChild(book);
+    // Build realistic sheet-based book
+    let currentSheetIndex = 0; // 0 means closed (no sheet flipped)
+    function buildBook(){ const book = document.getElementById('book'); book.innerHTML='';
+      const totalPages = PAGES.length; const totalSheets = Math.ceil(totalPages/2);
+      // create sheets from front to back (sheet0 is frontmost)
+      for(let s=0;s<totalSheets;s++){
+        const sheet = document.createElement('div'); sheet.className='sheet'; sheet.dataset.sheet = s;
+        // left side = page (back) index = s*2+1 (odd), right side = page index s*2 (even)
+        const leftIndex = s*2+1; const rightIndex = s*2;
+        const left = document.createElement('div'); left.className='side left';
+        const right = document.createElement('div'); right.className='side right';
+        left.innerHTML = `<div class="page-inner">${PAGES[leftIndex] || ''}</div>`;
+        right.innerHTML = `<div class="page-inner">${PAGES[rightIndex] || ''}</div>`;
+        sheet.appendChild(left); sheet.appendChild(right);
+        // place sheet into book; sheets later in array are deeper (back)
+        book.appendChild(sheet);
+      }
 
-      // interactions
-      let opened = false;
-      book.addEventListener('click', ()=>{
-        if(!opened){ book.classList.add('zoom'); setTimeout(()=>{ opened=true; book.classList.remove('zoom'); },380); return; }
-        advancePage(book);
-      });
-      // allow Enter to advance
-      document.addEventListener('keydown',(e)=>{ if(e.key==='Enter'){ const b=document.getElementById('mainBook'); if(b) b.click(); } });
+      // Add click zones for prev/next
+      enableSheetInteractions();
+      // show controls
+      document.getElementById('prevBtn').style.display = 'inline-block';
+      document.getElementById('nextBtn').style.display = 'inline-block';
     }
 
-    function advancePage(book){ let idx = parseInt(book.dataset.current || 0); const pages = Array.from(book.querySelectorAll('.page'));
-      if(idx >= pages.length){ book.classList.add('fadeout'); setTimeout(()=>{ if(book.parentElement) book.parentElement.style.display='none'; book.remove(); proceedAfterBook(); },900); return; }
-      const p = pages[idx]; p.classList.add('flipped'); p.style.zIndex = 10 + idx; book.dataset.current = idx + 1; }
+    function enableSheetInteractions(){
+      const sheets = Array.from(document.querySelectorAll('.sheet'));
+      // clicking right half -> next, left half -> prev
+      const bookElem = document.getElementById('book');
+      bookElem.onclick = function(e){
+        const rect = bookElem.getBoundingClientRect(); const x = e.clientX - rect.left;
+        if(x > rect.width/2) flipNext(); else flipPrev();
+      }
+      // controls
+      document.getElementById('nextBtn').onclick = flipNext; document.getElementById('prevBtn').onclick = flipPrev;
+    }
 
-    function proceedAfterBook(){ show('gifModal'); setTimeout(()=>{ hide('gifModal'); setTimeout(()=>{ show('videoModal'); },300); },2200); setTimeout(()=>{ hide('videoModal'); setTimeout(()=>{ show('endModal'); },350); },7600); }
+    function flipNext(){ const sheets = Array.from(document.querySelectorAll('.sheet'));
+      if(currentSheetIndex >= sheets.length) return; // already all flipped
+      // flip the sheet at index currentSheetIndex (frontmost first)
+      const sheet = sheets[currentSheetIndex]; sheet.classList.add('flipped'); currentSheetIndex++;
+      // after flipping last sheet (i.e., book fully open), we consider pages done when currentSheetIndex === sheets.length
+      if(currentSheetIndex === sheets.length){ // finished all pages
+        // close and hide after short delay
+        setTimeout(()=>{ // fade out book and continue sequence
+          const ba = document.getElementById('bookArea'); ba.style.opacity = '0'; setTimeout(()=>{ ba.style.display='none'; ba.style.opacity='1'; proceedAfterBook(); },800);
+        },700);
+      }
+    }
+
+    function flipPrev(){ const sheets = Array.from(document.querySelectorAll('.sheet'));
+      if(currentSheetIndex <= 0) return; currentSheetIndex--; const sheet = sheets[currentSheetIndex]; sheet.classList.remove('flipped'); }
+
+    function proceedAfterBook(){ // show gif -> video -> end sequentially
+      show('gifModal'); setTimeout(()=>{ hide('gifModal'); setTimeout(()=>{ show('videoModal'); },300); },2200);
+      setTimeout(()=>{ hide('videoModal'); setTimeout(()=>{ show('endModal'); },350); },7600);
+    }
 
     document.getElementById('endClose').addEventListener('click', ()=>{ hide('endModal'); });
 
     // music controls
     const audio = document.getElementById('bgMusic'); const playBtn = document.getElementById('playBtn'); const vol = document.getElementById('vol');
     playBtn.addEventListener('click', ()=>{ if(audio.paused){ audio.play(); playBtn.textContent='Pause'; } else { audio.pause(); playBtn.textContent='Play'; } });
-    vol.addEventListener('input',(e)=>{ audio.volume = e.target.value; });
-    audio.volume = vol.value;
+    vol.addEventListener('input',(e)=>{ audio.volume = e.target.value; }); audio.volume = vol.value;
 
-    // initial: show pwdModal already
+    // small UX: close any modal if escape pressed
+    document.addEventListener('keydown',(e)=>{ if(e.key==='Escape'){ const modals = document.querySelectorAll('.modal.show'); if(modals.length) modals.forEach(m=>m.classList.remove('show')); } });
 
-    // small guidance: all texts and sources are editable in variables at the top of script
+    // ready
   </script></body>
 </html>
