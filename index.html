@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Flipbook Interaktif — Final (Password + Fingerprint + 10 Pages)</title>
+  <title>Flipbook Interaktif — Fixed</title>
 
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
     html,body{height:100%;margin:0;font-family:'Poppins',system-ui,Arial;background:linear-gradient(180deg,var(--cream-a),var(--cream-b));color:var(--muted)}
     .stage{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px}
 
-    /* Balloons */
+    /* Balloons (placeholders) */
     .balloon{position:absolute;bottom:-220px;opacity:0.95;animation:rise linear infinite;pointer-events:none}
     .balloon.x1{left:6%;width:120px;animation-duration:18s;animation-delay:0s}
     .balloon.x2{left:22%;width:90px;animation-duration:15s;animation-delay:2s}
@@ -30,7 +30,7 @@
       z-index:999;min-width:320px;max-width:92vw;padding:18px;border-radius:var(--popup-radius);
       box-shadow:0 24px 60px rgba(0,0,0,0.15);
       background:linear-gradient(180deg,var(--cream-a),var(--cream-b));
-      display:none;opacity:0;transition:opacity .35s,transform .35s;
+      display:none;opacity:0;transition:opacity .32s,transform .32s;
     }
     .modal.show{display:block;opacity:1;transform:translate(-50%,-50%) scale(1)}
     .modal h3{margin:6px 0 10px;font-size:20px;text-align:center}
@@ -45,11 +45,12 @@
     .finger-progress{width:86px;height:8px;background:rgba(0,0,0,0.06);border-radius:20px;overflow:hidden}
     .finger-progress>i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#d2ad88,#b78c6b);transition:width .06s linear}
 
-    /* flipbook (turn.js) styling */
-    #flipbook{width:760px;height:540px;margin:0 auto;visibility:hidden;opacity:0;transition:opacity .5s}
+    /* flipbook styling */
+    .book-wrap{width:100%;max-width:920px;margin:0 auto;padding:8px}
+    #flipbook{margin:0 auto;visibility:hidden;opacity:0;transition:opacity .4s}
     #flipbook .page{background:#fbf7f1;border:1px solid rgba(0,0,0,0.06);box-shadow:0 8px 30px rgba(0,0,0,0.12);overflow:hidden;display:flex;align-items:center;justify-content:center}
-    .cover{background:linear-gradient(180deg,#5d3b2a,#70462e);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:28px}
-    .inner{background:linear-gradient(180deg,#fbf9f5,#fbf3ea);padding:36px;font-size:20px;line-height:1.6;color:var(--muted);width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+    .cover{background:linear-gradient(180deg,#5d3b2a,#70462e);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:26px}
+    .inner{background:linear-gradient(180deg,#fbf9f5,#fbf3ea);padding:32px;font-size:18px;line-height:1.6;color:var(--muted);width:100%;height:100%;display:flex;align-items:center;justify-content:center;text-align:center;box-shadow:inset 0 8px 30px rgba(0,0,0,0.02)}
 
     /* controls */
     .controls{position:fixed;right:18px;bottom:18px;display:flex;gap:8px;z-index:120}
@@ -58,21 +59,24 @@
     .music{position:fixed;left:14px;bottom:14px;background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(250,245,238,0.96));padding:10px 14px;border-radius:14px;box-shadow:0 12px 36px rgba(0,0,0,0.12);display:flex;gap:10px;align-items:center;z-index:120}
     .music input[type=range]{width:160px}
 
-    @media (max-width:900px){ #flipbook{width:86vw;height:56vw} .modal{min-width:300px} }
+    @media (max-width:900px){
+      .book-wrap{padding:6px}
+      #flipbook .page{font-size:16px}
+      .inner{padding:20px;font-size:16px}
+      .music input[type=range]{width:120px}
+    }
   </style>
 </head>
 <body>
   <div class="stage" id="stage">
-    <!-- balloons -->
+    <!-- balloon placeholders -->
     <img id="balloon1" class="balloon x1" src="" alt="b1">
     <img id="balloon2" class="balloon x2" src="" alt="b2">
     <img id="balloon3" class="balloon x3" src="" alt="b3">
     <img id="balloon4" class="balloon x4" src="" alt="b4">
 
-    <div id="center" style="z-index:20;display:flex;flex-direction:column;align-items:center;gap:18px">
-      <div id="bookArea">
-        <div id="flipbook"></div>
-      </div>
+    <div class="book-wrap" id="center">
+      <div id="flipbook"></div>
     </div>
 
     <!-- music player -->
@@ -114,21 +118,19 @@
     <button id="nextBtn" class="btn" style="display:none">Next</button>
   </div>
 
-  <!-- CDNs -->
+  <!-- jQuery + turn.js -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
 
   <script>
-    /* ===== EDITABLE VARIABLES =====
-       Ganti asset URL/path di bawah.
-    */
+    /* ===== EDITABLE VARIABLES ===== */
     const PASSWORD = 'arjingga25';
     const MUSIC_LABEL = 'Sempurna (ganti)';
-    const MUSIC_SRC = '';   // your music (mp3)
-    const BG_IMAGE = '';    // optional background image url
-    const BALLOONS = ['','','','']; // optional balloon images
-    const GIF_SRC = '';     // optional gif after book
-    const VIDEO_SRC = '';   // optional video url (mp4/webm)
+    const MUSIC_SRC = '';   // tambahin raw.githubusercontent.com url atau path
+    const BG_IMAGE = '';
+    const BALLOONS = ['','','',''];
+    const GIF_SRC = '';
+    const VIDEO_SRC = '';
     const PAGES = [
       'Halaman 1 — Hai, ini halaman pertama 💌',
       'Halaman 2 — Makasih udah buka buku ini 🤍',
@@ -153,11 +155,11 @@
     BALLOONS.forEach((s,i)=>{ const el=document.getElementById('balloon'+(i+1)); if(el){ el.src = s || ''; if(!s) el.style.opacity=0.03 } });
     document.getElementById('endText').textContent = END_TEXT;
 
-    // helper show/hide
-    function show(id){ document.getElementById(id).classList.add('show'); }
-    function hide(id){ document.getElementById(id).classList.remove('show'); }
+    // helpers
+    const show = id => document.getElementById(id).classList.add('show');
+    const hide = id => document.getElementById(id).classList.remove('show');
 
-    // PASSWORD logic (unchanged)
+    // password modal
     const pwdInput = document.getElementById('pwdInput');
     document.getElementById('pwdNext').addEventListener('click', checkPwd);
     pwdInput.addEventListener('keydown',(e)=>{ if(e.key==='Enter') checkPwd(); });
@@ -172,7 +174,7 @@
     }
     document.getElementById('pwdRetry').addEventListener('click', ()=>{ hide('pwdWrong'); show('pwdModal'); pwdInput.value=''; pwdInput.focus(); });
 
-    // Fingerprint hold (unchanged)
+    // fingerprint hold
     const fingerBtn = document.getElementById('fingerBtn');
     const fingerFill = document.getElementById('fingerFill');
     let fillInt=null, fill=0;
@@ -181,7 +183,6 @@
     function fingerComplete(){
       clearInterval(fillInt); fingerFill.style.width='100%';
       hide('fingerModal');
-      // directly show flipbook
       setTimeout(()=> showFlipbook(), 350);
     }
     fingerBtn.addEventListener('mousedown', fingerStart);
@@ -189,7 +190,8 @@
     document.addEventListener('mouseup', fingerStop);
     document.addEventListener('touchend', fingerStop);
 
-    // show flipbook
+    // Build & show flipbook
+    let pagesCount = 0;
     function showFlipbook(){
       initFlipbook();
       const fb = document.getElementById('flipbook');
@@ -199,57 +201,96 @@
       document.getElementById('prevBtn').style.display = 'inline-block';
     }
 
-    // initialize flipbook with covers + 10 pages
     function initFlipbook(){
       const fb = document.getElementById('flipbook'); fb.innerHTML = '';
       // front cover
-      const cf = document.createElement('div'); cf.className='page cover'; cf.innerHTML = '<div style="padding:20px;font-size:26px;color:#fff">📖 Cover Depan</div>';
+      const cf = document.createElement('div'); cf.className='page cover'; cf.innerHTML = '<div style="padding:20px;font-size:22px;color:#fff">📖 Cover Depan</div>';
       fb.appendChild(cf);
-      // 10 pages
-      for(let i=0;i<10;i++){
+      // pages
+      PAGES.forEach((t,i)=>{
         const pg = document.createElement('div'); pg.className='page inner';
-        pg.innerHTML = `<div class="inner" data-page="${i+1}">${PAGES[i] || ''}</div>`;
+        pg.innerHTML = `<div class="inner" data-page="${i+1}">${t || ''}</div>`;
         fb.appendChild(pg);
-      }
+      });
       // back cover
-      const cb = document.createElement('div'); cb.className='page cover'; cb.innerHTML = '<div style="padding:20px;font-size:22px;color:#fff">📖 Cover Belakang</div>';
+      const cb = document.createElement('div'); cb.className='page cover'; cb.innerHTML = '<div style="padding:20px;font-size:20px;color:#fff">📖 Cover Belakang</div>';
       fb.appendChild(cb);
 
-      // initialize turn.js
+      // determine display mode based on width (single on small screens)
+      const displayMode = (window.innerWidth < 900) ? 'single' : 'double';
+
+      // init turn.js
       try {
-        $('#flipbook').turn({width:760,height:540,autoCenter:true,display:'double'});
+        $('#flipbook').turn('destroy'); // destroy if exists
+      } catch(e){}
+      try {
+        $('#flipbook').turn({
+          width: Math.min(900, window.innerWidth - 40),
+          height: Math.min(700, Math.round((window.innerWidth - 40) * 0.65)),
+          autoCenter: true,
+          display: displayMode,
+          gradients: true,
+          duration: 600
+        });
       } catch(e){
         console.error('turn.js init error', e);
       }
 
-      // click zone: left/right
+      pagesCount = $('#flipbook').turn('pages');
+
+      // click zones
       const bookElem = document.getElementById('flipbook');
-      bookElem.addEventListener('click',(ev)=>{
+      bookElem.onclick = function(ev){
         const rect = bookElem.getBoundingClientRect();
-        const x = ev.clientX - rect.left;
+        const x = (ev.touches ? ev.touches[0].clientX : ev.clientX) - rect.left;
         if(x > rect.width/2) $('#flipbook').turn('next'); else $('#flipbook').turn('previous');
-      });
+      };
 
-      // next/prev controls
-      document.getElementById('nextBtn').onclick = ()=>{ try{ $('#flipbook').turn('next'); }catch(e){} };
-      document.getElementById('prevBtn').onclick = ()=>{ try{ $('#flipbook').turn('previous'); }catch(e){} };
+      // next/prev buttons
+      document.getElementById('nextBtn').onclick = function(){
+        try {
+          const current = $('#flipbook').turn('page');
+          const total = $('#flipbook').turn('pages');
+          // if at last inner page (before back cover) -> proceed
+          if(current >= total-1){
+            // ensure proceed only once
+            proceedAfterBook();
+          } else {
+            $('#flipbook').turn('next');
+          }
+        } catch(e){}
+      };
+      document.getElementById('prevBtn').onclick = function(){ try{ $('#flipbook').turn('previous'); }catch(e){} };
 
-      // when reaching end (before back cover) -> proceed
+      // bind turned
       $('#flipbook').bind('turned', function(e, page, view){
         const total = $('#flipbook').turn('pages');
+        // when reached the last inner page
         if(page >= total-1){
+          // fade and proceed
           setTimeout(()=>{
-            // fade out book then proceed
             const bookArea = document.getElementById('flipbook');
             bookArea.style.opacity = '0';
             setTimeout(()=>{ bookArea.style.display = 'none'; proceedAfterBook(); },700);
           },700);
         }
       });
+
+      // responsive: re-init on resize
+      let resizeTimer = null;
+      window.addEventListener('resize', function(){
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function(){
+          try{ initFlipbook(); }catch(e){}
+        },250);
+      }, {passive:true});
     }
 
-    // after book finished -> GIF -> video -> end modal
+    // proceed after book -> gif -> video -> end
     function proceedAfterBook(){
+      // prevents multiple triggers
+      if(window.__proceeded) return; window.__proceeded = true;
+
       if(GIF_SRC && GIF_SRC.trim()!=='') show('gifModal');
       setTimeout(()=>{
         if(GIF_SRC && GIF_SRC.trim()!=='') hide('gifModal');
@@ -260,7 +301,7 @@
             v.play().catch(()=>{});
             v.onended = ()=>{ hide('videoModal'); setTimeout(()=> show('endModal'), 300); };
           } else {
-            setTimeout(()=>{ hide('videoModal'); setTimeout(()=> show('endModal'), 300); },1800);
+            setTimeout(()=>{ hide('videoModal'); setTimeout(()=> show('endModal'), 300); },1400);
           }
         },300);
       }, (GIF_SRC && GIF_SRC.trim()!=='')? 2000 : 400);
@@ -268,7 +309,7 @@
 
     document.getElementById('endClose').addEventListener('click', ()=>{ hide('endModal'); });
 
-    // music
+    // music controls
     const audio = document.getElementById('bgMusic');
     const playBtn = document.getElementById('playBtn');
     const vol = document.getElementById('vol');
@@ -279,7 +320,7 @@
     vol.addEventListener('input',(e)=>{ if(audio) audio.volume = e.target.value; });
     if(audio) audio.volume = vol.value;
 
-    // keyboard navigation
+    // keyboard nav
     document.addEventListener('keydown',(e)=>{
       try{ if(e.key==='ArrowRight') $('#flipbook').turn('next'); if(e.key==='ArrowLeft') $('#flipbook').turn('previous'); }catch(err){}
       if(e.key==='Escape'){ const modals=document.querySelectorAll('.modal.show'); if(modals.length) modals.forEach(m=>m.classList.remove('show')); }
