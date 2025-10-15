@@ -3,10 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>HTS Flipbook — All-in-one (Siap Tes)</title>
-
+<title>HTS Flipbook — Final (All-in-one contoh)</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-
 <style>
   :root{
     --cream-a:#fbf5ec;
@@ -17,16 +15,17 @@
   }
   *{box-sizing:border-box}
   html,body{height:100%;margin:0;font-family:'Poppins',system-ui,Arial;background:linear-gradient(180deg,var(--cream-a),var(--cream-b));color:var(--muted);-webkit-font-smoothing:antialiased}
-  .stage{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px}
+  .stage{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px;overflow-x:hidden}
 
-  /* Background placeholder text */
+  /* subtle background placeholder (very faint) */
   .bg-placeholder{
     position:fixed;inset:0;z-index:0;display:flex;align-items:center;justify-content:center;
-    color:rgba(75,61,51,0.06);font-size:44px;font-weight:700;pointer-events:none;
+    color:rgba(75,61,51,0.03);font-size:56px;font-weight:800;pointer-events:none;
+    text-transform:uppercase;letter-spacing:2px;padding:24px;text-align:center;
   }
 
-  /* Balloons: 5 spaced evenly */
-  .balloon{position:absolute;bottom:-160px;opacity:0.95;animation:rise linear infinite;pointer-events:none}
+  /* Balloons: 5 spaced evenly (slightly above) */
+  .balloon{position:absolute;bottom:-160px;opacity:0.95;animation:rise linear infinite;pointer-events:none;z-index:10}
   .balloon.x1{left:6%;width:96px;animation-duration:18s;animation-delay:0s}
   .balloon.x2{left:22%;width:84px;animation-duration:16s;animation-delay:1s}
   .balloon.x3{left:38%;width:110px;animation-duration:20s;animation-delay:2s}
@@ -56,23 +55,23 @@
   .finger-progress>i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#d2ad88,#b78c6b);transition:width .06s linear}
 
   /* Book area */
-  .book-stage{position:relative;z-index:200;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+  .book-stage{position:relative;z-index:200;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;pointer-events:auto}
   .book{
     width:820px;max-width:92vw;height:520px;perspective:2200px;position:relative;display:flex;align-items:center;justify-content:center;
   }
 
   /* Closed cover */
   .cover-closed{
-    width:68%;max-width:640px;height:86%;background:linear-gradient(180deg,#5d3b2a,#70462e);border-radius:10px;box-shadow:0 40px 80px rgba(0,0,0,0.2);
-    display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;font-weight:700;cursor:pointer;transform-origin:center;transition:transform .6s;
+    width:68%;max-width:640px;height:86%;background:linear-gradient(180deg,#5d3b2a,#70462e);border-radius:10px;box-shadow:0 40px 80px rgba(0,0,0,0.18);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;font-weight:700;cursor:pointer;transform-origin:center;transition:transform .45s;
   }
 
   /* Viewer (opened) */
   .viewer{width:78%;max-width:760px;height:86%;position:relative;transform-style:preserve-3d;display:none}
   .page-leaf{
     position:absolute;left:50%;top:50%;width:48%;height:94%;transform-origin:left center;transform-style:preserve-3d;
-    transition:transform .75s cubic-bezier(.2,.9,.2,1);box-shadow:0 18px 40px rgba(0,0,0,0.15);
-    backface-visibility:hidden;border-radius:8px;overflow:hidden;
+    transition:transform .75s cubic-bezier(.2,.9,.2,1);box-shadow:0 18px 40px rgba(0,0,0,0.12);
+    backface-visibility:hidden;border-radius:8px;overflow:hidden;background:transparent;
   }
   .page-front,.page-back{
     position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:28px;
@@ -85,19 +84,24 @@
   .controls{display:flex;gap:10px;margin-top:12px}
   .controls .btn{padding:8px 12px;font-weight:700}
 
+  /* music */
+  .music{position:fixed;left:14px;bottom:14px;background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(250,245,238,0.96));padding:10px 14px;border-radius:14px;box-shadow:0 12px 36px rgba(0,0,0,0.12);display:flex;gap:10px;align-items:center;z-index:600}
+  .music input[type=range]{width:140px}
+
   @media (max-width:900px){
     .cover-closed{width:90%;height:72%}
     .viewer{width:94%}
     .page-leaf{width:92%;left:4%}
     .page-front,.page-back{padding:18px;font-size:16px}
+    .bg-placeholder{font-size:36px}
   }
 </style>
 </head>
 <body>
-  <!-- Background placeholder text -->
+  <!-- Background placeholder text (very faint) -->
   <div class="bg-placeholder" id="bgPlaceholder">Ganti background di EDITABLE VARIABLES nanti</div>
 
-  <!-- Balloons (5) -->
+  <!-- Balloons (5) using simple colored SVG dataURI as placeholders -->
   <img id="bal1" class="balloon x1" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='300'><ellipse rx='60' ry='80' cx='100' cy='120' fill='%23ff8a80'/></svg>" alt="b1">
   <img id="bal2" class="balloon x2" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='300'><ellipse rx='52' ry='72' cx='100' cy='120' fill='%23ffd180'/></svg>" alt="b2">
   <img id="bal3" class="balloon x3" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='300'><ellipse rx='66' ry='86' cx='100' cy='120' fill='%2397c5fe'/></svg>" alt="b3">
@@ -106,10 +110,12 @@
 
   <div class="stage">
     <div class="book-stage" id="bookStage" style="z-index:200">
+      <!-- CLOSED COVER (click to open) -->
       <div id="coverClosed" class="cover-closed" title="Klik untuk buka buku (setelah fingerprint)">
         📚 BUKU KADO
       </div>
 
+      <!-- VIEWER -->
       <div id="viewer" class="viewer" aria-hidden="true">
         <div id="leaf" class="page-leaf" style="transform:rotateY(0deg);">
           <div class="page-front" id="pageFront"></div>
@@ -125,7 +131,7 @@
     </div>
 
     <!-- music player -->
-    <div class="music" style="position:fixed;left:14px;bottom:14px;z-index:500">
+    <div class="music" style="position:fixed;left:14px;bottom:14px;z-index:600">
       <button id="playBtn" class="btn">Play</button>
       <span style="margin-left:8px">Music: <strong id="musicLabel">[ganti di script]</strong></span>
       <input id="vol" type="range" min="0" max="1" step="0.01" value="0.6" style="margin-left:10px">
@@ -177,16 +183,16 @@
 
 <script>
 /* ===== EDITABLE VARIABLES =====
-   Ganti URL/path dengan raw.githubusercontent.com links jika pakai repo.
-   Aku sudah isi contoh asset publik agar file ini langsung bisa dijalankan.
+   Ganti URL/path jika mau pakai aset sendiri.
+   Contoh-aset publik sudah diisi sehingga file ini langsung bisa dites.
 */
 const PASSWORD = 'arjingga25';
 const MUSIC_LABEL = 'Sempurna (contoh)';
 const MUSIC_SRC = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'; // contoh mp3 publik
-const BG_IMAGE = ''; // biarkan kosong => cream gradient; ganti dengan URL untuk pakai gambar
-const BALLOONS = ['', '', '', '', '']; // sudah pakai SVG dataURIs di <img> tag, tapi bisa diganti
-const GIF_SRC = 'https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif'; // contoh gif publik
-const VIDEO_SRC = 'https://www.w3schools.com/html/mov_bbb.mp4'; // contoh mp4 publik
+const BG_IMAGE = ''; // kosong => cream gradient used; isi URL untuk pakai gambar
+const BALLOONS = ['', '', '', '', '']; // kamu bisa isi gambar balloon URLs, else dataURIs used
+const GIF_SRC = 'https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif'; // contoh
+const VIDEO_SRC = 'https://www.w3schools.com/html/mov_bbb.mp4'; // contoh
 const PAGES = [
   'Halaman 1 — Hai, ini halaman pertama 💌',
   'Halaman 2 — Makasih udah buka buku ini 🤍',
@@ -258,13 +264,13 @@ let currentIndex = 0; // 0..PAGES.length-1
 let flipping = false;
 let proceeded = false;
 
+/* open cover after fingerprint */
 function openCoverOrViewer(){
-  // show coverClosed and require click to open
   coverClosed.style.display = 'flex';
   viewer.style.display = 'none';
   coverClosed.onclick = () => {
     coverClosed.style.transform = 'scale(0.98) translateY(-6px)';
-    setTimeout(()=>{ coverClosed.style.display='none'; viewer.style.display='block'; renderLeaf(); }, 420);
+    setTimeout(()=>{ coverClosed.style.display='none'; viewer.style.display='block'; renderLeaf(); prevBtn.style.display='inline-block'; nextBtn.style.display='inline-block'; }, 420);
   };
 }
 
@@ -342,7 +348,7 @@ function proceedAfterBook(){
         setTimeout(()=>{ hide('videoModal'); setTimeout(()=> show('endModal'), 300); }, 1800);
       }
     }, 300);
-  }, (GIF_SRC && GIF_SRC.trim()!=='')? 2000 : 400);
+  }, (GIF_SRC && GIF_SRC.trim()!=='')? 2200 : 600);
 }
 
 /* Music controls */
