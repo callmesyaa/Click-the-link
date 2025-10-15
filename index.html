@@ -1,32 +1,26 @@
-<!--
-FINAL READY FILE — Flipbook Interaktif (PNG gift + Turn.js)
-Petunjuk singkat:
-- Semua teks dan asset URL ada di bagian EDITABLE VARIABLES di bawah <script>.
-- Ganti GIFT_PNG, BG_IMAGE, BALLOONS, MUSIC_SRC, GIF_SRC, VIDEO_SRC, dan PAGES dengan URL raw GitHub (raw.githubusercontent.com) atau path file di repo.
-- Upload file ini sebagai index.html ke repo GitHub dan aktifkan GitHub Pages.
-
-Fitur utama:
-1) Sequential modals: password -> fingerprint -> gift (PNG, float) -> book (turn.js flipbook 3D) -> gif -> video -> end popup.
-2) Gift uses a transparent PNG (GIFT_PNG). On click it animates open (fade) and reveals book.
-3) Music player remains. Popups are cream gradient and animated.
-4) Poppins font.
-
---- START OF FILE ---
-
 <!doctype html>
 <html lang="id">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Flipbook Interaktif - FINAL</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Flipbook Interaktif - Final</title>
+
+  <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
   <style>
-    :root{--cream-a:#fbf5ec;--cream-b:#f3eadc;--accent:#c69c71;--muted:#4b3d33}
+    :root{
+      --cream-a:#fbf5ec;
+      --cream-b:#f3eadc;
+      --accent:#c69c71;
+      --muted:#4b3d33;
+      --popup-radius:16px;
+    }
     *{box-sizing:border-box}
-    body,html{height:100%;margin:0;font-family:'Poppins',system-ui,Arial;background:linear-gradient(180deg,var(--cream-a),var(--cream-b))}
+    html,body{height:100%;margin:0;font-family:'Poppins',system-ui,Arial;background:linear-gradient(180deg,var(--cream-a),var(--cream-b));color:var(--muted)}
     .stage{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px}
 
-    /* balloons */
+    /* Balloons */
     .balloon{position:absolute;bottom:-220px;opacity:0.95;animation:rise linear infinite;pointer-events:none}
     .balloon.x1{left:6%;width:120px;animation-duration:18s;animation-delay:0s}
     .balloon.x2{left:22%;width:90px;animation-duration:15s;animation-delay:2s}
@@ -34,28 +28,34 @@ Fitur utama:
     .balloon.x4{left:80%;width:100px;animation-duration:16s;animation-delay:3s}
     @keyframes rise{0%{transform:translateY(0) rotate(-6deg);}100%{transform:translateY(-140vh) rotate(10deg);} }
 
-    /* modal style */
-    .modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.98);z-index:999;min-width:320px;max-width:92vw;padding:18px;border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,0.15);background:linear-gradient(180deg,var(--cream-a),var(--cream-b));display:none;opacity:0;transition:opacity .35s,transform .35s}
+    /* Modal (cream gradient) */
+    .modal{
+      position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.98);
+      z-index:999;min-width:320px;max-width:92vw;padding:18px;border-radius:var(--popup-radius);
+      box-shadow:0 24px 60px rgba(0,0,0,0.15);
+      background:linear-gradient(180deg,var(--cream-a),var(--cream-b));
+      display:none;opacity:0;transition:opacity .35s,transform .35s;
+    }
     .modal.show{display:block;opacity:1;transform:translate(-50%,-50%) scale(1)}
-    .modal h3{margin:6px 0 10px;text-align:center}
-    .modal p{text-align:center;margin:0 0 12px}
+    .modal h3{margin:6px 0 10px;font-size:20px;text-align:center}
+    .modal p{margin:0 0 12px;text-align:center}
     .buttons{display:flex;gap:10px;justify-content:center}
     button.btn{background:var(--accent);border:none;padding:10px 16px;border-radius:12px;color:#fff;font-weight:700;cursor:pointer}
-    input[type=text],input[type=password]{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(0,0,0,0.06);background:transparent}
+    input[type=text],input[type=password]{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(0,0,0,0.06);background:transparent;font-size:15px}
 
     /* fingerprint */
     .finger-area{display:flex;align-items:center;flex-direction:column;gap:12px}
-    .finger-btn{width:92px;height:92px;border-radius:50%;background:linear-gradient(180deg,rgba(0,0,0,0.06),rgba(0,0,0,0.03));display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:32px}
+    .finger-btn{width:92px;height:92px;border-radius:50%;background:linear-gradient(180deg,rgba(0,0,0,0.06),rgba(0,0,0,0.03));display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:34px}
     .finger-progress{width:86px;height:8px;background:rgba(0,0,0,0.06);border-radius:20px;overflow:hidden}
-    .finger-progress > i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#d2ad88,#b78c6b);}
+    .finger-progress>i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#d2ad88,#b78c6b);}
 
     /* gift png */
-    .gift-png{width:260px;height:auto;cursor:pointer;transition:transform .28s,opacity .4s}
     .gift-wrap{display:flex;align-items:center;justify-content:center}
+    .gift-png{width:260px;height:auto;cursor:pointer;transition:transform .28s,opacity .4s}
     .gift-float{animation:floatY 3s ease-in-out infinite}
     @keyframes floatY{0%{transform:translateY(0)}50%{transform:translateY(-10px)}100%{transform:translateY(0)}}
 
-    /* flipbook container for turn.js */
+    /* flipbook (turn.js) styling */
     #flipbook{width:720px;height:520px;margin:0 auto}
     #flipbook .page{background:#fbf7f1;border:1px solid rgba(0,0,0,0.06);box-shadow:0 8px 30px rgba(0,0,0,0.12);overflow:hidden}
     .cover{background:linear-gradient(180deg,#5d3b2a,#70462e);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:28px}
@@ -68,12 +68,17 @@ Fitur utama:
     .music{position:fixed;left:14px;bottom:14px;background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(250,245,238,0.96));padding:10px 14px;border-radius:14px;box-shadow:0 12px 36px rgba(0,0,0,0.12);display:flex;gap:10px;align-items:center;z-index:120}
     .music input[type=range]{width:160px}
 
-    /* responsive */
-    @media (max-width:900px){#flipbook{width:86vw;height:56vw}.gift-png{width:200px}.modal{min-width:300px}}
+    /* responsive tweaks */
+    @media (max-width:900px){
+      #flipbook{width:86vw;height:56vw}
+      .gift-png{width:200px}
+      .modal{min-width:300px}
+    }
   </style>
 </head>
 <body>
   <div class="stage" id="stage">
+    <!-- Balloon placeholders -->
     <img id="balloon1" class="balloon x1" src="" alt="b1">
     <img id="balloon2" class="balloon x2" src="" alt="b2">
     <img id="balloon3" class="balloon x3" src="" alt="b3">
@@ -89,6 +94,7 @@ Fitur utama:
       </div>
     </div>
 
+    <!-- music player -->
     <div class="music" id="musicBox">
       <button id="playBtn" class="btn">Play</button>
       <div style="font-size:14px">Music: <span id="musicLabel">[ganti di script]</span></div>
@@ -96,36 +102,53 @@ Fitur utama:
     </div>
   </div>
 
-  <!-- MODALS -->  <div id="pwdModal" class="modal show">
+  <!-- Modals -->
+  <div id="pwdModal" class="modal show">
     <h3>Masukkan sandi</h3>
     <p>Masukkan kata sandi untuk membuka hadiah.</p>
     <input id="pwdInput" type="password" placeholder="ketik sandi">
     <div class="buttons"><button id="pwdNext" class="btn">Next</button></div>
-  </div>  <div id="pwdWrong" class="modal">
+  </div>
+
+  <div id="pwdWrong" class="modal">
     <h3>Kata sandi salah</h3>
     <p>Silakan coba lagi.</p>
     <div class="buttons"><button id="pwdRetry" class="btn">Coba lagi</button></div>
-  </div>  <div id="fingerModal" class="modal">
+  </div>
+
+  <div id="fingerModal" class="modal">
     <h3>Verifikasi Sidik Jari</h3>
     <p>Tahan tombol sidik jari selama beberapa detik untuk melanjutkan.</p>
     <div class="finger-area"><div class="finger-btn" id="fingerBtn">🔒</div><div class="finger-progress"><i id="fingerFill"></i></div></div>
-  </div>  <div id="gifModal" class="modal"><div style="width:320px;height:200px;display:flex;align-items:center;justify-content:center"><img id="gifImg" src="" style="max-width:100%;max-height:100%"></div></div>
-  <div id="videoModal" class="modal"><div style="width:420px;height:260px;display:flex;align-items:center;justify-content:center"><video id="floatVideo" src="" controls loop style="max-width:100%;max-height:100%"></video></div></div>
-  <div id="endModal" class="modal"><h3>Penutup</h3><p id="endText">Terima kasih — ganti teks penutup di script.</p><div class="buttons"><button id="endClose" class="btn">Tutup</button></div></div><audio id="bgMusic" loop preload="auto" src=""></audio>
+  </div>
+
+  <div id="gifModal" class="modal"><div style="width:320px;height:200px;display:flex;align-items:center;justify-content:center"><img id="gifImg" src="" style="max-width:100%;max-height:100%"></div></div>
+  <div id="videoModal" class="modal"><div style="width:420px;height:260px;display:flex;align-items:center;justify-content:center"><video id="floatVideo" src="" controls style="max-width:100%;max-height:100%"></video></div></div>
+  <div id="endModal" class="modal"><h3>Penutup</h3><p id="endText">Terima kasih — ganti teks penutup di script.</p><div class="buttons"><button id="endClose" class="btn">Tutup</button></div></div>
+
+  <audio id="bgMusic" loop preload="auto" src=""></audio>
 
   <div class="controls">
     <button id="prevBtn" class="btn" style="display:none">Prev</button>
     <button id="nextBtn" class="btn" style="display:none">Next</button>
-  </div>  <!-- CDNs -->  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>  <script>
-    /* ===== EDITABLE VARIABLES ===== */
+  </div>
+
+  <!-- CDNs -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
+
+  <script>
+    /* ===== EDITABLE VARIABLES =====
+       Ganti path/URL dengan raw.githubusercontent.com jika file di repo.
+    */
     const PASSWORD = 'arjingga25';
     const MUSIC_LABEL = 'Sempurna (ganti)';
-    const MUSIC_SRC = ''; // raw github url or path
-    const BG_IMAGE = ''; // raw url or empty to keep gradient
-    const BALLOONS = ['','','','']; // replace with 4 balloon images if you want
-    const GIFT_PNG = ''; // URL to transparent PNG of gift (red with ribbon)
-    const GIF_SRC = '';
-    const VIDEO_SRC = '';
+    const MUSIC_SRC = ''; // contoh: 'assets/music.mp3' atau raw github url
+    const BG_IMAGE = ''; // jika mau gambar background (else gradient)
+    const BALLOONS = ['','','','']; // isi 4 gambar balon jika punya
+    const GIFT_PNG = ''; // URL PNG transparan kotak hadiah (required untuk look)
+    const GIF_SRC = ''; // gif for after book
+    const VIDEO_SRC = ''; // mp4 or webm for after gif
 
     const PAGES = [
       'Halaman 1 — ganti teks di sini',
@@ -160,13 +183,21 @@ Fitur utama:
     const pwdInput = document.getElementById('pwdInput');
     document.getElementById('pwdNext').addEventListener('click', checkPwd);
     pwdInput.addEventListener('keydown',(e)=>{ if(e.key==='Enter') checkPwd(); });
-    function checkPwd(){ if(pwdInput.value === PASSWORD){ hide('pwdModal'); setTimeout(()=>show('fingerModal'),300); } else { hide('pwdModal'); show('pwdWrong'); }}
+    function checkPwd(){
+      if(pwdInput.value === PASSWORD){
+        hide('pwdModal');
+        setTimeout(()=>show('fingerModal'),280);
+      } else {
+        hide('pwdModal');
+        show('pwdWrong');
+      }
+    }
     document.getElementById('pwdRetry').addEventListener('click',()=>{ hide('pwdWrong'); show('pwdModal'); pwdInput.value=''; pwdInput.focus(); });
 
     // Fingerprint hold
     const fingerBtn = document.getElementById('fingerBtn'); const fingerFill = document.getElementById('fingerFill');
     let fillInt=null, fill=0;
-    function fingerStart(){ fill=0; fingerFill.style.width='0%'; fillInt=setInterval(()=>{ fill+=4; fingerFill.style.width = fill+'%'; if(fill>=100){ fingerComplete(); } },90);}    
+    function fingerStart(){ fill=0; fingerFill.style.width='0%'; fillInt=setInterval(()=>{ fill+=4; fingerFill.style.width = fill+'%'; if(fill>=100){ fingerComplete(); } },90);}
     function fingerStop(){ clearInterval(fillInt); fingerFill.style.width='0%'; }
     function fingerComplete(){ clearInterval(fillInt); fingerFill.style.width='100%'; hide('fingerModal'); setTimeout(()=>{ showGift(); },350); }
     fingerBtn.addEventListener('mousedown',fingerStart); fingerBtn.addEventListener('touchstart',fingerStart);
@@ -174,19 +205,27 @@ Fitur utama:
 
     // Show gift floating and enable click
     const giftArea = document.getElementById('giftArea'); const giftImg = document.getElementById('giftImg');
-    function showGift(){ giftArea.style.display='flex'; giftImg.classList.add('gift-float'); // ensure visible
-      // add small entrance
-      giftImg.style.opacity='0'; giftImg.style.transform='translateY(20px) scale(.98)'; setTimeout(()=>{ giftImg.style.transition='opacity .5s,transform .6s'; giftImg.style.opacity='1'; giftImg.style.transform='translateY(0) scale(1)'; },50);
+    function showGift(){
+      giftArea.style.display='flex';
+      giftImg.classList.add('gift-float');
+      giftImg.style.opacity='0'; giftImg.style.transform='translateY(20px) scale(.98)';
+      setTimeout(()=>{ giftImg.style.transition='opacity .5s,transform .6s'; giftImg.style.opacity='1'; giftImg.style.transform='translateY(0) scale(1)'; },50);
       giftImg.addEventListener('click', openGiftOnce);
     }
 
-    function openGiftOnce(){ giftImg.removeEventListener('click',openGiftOnce); // stop float
-      giftImg.classList.remove('gift-float'); giftImg.style.transition='transform .6s,opacity .5s'; giftImg.style.transform='translateY(-40px) scale(.9) rotateX(6deg)'; giftImg.style.opacity='0';
+    function openGiftOnce(){
+      giftImg.removeEventListener('click',openGiftOnce);
+      // small open animation (fade up)
+      giftImg.classList.remove('gift-float');
+      giftImg.style.transition='transform .6s,opacity .5s';
+      giftImg.style.transform='translateY(-40px) scale(.9) rotateX(6deg)';
+      giftImg.style.opacity='0';
       setTimeout(()=>{ giftArea.style.display='none'; initBook(); },600);
     }
 
     // Initialize Turn.js flipbook
-    function initBook(){ const fb = document.getElementById('flipbook'); fb.innerHTML='';
+    function initBook(){
+      const fb = document.getElementById('flipbook'); fb.innerHTML='';
       // cover front
       const coverFront = document.createElement('div'); coverFront.className='page cover'; coverFront.innerHTML='<div style="padding:30px;font-size:28px;color:#fff">Cover Depan</div>';
       fb.appendChild(coverFront);
@@ -201,32 +240,62 @@ Fitur utama:
       document.getElementById('bookArea').style.display='block';
       document.getElementById('nextBtn').style.display='inline-block'; document.getElementById('prevBtn').style.display='inline-block';
 
-      // keep pages manual: user must click next/prev buttons or page area
+      // user controls (click zone: right side next, left side prev)
+      const bookElem = document.getElementById('flipbook');
+      bookElem.addEventListener('click',(e)=>{
+        const rect = bookElem.getBoundingClientRect(); const x = e.clientX - rect.left;
+        if(x > rect.width/2) $('#flipbook').turn('next'); else $('#flipbook').turn('previous');
+      });
+
       document.getElementById('nextBtn').addEventListener('click',()=>{ $('#flipbook').turn('next'); });
       document.getElementById('prevBtn').addEventListener('click',()=>{ $('#flipbook').turn('previous'); });
 
-      // detect last page
-      $('#flipbook').bind('turned', function(e, page, view){ const total = $('#flipbook').turn('pages'); if(page >= total-1){ // after small delay close book
-          setTimeout(()=>{ $('#flipbook').turn('page',1); // reset or you can close
-            document.getElementById('bookArea').style.opacity='0'; setTimeout(()=>{ document.getElementById('bookArea').style.display='none'; document.getElementById('bookArea').style.opacity='1'; proceedAfterBook(); },700); },800);
+      // detect last page turned
+      $('#flipbook').bind('turned', function(e, page, view){
+        const total = $('#flipbook').turn('pages');
+        if(page >= total-1){
+          // after small delay close book
+          setTimeout(()=>{
+            // fade out book then proceed
+            document.getElementById('bookArea').style.opacity='0';
+            setTimeout(()=>{
+              document.getElementById('bookArea').style.display='none';
+              document.getElementById('bookArea').style.opacity='1';
+              proceedAfterBook();
+            },700);
+          },700);
         }
       });
     }
 
-    function proceedAfterBook(){ show('gifModal'); setTimeout(()=>{ hide('gifModal'); setTimeout(()=>{ show('videoModal'); },400); },2400); // show gif for ~2.4s
-      // when video ends, proceed to end modal
-      const v = document.getElementById('floatVideo'); v.onended = ()=>{ hide('videoModal'); setTimeout(()=>{ show('endModal'); },300); };
+    function proceedAfterBook(){
+      // show gif for a moment -> then video -> then end modal
+      show('gifModal');
+      setTimeout(()=>{ hide('gifModal'); setTimeout(()=>{ show('videoModal'); // if video provided, wait onended
+        const v = document.getElementById('floatVideo');
+        if(v && v.src && v.src.trim()!==''){
+          v.play().catch(()=>{}); // try play
+          v.onended = ()=>{ hide('videoModal'); setTimeout(()=>{ show('endModal'); },300); };
+        } else {
+          // no video provided: proceed to end after 2.2s
+          setTimeout(()=>{ hide('videoModal'); setTimeout(()=>{ show('endModal'); },300); },2200);
+        }
+      },400); },2400);
     }
 
     document.getElementById('endClose').addEventListener('click', ()=>{ hide('endModal'); });
 
     // music controls
     const audio = document.getElementById('bgMusic'); const playBtn = document.getElementById('playBtn'); const vol = document.getElementById('vol');
-    playBtn.addEventListener('click', ()=>{ if(audio.paused){ audio.play(); playBtn.textContent='Pause'; } else { audio.pause(); playBtn.textContent='Play'; } }); vol.addEventListener('input',(e)=>{ audio.volume = e.target.value; }); audio.volume = vol.value;
+    playBtn.addEventListener('click', ()=>{ if(audio.paused){ audio.play().catch(()=>{}); playBtn.textContent='Pause'; } else { audio.pause(); playBtn.textContent='Play'; } });
+    vol.addEventListener('input',(e)=>{ audio.volume = e.target.value; }); audio.volume = vol.value;
 
     // initial focus
-    setTimeout(()=>{ document.getElementById('pwdInput').focus(); },300);
+    setTimeout(()=>{ const pi=document.getElementById('pwdInput'); if(pi) pi.focus(); },300);
 
-  </script></body>
-</html>--- END OF FILE ---
+    // accessibility: keyboard arrows for flip
+    document.addEventListener('keydown',(e)=>{ if(e.key==='ArrowRight') $('#flipbook').turn('next'); if(e.key==='ArrowLeft') $('#flipbook').turn('previous'); if(e.key==='Escape'){ const modals = document.querySelectorAll('.modal.show'); if(modals.length) modals.forEach(m=>m.classList.remove('show')); } });
 
+  </script>
+</body>
+</html>
