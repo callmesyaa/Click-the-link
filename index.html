@@ -34,20 +34,22 @@
     top: 0;
     left: 0;
     transform-origin: left;
-    transition: transform 1s;
+    transition: transform 1s, z-index 0.5s;
     backface-visibility: hidden;
     padding: 30px;
     box-sizing: border-box;
+    z-index: 10;
+  }
+
+  .page.flipped {
+    transform: rotateY(-180deg);
+    z-index: 0;
   }
 
   .page h2 {
     text-align: center;
     font-size: 18px;
     margin-top: 40%;
-  }
-
-  .page.flipped {
-    transform: rotateY(-180deg);
   }
 
   button {
@@ -93,11 +95,11 @@
 <div class="balloon b4"></div>
 <div class="balloon b5"></div>
 
-<div class="book">
+<div class="book" id="book">
   <div class="page"><h2>Halaman 1 — Hai, ini halaman pertama 💌</h2></div>
   <div class="page"><h2>Halaman 2 — Makasih udah buka buku ini 🤍</h2></div>
   <div class="page"><h2>Halaman 3 — Setiap lembar punya arti sendiri...</h2></div>
-  <div class="page"><h2>Halaman 4 — Nanti kamu isi sendiri yaa oke~</h2></div>
+  <div class="page"><h2>Halaman 4 — Nanti kamu isi sendiri yaa~</h2></div>
   <div class="page"><h2>Halaman 5 — 🌷</h2></div>
   <div class="page"><h2>Halaman 6</h2></div>
   <div class="page"><h2>Halaman 7</h2></div>
@@ -113,17 +115,14 @@
   const pages = document.querySelectorAll('.page');
   let current = 0;
 
-  function showPage(n) {
-    if (n > current) {
-      pages[current].classList.add('flipped');
-    } else {
-      pages[current - 1].classList.remove('flipped');
-    }
-  }
+  // atur urutan z-index supaya halaman depan kelihatan paling atas
+  pages.forEach((page, index) => {
+    page.style.zIndex = pages.length - index;
+  });
 
   document.getElementById('next').addEventListener('click', () => {
     if (current < pages.length) {
-      showPage(current + 1);
+      pages[current].classList.add('flipped');
       current++;
     }
   });
@@ -131,7 +130,7 @@
   document.getElementById('prev').addEventListener('click', () => {
     if (current > 0) {
       current--;
-      showPage(current);
+      pages[current].classList.remove('flipped');
     }
   });
 </script>
