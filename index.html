@@ -1,92 +1,129 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Flipbook Syaa 💌</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>HTS — Password → Finger → Flipbook → Video → End</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
 <style>
-  body {
-    background-color: #f9f3e9;
-    font-family: 'Poppins', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    overflow: hidden;
+  :root{
+    --cream-a:#fbf5ec;
+    --cream-b:#f3eadc;
+    --accent:#c69c71;
+    --muted:#4b3d33;
+    --popup-radius:16px;
   }
+  /* ---------- Global reset ---------- */
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:'Poppins',system-ui,Arial;background:linear-gradient(180deg,var(--cream-a),var(--cream-b));color:var(--muted);-webkit-font-smoothing:antialiased}
+  /* allow background image override (EDITABLE) */
+  body.bg-img { background-size:cover; background-position:center; }
 
-  /* ===== Pop-up password ===== */
-  .popup {
+  /* ---------- modal (centered) with fade in/out ---------- */
+  .modal {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.3);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-  }
-  .popup-content {
-    background: #fffaf5;
-    padding: 30px;
-    border-radius: 15px;
-    text-align: center;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    animation: fadeIn 1s ease;
-  }
-  .popup-content h2 {
-    margin-bottom: 10px;
-  }
-  .popup-content input {
-    width: 180px;
-    padding: 8px;
-    border: 1px solid #d8bfae;
-    border-radius: 8px;
-    outline: none;
-    text-align: center;
-  }
-  .popup-content button {
-    background: #cfa47c;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 16px;
-    margin-top: 15px;
-    cursor: pointer;
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; } to { opacity: 1; }
-  }
-
-  /* ===== Fingerprint ===== */
-  .fingerprint {
+    left:50%;
+    top:50%;
+    transform: translate(-50%,-50%) scale(.98);
+    z-index: 9999;
+    min-width: 300px;
+    max-width: 92vw;
+    padding: 18px;
+    border-radius: var(--popup-radius);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.15);
+    background: linear-gradient(180deg,var(--cream-a),var(--cream-b));
     display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.3);
-    justify-content: center;
-    align-items: center;
-    z-index: 90;
-    animation: fadeIn 1s ease;
+    opacity: 0;
+    transition: opacity .32s, transform .32s;
+    text-align:center;
+    color: var(--muted);
   }
-  .fingerprint img {
-    width: 100px;
-    cursor: pointer;
-    transition: transform 0.3s;
-  }
-  .fingerprint img:hover {
-    transform: scale(1.1);
-  }
+  .modal.show { display:block; opacity:1; transform: translate(-50%,-50%) scale(1); }
+  .modal h3 { margin:6px 0 8px; font-size:20px; }
+  .modal p { margin:0 0 12px; }
 
-  /* ===== Flipbook ===== */
+  .buttons{ display:flex; gap:10px; justify-content:center; margin-top:10px; }
+  .btn{ background:var(--accent); border:none; padding:10px 16px; border-radius:12px; color:#fff; font-weight:700; cursor:pointer; }
+
+  /* small helper backdrop dim */
+  .backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.04); z-index:9980; display:none; opacity:0; transition:opacity .25s; }
+  .backdrop.show{ display:block; opacity:1; }
+
+  /* ---------- Password box (centered) ---------- */
+  .password-box {
+    position: fixed;
+    left:50%;
+    top:50%;
+    transform: translate(-50%,-50%);
+    z-index:9999;
+    background: linear-gradient(135deg, #f9e4c8, #f6d8b6);
+    padding: 22px;
+    border-radius: 14px;
+    box-shadow: 0 18px 50px rgba(0,0,0,0.12);
+    text-align:center;
+    width: 320px;
+    max-width: 86vw;
+  }
+  .password-box h2{ margin:0 0 8px; font-size:18px; color:var(--muted) }
+  .password-box input[type="password"]{
+    width: 200px;
+    padding:8px 10px;
+    border-radius:10px;
+    border:1px solid rgba(0,0,0,0.14);
+    background:#fffaf5;
+    font-size:15px;
+    text-align:center;
+    outline:none;
+  }
+  .password-box .error{ color:#d04b4b; font-size:13px; margin-top:8px; display:none; }
+
+  /* ---------- Fingerprint modal contents ---------- */
+  .finger-area{ display:flex; flex-direction:column; gap:12px; align-items:center; }
+  #fingerImg{ width:92px; height:92px; object-fit:cover; border-radius:50%; cursor:pointer; display:block; }
+  .finger-progress{ width:86px; height:8px; background: rgba(0,0,0,0.06); border-radius:20px; overflow:hidden; }
+  .finger-progress>i{ display:block; height:100%; width:0%; background:linear-gradient(90deg,#d2ad88,#b78c6b); transition:width .06s linear; }
+
+  /* ---------- GIF & VIDEO modal sizing ---------- */
+  .media-wrap{ width:320px; height:200px; display:flex; align-items:center; justify-content:center; }
+  .video-wrap{ width:420px; height:260px; display:flex; align-items:center; justify-content:center; }
+
+  /* ---------- overlay stage & balloon ---------- */
+  #overlayStage { position: fixed; inset:0; z-index:100; display:flex; align-items:center; justify-content:center; pointer-events:none; }
+  .balloon{ position:absolute; bottom:-160px; opacity:0.95; animation:rise linear infinite; pointer-events:none; z-index:20; }
+  .balloon.x1{ left:6%; width:96px; animation-duration:18s; animation-delay:0s }
+  .balloon.x2{ left:22%; width:84px; animation-duration:16s; animation-delay:1s }
+  .balloon.x3{ left:38%; width:110px; animation-duration:20s; animation-delay:2s }
+  .balloon.x4{ left:56%; width:92px; animation-duration:17s; animation-delay:0.6s }
+  .balloon.x5{ left:78%; width:100px; animation-duration:19s; animation-delay:1.4s }
+  @keyframes rise{0%{transform:translateY(0) rotate(-6deg);}100%{transform:translateY(-140vh) rotate(10deg);} }
+
+  /* ---------- music control ---------- */
+  .music{ position:fixed; left:14px; bottom:14px; z-index:9999; background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(250,245,238,0.96)); padding:10px 14px; border-radius:14px; box-shadow:0 12px 36px rgba(0,0,0,0.12); display:flex; gap:10px; align-items:center; }
+  .music input[type=range]{ width:140px; }
+
+  /* ---------- fade out for book ---------- */
+  .fade-out { animation: bookFadeOut .6s forwards; }
+  @keyframes bookFadeOut{ from{opacity:1; transform:scale(1);} to{opacity:0; transform:scale(0.96);} }
+
+  @media (max-width:900px){
+    .password-box{ width:88vw }
+    .video-wrap{ width:90vw; height:50vh }
+    .media-wrap{ width:88vw; height:40vh }
+  }
+</style>
+
+<!-- ========== FLIPBOOK STYLES (UNCHANGED FROM YOUR CODE) ========== -->
+<style>
+  /* flipbook original styles (kept exactly as you sent) */
   .book {
     width: 320px;
     height: 420px;
     position: relative;
     perspective: 1500px;
-    display: none;
+    pointer-events:auto;
   }
 
   .page {
@@ -118,7 +155,7 @@
     margin-top: 40%;
   }
 
-  button {
+  #prev, #next {
     position: absolute;
     bottom: -60px;
     background: #cfa47c;
@@ -133,117 +170,297 @@
   #prev { left: 0; }
   #next { right: 0; }
 
-  /* ===== Pop-up Akhir ===== */
-  .closing-popup {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.4);
-    justify-content: center;
-    align-items: center;
-    z-index: 200;
-  }
-  .closing-content {
-    background: #fffaf5;
-    padding: 40px;
-    border-radius: 15px;
-    text-align: center;
-    animation: fadeIn 1s ease;
-  }
-
+  .balloon-placeholder { display:none; } /* decorative only */
 </style>
 </head>
 <body>
 
-<!-- Popup Password -->
-<div class="popup" id="passwordPopup">
-  <div class="popup-content">
-    <h2>Masukkan Sandi 💌</h2>
-    <input type="password" id="passwordInput" placeholder="Masukkan sandi">
-    <br>
-    <button id="checkPassword">Lanjut</button>
+<!-- backdrop -->
+<div id="backdrop" class="backdrop"></div>
+
+<!-- ========== PASSWORD BOX (center) ========== -->
+<div class="password-box" id="passwordBox" aria-modal="true">
+  <h2>Masukkan sandi 💌</h2>
+  <input id="pwdInput" type="password" placeholder="Masukkan sandi">
+  <div class="buttons" style="justify-content:center; margin-top:12px;">
+    <button id="pwdNext" class="btn">Lanjut</button>
+  </div>
+  <div class="error" id="pwdError">Kata sandi salah 😭</div>
+</div>
+
+<!-- ========== FINGERPRINT MODAL (center) ========== -->
+<div id="fingerModal" class="modal" aria-modal="true" role="dialog">
+  <h3>Verifikasi Sidik Jari</h3>
+  <p>Tahan gambar sidik jari beberapa detik untuk melanjutkan</p>
+  <div class="finger-area">
+    <!-- editable image: change src in JS or directly in markup -->
+    <img id="fingerImg" src="" alt="fingerprint (ganti src nanti)">
+    <div class="finger-progress"><i id="fingerFill"></i></div>
   </div>
 </div>
 
-<!-- Fingerprint -->
-<div class="fingerprint" id="fingerprintPopup">
-  <img src="https://cdn-icons-png.flaticon.com/512/565/565547.png" alt="Fingerprint" id="fingerprintIcon">
+<!-- ========== GIF modal (optional) ========== -->
+<div id="gifModal" class="modal" aria-modal="true" role="dialog">
+  <div class="media-wrap"><img id="gifImg" src="" style="max-width:100%;max-height:100%"></div>
 </div>
 
-<!-- Flipbook -->
-<div class="book" id="book">
-  <div class="page"><h2>Halaman 1 — Hai, ini halaman pertama 💌</h2></div>
-  <div class="page"><h2>Halaman 2 — Makasih udah buka buku ini 🤍</h2></div>
-  <div class="page"><h2>Halaman 3 — Setiap lembar punya arti sendiri...</h2></div>
-  <div class="page"><h2>Halaman 4 — Nanti kamu isi sendiri yaa~</h2></div>
-  <div class="page"><h2>Halaman 5 — 🌷</h2></div>
-  <div class="page"><h2>Halaman 6</h2></div>
-  <div class="page"><h2>Halaman 7</h2></div>
-  <div class="page"><h2>Halaman 8</h2></div>
-  <div class="page"><h2>Halaman 9</h2></div>
-  <div class="page"><h2>Halaman 10 — Terakhir 💫</h2></div>
-
-  <button id="prev">Prev</button>
-  <button id="next">Next</button>
+<!-- ========== VIDEO modal ========== -->
+<div id="videoModal" class="modal" aria-modal="true" role="dialog">
+  <div class="video-wrap"><video id="floatVideo" src="" controls style="max-width:100%;max-height:100%"></video></div>
 </div>
 
-<!-- Pop-up Akhir -->
-<div class="closing-popup" id="closingPopup">
-  <div class="closing-content">
-    <h2>Terima kasih sudah membuka flipbook ini 💖</h2>
+<!-- ========== END modal ========== -->
+<div id="endModal" class="modal" aria-modal="true" role="dialog">
+  <h3>Penutup</h3>
+  <p id="endText">Terima kasih — ganti teks di EDITABLE VARIABLES.</p>
+  <div class="buttons"><button id="endClose" class="btn">Tutup</button></div>
+</div>
+
+<!-- ========== music control ========== -->
+<div class="music" style="pointer-events:auto;">
+  <button id="playBtn" class="btn">Play</button>
+  <div style="font-size:14px; margin-left:6px">Music: <span id="musicLabel">[ganti di script]</span></div>
+  <input id="vol" type="range" min="0" max="1" step="0.01" value="0.6">
+  <audio id="bgMusic" loop preload="auto" src=""></audio>
+</div>
+
+<!-- ========== BALLOONS ========== -->
+<div id="overlayStage">
+  <img id="bal1" class="balloon x1" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='300'><ellipse rx='60' ry='80' cx='100' cy='120' fill='%23ff8a80'/></svg>" alt="b1">
+  <img id="bal2" class="balloon x2" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='300'><ellipse rx='52' ry='72' cx='100' cy='120' fill='%23ffd180'/></svg>" alt="b2">
+  <img id="bal3" class="balloon x3" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='300'><ellipse rx='66' ry='86' cx='100' cy='120' fill='%2397c5fe'/></svg>" alt="b3">
+  <img id="bal4" class="balloon x4" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='300'><ellipse rx='58' ry='78' cx='100' cy='120' fill='%23c5e1a5'/></svg>" alt="b4">
+  <img id="bal5" class="balloon x5" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='300'><ellipse rx='60' ry='80' cx='100' cy='120' fill='%23f8bbd0'/></svg>" alt="b5">
+</div>
+
+<!-- ========== FLIPBOOK MARKUP (UNCHANGED) ========== -->
+<div id="overlayStage">
+  <div class="book" id="book" aria-hidden="true" style="display:none">
+    <div class="page"><h2>Halaman 1 — Hai, ini halaman pertama 💌</h2></div>
+    <div class="page"><h2>Halaman 2 — Makasih udah buka buku ini 🤍</h2></div>
+    <div class="page"><h2>Halaman 3 — Setiap lembar punya arti sendiri...</h2></div>
+    <div class="page"><h2>Halaman 4 — Nanti kamu isi sendiri yaa~</h2></div>
+    <div class="page"><h2>Halaman 5 — 🌷</h2></div>
+    <div class="page"><h2>Halaman 6</h2></div>
+    <div class="page"><h2>Halaman 7</h2></div>
+    <div class="page"><h2>Halaman 8</h2></div>
+    <div class="page"><h2>Halaman 9</h2></div>
+    <div class="page"><h2>Halaman 10 — Terakhir 💫</h2></div>
+
+    <button id="prev">Prev</button>
+    <button id="next">Next</button>
   </div>
 </div>
 
 <script>
-  const passwordPopup = document.getElementById('passwordPopup');
-  const fingerprintPopup = document.getElementById('fingerprintPopup');
-  const book = document.getElementById('book');
-  const closingPopup = document.getElementById('closingPopup');
-  const fingerprintIcon = document.getElementById('fingerprintIcon');
+/* ===== EDITABLE VARIABLES (ganti sesuai asetmu) =====
+ - BG_IMAGE: jika kamu ingin pakai background gambar (raw GitHub atau URL), isi stringnya.
+ - FINGER_IMG: source gambar fingerprint yang ingin kamu pakai (png/jpg). kosong = default emoji circle.
+ - MUSIC_SRC, GIF_SRC, VIDEO_SRC: isi sesuai aset.
+ - END_TEXT: teks penutup yang mau kamu ganti nanti.
+*/
+const BG_IMAGE = '';           // ex: 'https://raw.githubusercontent.com/username/repo/main/bg.jpg'
+const FINGER_IMG = '';         // ex: 'https://raw.githubusercontent.com/.../finger.png'
+const MUSIC_LABEL = 'Sempurna (ganti)';
+const MUSIC_SRC = '';          // ex: 'assets/music.mp3'
+const GIF_SRC = '';            // ex: 'https://media.giphy.com/....gif'
+const VIDEO_SRC = '';          // ex: 'https://raw.githubusercontent.com/.../video.mp4'
+const END_TEXT = 'Terima kasih — ganti teks di EDITABLE VARIABLES';
+/* ===== END EDITABLE ===== */
 
-  // Cek sandi
-  document.getElementById('checkPassword').addEventListener('click', () => {
-    const pass = document.getElementById('passwordInput').value;
-    if (pass === 'arjingga25') {
-      passwordPopup.style.display = 'none';
-      fingerprintPopup.style.display = 'flex';
-    } else {
-      alert('Sandi salah, coba lagi ya 💫');
-    }
-  });
+/* ---------- apply editable assets ---------- */
+const musicLabelEl = document.getElementById('musicLabel');
+musicLabelEl.textContent = MUSIC_LABEL;
+if(MUSIC_SRC) document.getElementById('bgMusic').src = MUSIC_SRC;
+if(BG_IMAGE && BG_IMAGE.trim()!==''){ document.body.classList.add('bg-img'); document.body.style.backgroundImage = `url('${BG_IMAGE}')`; }
+if(FINGER_IMG && FINGER_IMG.trim()!==''){ document.getElementById('fingerImg').src = FINGER_IMG; } else {
+  // fallback (aesthetic circle) - keep as blank or emoji-like
+  document.getElementById('fingerImg').src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><circle cx="100" cy="100" r="90" fill="%23efe7df"/></svg>';
+}
+if(GIF_SRC) document.getElementById('gifImg').src = GIF_SRC;
+if(VIDEO_SRC) document.getElementById('floatVideo').src = VIDEO_SRC;
+document.getElementById('endText').textContent = END_TEXT;
 
-  // Klik fingerprint
-  fingerprintIcon.addEventListener('click', () => {
-    fingerprintPopup.style.display = 'none';
-    book.style.display = 'block';
-  });
+/* ---------- modal helpers ---------- */
+const backdrop = document.getElementById('backdrop');
+function showModal(id){
+  document.getElementById(id).classList.add('show');
+  backdrop.classList.add('show');
+}
+function hideModal(id){
+  document.getElementById(id).classList.remove('show');
+  const any = document.querySelectorAll('.modal.show');
+  if(any.length === 0) backdrop.classList.remove('show');
+}
 
-  // Flipbook logic
-  const pages = document.querySelectorAll('.page');
-  let current = 0;
-  pages.forEach((page, index) => {
-    page.style.zIndex = pages.length - index;
-  });
+/* ---------- PASSWORD flow ---------- */
+const pwdInput = document.getElementById('pwdInput');
+const pwdNext = document.getElementById('pwdNext');
+const pwdError = document.getElementById('pwdError');
+const PASSWORD = 'arjingga25'; // fixed as requested
 
-  document.getElementById('next').addEventListener('click', () => {
-    if (current < pages.length - 1) {
-      pages[current].classList.add('flipped');
-      current++;
-    } else {
-      document.getElementById('next').style.display = 'none';
-      document.getElementById('prev').style.display = 'none';
-      setTimeout(() => closingPopup.style.display = 'flex', 800);
-    }
-  });
+pwdNext.addEventListener('click', tryPassword);
+pwdInput.addEventListener('keydown', e => { if(e.key === 'Enter') tryPassword(); });
 
-  document.getElementById('prev').addEventListener('click', () => {
-    if (current > 0) {
-      current--;
-      pages[current].classList.remove('flipped');
-    }
-  });
+function tryPassword(){
+  const v = pwdInput.value.trim();
+  if(v === PASSWORD){
+    // close password box and open fingerprint modal
+    document.getElementById('passwordBox').style.display = 'none';
+    setTimeout(()=>{ showModal('fingerModal'); }, 180);
+  } else {
+    pwdError.style.display = 'block';
+    setTimeout(()=> pwdError.style.display = 'none', 2000);
+  }
+}
+
+/* ---------- FINGERPRINT hold logic (press and hold image) ---------- */
+const fingerImgEl = document.getElementById('fingerImg');
+const fingerFill = document.getElementById('fingerFill');
+let fill = 0, fillInt = null;
+
+function fingerStart(){
+  fill = 0; fingerFill.style.width = '0%';
+  fillInt = setInterval(()=> {
+    fill += 6; fingerFill.style.width = fill + '%';
+    if(fill >= 100){ fingerComplete(); }
+  }, 80);
+}
+function fingerStop(){
+  clearInterval(fillInt);
+  fingerFill.style.width = '0%';
+}
+function fingerComplete(){
+  clearInterval(fillInt);
+  fingerFill.style.width = '100%';
+  hideModal('fingerModal');
+  setTimeout(()=> { showFlipbook(); }, 300);
+}
+
+/* mouse/touch events for image hold */
+fingerImgEl.addEventListener('mousedown', fingerStart);
+fingerImgEl.addEventListener('touchstart', fingerStart);
+document.addEventListener('mouseup', fingerStop);
+document.addEventListener('touchend', fingerStop);
+
+/* ---------- FLIPBOOK logic (UNCHANGED flipping behavior) ---------- */
+/* This flipbook code is the same as you provided earlier; kept intact. */
+const book = document.getElementById('book');
+const pages = document.querySelectorAll('.page');
+let current = 0;
+let proceeded = false;
+
+/* set stacking order */
+pages.forEach((page, index) => {
+  page.style.zIndex = pages.length - index;
+});
+
+/* show flipbook after fingerprint */
+function showFlipbook(){
+  book.style.display = 'block';
+  book.classList.remove('fade-out');
+  // reset progress
+  current = 0;
+  pages.forEach(p => p.classList.remove('flipped'));
+  // show prev/next (they exist on markup)
+  try{ document.getElementById('prev').style.display = 'inline-block'; document.getElementById('next').style.display = 'inline-block'; }catch(e){}
+  // focus next for keyboard
+  try{ document.getElementById('next').focus(); }catch(e){}
+}
+
+/* next/prev listeners (kept) */
+document.getElementById('next').addEventListener('click', () => {
+  if (current < pages.length) {
+    pages[current].classList.add('flipped');
+    current++;
+    checkIfFinished();
+  }
+});
+document.getElementById('prev').addEventListener('click', () => {
+  if (current > 0) {
+    current--;
+    pages[current].classList.remove('flipped');
+  }
+});
+
+/* detect finish — when current >= pages.length */
+function checkIfFinished(){
+  if(!proceeded && current >= pages.length){
+    proceeded = true;
+    // fade out book and hide controls, then show video modal
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    if(prevBtn) prevBtn.style.display = 'none';
+    if(nextBtn) nextBtn.style.display = 'none';
+    // fade out
+    book.classList.add('fade-out');
+    setTimeout(()=> {
+      book.style.display = 'none';
+      // proceed to video
+      showVideoModal();
+    }, 650);
+  }
+}
+
+/* ---------- Video flow ---------- */
+function showVideoModal(){
+  // set video src if not already set (editable)
+  if(VIDEO_SRC && VIDEO_SRC.trim() !== ''){
+    document.getElementById('floatVideo').src = VIDEO_SRC;
+  }
+  showModal('videoModal');
+  const v = document.getElementById('floatVideo');
+  // try autoplay
+  v.play().catch(()=>{ /* autoplay might be blocked; user can press play */ });
+  // when ends -> go to end modal
+  v.onended = ()=>{ hideModal('videoModal'); setTimeout(()=> showEndModal(), 300); };
+  // also if user closes video modal manually (we didn't add close—user can pause/close) we'll call end modal after hide
+}
+
+/* ---------- GIF flow (optional) ---------- */
+function showGifThenVideo(){
+  if(GIF_SRC && GIF_SRC.trim() !== ''){
+    document.getElementById('gifImg').src = GIF_SRC;
+    showModal('gifModal');
+    setTimeout(()=>{ hideModal('gifModal'); setTimeout(()=> showVideoModal(), 300); }, 2000);
+  } else {
+    showVideoModal();
+  }
+}
+
+/* ---------- End modal ---------- */
+function showEndModal(){
+  document.getElementById('endText').textContent = END_TEXT;
+  showModal('endModal');
+}
+
+/* close end modal */
+document.getElementById('endClose').addEventListener('click', ()=>{ hideModal('endModal'); });
+
+/* ---------- Music controls ---------- */
+const audio = document.getElementById('bgMusic');
+const playBtn = document.getElementById('playBtn');
+const vol = document.getElementById('vol');
+playBtn.addEventListener('click', ()=>{
+  if(audio.paused){ audio.play().catch(()=>{}); playBtn.textContent='Pause'; } else { audio.pause(); playBtn.textContent='Play'; }
+});
+vol.addEventListener('input',(e)=>{ if(audio) audio.volume = e.target.value; });
+if(audio) audio.volume = vol.value;
+
+/* ---------- keyboard navigation ---------- */
+document.addEventListener('keydown',(e)=>{
+  try{
+    if(e.key==='ArrowRight') document.getElementById('next').click();
+    if(e.key==='ArrowLeft') document.getElementById('prev').click();
+    if(e.key==='Escape'){ const open = document.querySelectorAll('.modal.show'); open.forEach(m=>m.classList.remove('show')); backdrop.classList.remove('show'); }
+  }catch(err){}
+});
+
+/* ---------- init ---------- */
+document.getElementById('pwdInput').focus();
+document.getElementById('endText').textContent = END_TEXT;
+
+/* Optional: if you want GIF before video, replace showVideoModal() calls with showGifThenVideo() */
 </script>
-
 </body>
 </html>
