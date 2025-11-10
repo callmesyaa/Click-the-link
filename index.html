@@ -1,371 +1,89 @@
-<!DOCTYPE html>
-<html lang="id">
+<!DOCTYPE html><html lang="id">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Flipbook</title>
-
-<!-- handwriting font -->
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flipbook Cinta</title>
+<link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --cream-a:#fbf5ec;
-    --cream-b:#f3eadc;
-    --accent:#c69c71;
-    --muted:#4b3d33;
-    --popup-radius:16px;
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%;margin:0;font-family: 'Poppins', system-ui, Arial; background:linear-gradient(180deg,var(--cream-a),var(--cream-b)); color:var(--muted); -webkit-font-smoothing:antialiased;}
-  body.bg-img{ background-size:cover; background-position:center; }
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Bree Serif', serif;
+    background: url('background.jpg') no-repeat center center/cover;
+    overflow: hidden;
+  }.popup { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; }
 
-  /* backdrop for modals */
-  .backdrop{ position:fixed; inset:0; background: rgba(0,0,0,0.04); z-index: 98; display:none; opacity:0; transition:opacity .25s; }
-  .backdrop.show{ display:block; opacity:1; }
+.popup-content { background: #fff5f0; padding: 30px 40px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); text-align: center; animation: fadeInUp 0.8s ease; }
 
-  /* password box */
-  .password-box {
-    position:fixed; left:50%; top:50%; transform:translate(-50%,-50%);
-    z-index:999; width:340px; max-width:86vw; padding:22px; border-radius:14px;
-    background: linear-gradient(135deg,#f9e4c8,#f6d8b6); box-shadow:0 18px 50px rgba(0,0,0,.12); text-align:center;
-  }
-  .password-box h2{ margin:0 0 8px; font-size:18px; color:var(--muted); font-weight:600; }
-  .password-box input[type="password"]{ width:220px; padding:10px 12px; border-radius:10px; border:1px solid rgba(0,0,0,0.12); background:#fffaf5; font-size:15px; text-align:center; outline:none; }
-  .password-box .btn { margin-top:12px; background:var(--accent); color:#fff; border:none; padding:10px 16px; border-radius:10px; cursor:pointer; font-weight:700; }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* fingerprint modal */
-  .modal {
-    position: fixed; left:50%; top:50%; transform:translate(-50%,-50%); z-index:999; padding:18px; border-radius:14px;
-    background: linear-gradient(180deg,var(--cream-a),var(--cream-b)); box-shadow:0 18px 40px rgba(0,0,0,.12); text-align:center; display:none;
-  }
-  .modal.show{ display:block; }
-  .finger-area{ display:flex; flex-direction:column; align-items:center; gap:12px; }
-  #fingerImg{ width:96px; height:96px; object-fit:cover; border-radius:50%; cursor:pointer; background:#efe7df; display:block; }
-  .finger-progress{ width:90px; height:8px; background:rgba(0,0,0,.06); border-radius:20px; overflow:hidden; }
-  .finger-progress>i{ display:block; height:100%; width:0%; background:linear-gradient(90deg,#d2ad88,#b78c6b); transition:width .06s linear; }
+.love-button { width: 70px; height: 70px; background: none; border: none; cursor: pointer; animation: pulse 2s infinite; }
 
-  /* overlay stage for balloons + flipbook */
-  #overlayStage { position: fixed; inset:0; z-index:50; pointer-events:none; display:flex; align-items:center; justify-content:center; }
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
 
-  .balloon { position:absolute; bottom:-160px; pointer-events:none; opacity:0.95; z-index:40; filter: drop-shadow(0 8px 16px rgba(0,0,0,.08)); }
-  .balloon.x1{ left:6%; width:96px; animation:rise 18s linear infinite; animation-delay:0s; }
-  .balloon.x2{ left:22%; width:84px; animation:rise 16s linear infinite; animation-delay:1s; }
-  .balloon.x3{ left:38%; width:110px; animation:rise 20s linear infinite; animation-delay:2s; }
-  .balloon.x4{ left:56%; width:92px; animation:rise 17s linear infinite; animation-delay:.6s; }
-  .balloon.x5{ left:78%; width:100px; animation:rise 19s linear infinite; animation-delay:1.4s; }
-  @keyframes rise{0%{transform:translateY(0) rotate(-6deg)}100%{transform:translateY(-140vh) rotate(10deg)}}
+.flipbook { display: none; position: relative; z-index: 5; }
 
-  /* flipbook */
-  .book { width: 340px; height: 460px; position: relative; perspective: 1500px; pointer-events:auto; margin:0 auto; display:none; z-index:60; }
-  .page {
-    width:100%; height:100%; background:#fffaf5; color:var(--muted); border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.08);
-    position:absolute; top:0; left:0; transform-origin:left; transition: transform 1s, z-index .5s; backface-visibility:hidden;
-    padding:28px; box-sizing:border-box; z-index:10; overflow:auto;
-  }
-  .page.flipped{ transform: rotateY(-180deg); z-index:0; }
+.page { width: 80%; max-width: 500px; margin: 60px auto; background: rgba(255,255,255,0.9); border-radius: 15px; padding: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); text-align: justify; animation: fadeIn 1s ease; }
 
-  /* cover */
-  .page .cover { font-family: 'Poppins', cursive; font-size:200px; text-align:center; margin-top:20%; color:#5a3f2f; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-  /* diary text style */
-  .page .text p {
-    font-family: 'Poppins', cursive;
-    font-size:50px;
-    line-height:1.6;
-    color:#4b3d33;
-    margin:0 0 14px 0;
-    white-space:pre-wrap;
-  }
-  /* hide original h2 if accidentally present */
-  .page h2 { display:none; }
+.cover { text-align: center; font-size: 36px; font-weight: bold; letter-spacing: 2px; margin-top: 40%; }
 
-  /* prev/next */
-  #prev, #next { position:absolute; bottom:-64px; background:var(--accent); color:white; border:none; padding:10px 20px; border-radius:10px; cursor:pointer; font-size:14px; z-index:70; }
-  #prev{ left:0 } #next{ right:0 }
+.balloons { position: fixed; bottom: -100px; width: 100%; height: 100%; z-index: 1; overflow: hidden; pointer-events: none; }
 
-  /* end modal */
-  .end-modal { position: fixed; left:50%; top:50%; transform:translate(-50%,-50%); z-index:999; padding:22px; border-radius:14px; background:linear-gradient(180deg,var(--cream-a),var(--cream-b)); box-shadow:0 20px 60px rgba(0,0,0,.12); display:none; max-width:86vw; }
-  .end-modal.show{ display:block; text-align:center; }
-  .end-modal .btn { margin-top:14px; background:var(--accent); color:#fff; padding:10px 16px; border-radius:10px; border:none; cursor:pointer; }
+.balloon { position: absolute; bottom: 0; width: 50px; height: 70px; background: url('balloon.png') no-repeat center/contain; animation: floatUp 10s linear infinite; }
 
-  /* music control */
-  .music{ position:fixed; left:14px; bottom:14px; z-index:999; background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(250,245,238,0.96)); padding:10px 14px; border-radius:14px; box-shadow:0 12px 36px rgba(0,0,0,0.12); display:flex; gap:10px; align-items:center; pointer-events:auto;}
-  .music input[type=range]{ width:140px; }
+@keyframes floatUp { 0% { transform: translateY(100vh) scale(1); opacity: 1; } 100% { transform: translateY(-110vh) scale(1.1); opacity: 0; } }
 
-  @media (max-width:900px){
-    .book{ width:86vw; height:56vh }
-    .page .text p{ font-size:16px }
-    .page .cover{ font-size:28px }
-  }
-</style>
+.final-popup { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; flex-direction: column; animation: fadeInUp 1s ease; } </style>
+
 </head>
-<body>
-
-<div id="backdrop" class="backdrop"></div>
-
-<!-- Password -->
-<div class="password-box" id="passwordBox" aria-modal="true">
-  <h2>Masukkan sandi 💌</h2>
-  <input id="pwdInput" type="password" placeholder="Masukkan sandi">
-  <div style="margin-top:12px"><button id="pwdNext" class="btn">Lanjut</button></div>
-  <div id="pwdError" style="display:none;color:#d04b4b;margin-top:8px">Kata sandi salah</div>
-</div>
-
-<!-- Fingerprint modal -->
-<div id="fingerModal" class="modal" role="dialog" aria-modal="true">
-  <h3>Verifikasi Sidik Jari</h3>
-  <p>Tahan sidik jari beberapa detik untuk melanjutkan</p>
-  <div class="finger-area">
-    <img id="fingerImg" src="" alt="fingerprint">
-    <div class="finger-progress"><i id="fingerFill"></i></div>
+<body><div class="popup" id="fingerPopup">
+  <div class="popup-content">
+    <h2>Tempelkan jari cintamu 💕</h2>
+    <button class="love-button" onclick="startFingerprint()">
+      ❤️
+    </button>
   </div>
-</div>
-
-<!-- overlay: balloons + flipbook -->
-<div id="overlayStage" aria-hidden="false">
-  <!-- balloons -->
-  <img id="bal1" class="balloon x1" src="" alt="bal1">
-  <img id="bal2" class="balloon x2" src="" alt="bal2">
-  <img id="bal3" class="balloon x3" src="" alt="bal3">
-  <img id="bal4" class="balloon x4" src="" alt="bal4">
-  <img id="bal5" class="balloon x5" src="" alt="bal5">
-
-  <!-- FLIPBOOK (cover + all text split into 9 pages) -->
-  <div class="book" id="book" aria-hidden="true">
-    <!-- cover -->
-    <div class="page">
-      <div class="cover">FLIPBOOK</div>
-    </div>
-
-    <!-- Page 2 -->
-    <div class="page">
-      <div class="text">
-        <p>Hbd Nggaaaa, maaf yoo aku cuma iso ngekeki ikii, aku ga ngerti op nk mo senengii aku yo bingung pe ngekeki opoo, waktune brg mepeett, aku gawe link iki yoo gawe coding an smpe 2 bulanan aku sebenere drg diwarai coding nk TKJ yo cuma sekilas, ddi aku belajar dewe ddi spurane nk rondok rajelas link e, mugo2 awmu senengg yooo... Aku ngekeki hoodie iki yo mergo awmu kann sering omong akuu nk awamu sering hanyeben dadii aku ngekekii hoodie ikii gawe awmuu oh nk mungkin awmu ws duwe hoodie liyo toh misale iki mirip karo nggonmu sepurane tp vibes e jelas bedaa kan dari akuuu kannn😋</p>
-      </div>
-    </div>
-
-    <!-- Page 3 -->
-    <div class="page">
-      <div class="text">
-        <p>Gawe awmuuu semangatt yooo aku bingung kuduu omong op neh intinee doaa terbaik gawe awmuu apapun iku sg mo semogakan semoga tersemogakan terus gausah mikir sg aneh2 ttg hal apapun iku, dan maaff nk akuu gaisoo ky cah2 ngonoku ngekekno langsung nk awmuu selain aku paham posisimuu sering lembur jugaa, aku pun juga kerja dadi aku drg ono waktuu, tapi next timee nk kene iso ketemu aee yaaa disaat aku dan awamu ws ono nk versi terbaik masing2...</p>
-      </div>
-    </div>
-
-    <!-- Page 4 -->
-    <div class="page">
-      <div class="text">
-        <p>Jujurr aku ga ngertii saikii opo rosomu iku isih podo to gaa ky akuu tapii nk misalee awmu ws seneng wong liyo aku yo gaopoo dan aku minta maaf soal iki kabeh yoo soale aku ga ngertii (tp nk pancen iyo omng ae yo?? Mbeno ak ga ngenee trs), tp nk rosomu iku isih podoo ky akuu, aku seneng... Aku ngerti mungkin awmu drg pe mikirno sejauh iku, aku pun podo... Tp nk soall awmu takon aku iso ngenteni awmu smpe awmu bar mbe proses mu to gaa, aku isoo, iso poll malah dadi tenang aeee gausa mikir aku bakal mblenjani janjiku.</p>
-      </div>
-    </div>
-
-    <!-- Page 5 -->
-    <div class="page">
-      <div class="text">
-        <p>Nk awmu isih kurang yakinn ambe aku, awmu laa nk omhku wng tuwoku mbe adekku takoni aee, aku ws crito kbh ttg awmu, jujurr... Aku tipikal wng sg ga gampangg crito karo wong tuwo nk soal atiku selama ikii aku ga permah crito ttg atiku selalu tk pendem tp nk aku ws kadung crito mesti awmu ngerti mksdte... Soal aan? Wng tuwoku eroh mergo dkne njarak nk omhku iku aee dn jujur iku aku gaono roso sg podo mbe dkne, dadi wss yooo ojo ndarani aku piee pieee plisss nk awmu ragu mbe ak trs p smpe kapan?</p>
-      </div>
-    </div>
-
-    <!-- Page 6 -->
-    <div class="page">
-      <div class="text">
-        <p>Aku yoo minta maaf nk akuu gaiso ky sg mo karepnoo, aku sejee ga ky cah wedok liyo, ak sejee ky cah sg mo senengi biyen, awal aku eroh nk awmu y seneng mbe akuu, jujur ak seneng poll, ket kls X pas awall soal mslh ainur jujur akuu wss ono roso nk awmu tp ak meneng aee pas awmu ngirim puisi tk kiro iku nggo aku trs sediluk pesanmu "iki kirimno ainur" gasido seneng aku wkwk aku kirim nk ainur y tanpa rasa wedi rasa apapun iku aku ngetoki seolah ak ky seneng pdhl ws ogak cuma perkoro aku isin ngetokno rosoku nk awmu iku ae mergo aku wedok dan saat kui awmu omng nk ws seneng bch aku gaiso opo2.</p>
-      </div>
-    </div>
-
-    <!-- Page 7 -->
-    <div class="page">
-      <div class="text">
-        <p>Sampai dititik awmu pada saat iku omong nk kenee mending gausa hubungan neh dalam hal apapun jujur aku y sempat rondok loro ati sitik dan hari iku jugaa aku smpat nangis + gk mood lapo2 smpe sesok e nk sklh (dan nada eroh soal iki) trs waktu aku isek magangg akuu berusahaa memberanikan dirii ngechat awmu nehh, dan berusaha mbalekno suasana biyen iku nh masyo ws akeh sg bedaa... Trs waktu awmu omng nk isek seneng ch iku sg mo senengi biyen ak ngroso kyo ahh yowes ws gaono harapan aku berusaha mundur ngilangi rosoku dewe.</p>
-      </div>
-    </div>
-
-    <!-- Page 8 -->
-    <div class="page">
-      <div class="text">
-        <p>Waktu awmuu omong nk IG jujur nratap dikitt waktu awmu omng awmu seneng ch stm, maaff yo bukane opo2 tp tak kiro ch stm sg mo senengi iku aini😭 maaf loo soalee awmu kan pernah foto mbe dkne pas enduro ikuu dan waktu dkne komen mo balesii, sedangkann pass ono kancamu komen ttg akuu awmu hapus... Aku gaa ngiro nk awmu bakal seneng akuu... Aku seneng... Tp ak juga bingung, raguu yoo awmu ngerti lah wng ky akuu iso disenengi wng ky awmu iku hal mustahil (menurutku).</p>
-      </div>
-    </div>
-
-    <!-- Page 9 -->
-    <div class="page">
-      <div class="text">
-        <p>Aku ga sepinter awmu, ga bakatt op2, aku yo ga ayuu, mblarah lah dll, sifatku yo ky cah cilik ddi aku cukup kaget ae si, ky se suwe ikuu aku ngenteni awmu akhire ono titik balik ky mudeng gasi rasane anehh... Jujur soal ikii aku ga ngerti kudu nyebut iki opo, tp mboh lh bingung. Nk awmu mikirr aku bakal nompoo ch liyo sk lianee awmuu pas awmu isih berproses karo karirmu, uripmu dan valuemu sepuranee awmu salah poll.</p>
-      </div>
-    </div>
-
-    <!-- Page 10 -->
-    <div class="page">
-      <div class="text">
-        <p>Akuuu ga se friendly ikuu... Aku g kyo cah sg bosen sitik ninggalno bch trs genti anyar ogakkk aku yo isih berproses podo ky awmu, aku gilaa tapi ga gila cah lanang sepuranee gila ku ki gilaa duwek mbe gila skincare ddi nk awmu mikir ak bakal ngeliyo? Iyo aku ngeliyo mbe duwek karo skincare sak liane ikuu bch sg nyedaki akuu y tak kon omng ae nk awmu dewe dkne karepe p piee aku nk ga awmu moh og pie noo?</p>
-
-        <p>Wsss intinee ikuuuu ae sii hbd yo sekali lagiii, semangatt menjalani prosesmuuu... Sayaangg??!</p>
-      </div>
-    </div>
-
-    <!-- controls -->
-    <button id="prev">Prev</button>
-    <button id="next">Next</button>
+</div><div class="flipbook" id="flipbook">
+  <div class="page cover">FLIPBOOK</div>
+  <div class="page">Hbd 20th Nggaaaa, maaf yoo aku cuma iso ngekeki ikii...</div>
+  <div class="page">Gawe awmuuu semangatt yooo aku bingung kuduu omong op neh...</div>
+  <div class="page">Tp nk misale rosomu iku isih podoo ky akuu...</div>
+  <div class="page">Dan soal aan? Wng tuwoku eroh mergo dkne njarak nk omhku iku aee...</div>
+  <div class="page">Awal aku eroh nk awmu y seneng mbe akuu...</div>
+  <div class="page">Trs waktu aku isek magangg akuu berusahaa memberanikan dirii...</div>
+  <div class="page">Aku ga sepinter awmu, ga bakatt op2, aku yo ga ayuu...</div>
+  <div class="page">Tak akoni aku friendly tapi ga friendly mbe cah lanang...</div>
+  <div class="page">Yoo Wss intinee ikuuuu ae sii hbd yo sekali lagiii...</div>
+</div><div class="final-popup" id="finalPopup">
+  <div class="popup-content">
+    <h2 id="finalText">Terima kasih sudah membaca 💖</h2>
   </div>
-</div>
+</div><div class="balloons" id="balloons"></div><script>
+function startFingerprint() {
+  const popup = document.getElementById('fingerPopup');
+  popup.innerHTML = '<div class="popup-content"><h2>Memproses... ❤️</h2></div>';
+  setTimeout(() => {
+    popup.style.display = 'none';
+    document.getElementById('flipbook').style.display = 'block';
+    spawnBalloons();
+  }, 5000);
+}
 
-<!-- end modal -->
-<div id="endModal" class="end-modal" role="dialog" aria-modal="true">
-  <div id="endTextArea" style="white-space:pre-wrap; text-align:left; color:#4b3d33;"></div>
-  <div style="text-align:center;"><button id="endClose" class="btn">Tutup</button></div>
-</div>
-
-<!-- music control -->
-<div class="music" style="pointer-events:auto;">
-  <button id="playBtn" class="btn">Play</button>
-  <div style="font-size:14px; margin-left:6px">Music: <span id="musicLabel">[ganti di script]</span></div>
-  <input id="vol" type="range" min="0" max="1" step="0.01" value="0.6">
-  <audio id="bgMusic" loop preload="auto" src=""></audio>
-</div>
-
-<script>
-/* ========== EDITABLE VARIABLES ========== */
-const BG_IMAGE = ''; // contoh: 'https://raw.githubusercontent.com/username/repo/main/bg.jpg'
-const BALLOON_1 = '';
-const BALLOON_2 = '';
-const BALLOON_3 = '';
-const BALLOON_4 = '';
-const BALLOON_5 = '';
-const FINGER_IMG = ''; // contoh: 'https://raw.githubusercontent.com/.../finger.png'
-const MUSIC_LABEL = 'Sempurna (ganti)';
-const MUSIC_SRC = '';
-const END_TEXT = 'Hoodienya jangan lupa dipakee yaaa';
-/* ===== END ===== */
-
-/* apply editable assets */
-if(BG_IMAGE && BG_IMAGE.trim()!==''){ document.body.classList.add('bg-img'); document.body.style.backgroundImage = `url('${BG_IMAGE}')`; }
-
-const setOrFallback = (id, fallbackSVG) => {
-  const el = document.getElementById(id);
-  if(!el) return;
-  const val = (typeof window[id.toUpperCase()] !== 'undefined') ? window[id.toUpperCase()] : '';
-  if(val && val.trim()!=='') el.src = val;
-  else el.src = fallbackSVG;
-};
-
-/* set balloons */
-setOrFallback('bal1', "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='300'><ellipse rx='60' ry='80' cx='100' cy='120' fill='%23ff8a80'/></svg>");
-setOrFallback('bal2', "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='300'><ellipse rx='52' ry='72' cx='100' cy='120' fill='%23ffd180'/></svg>");
-setOrFallback('bal3', "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='300'><ellipse rx='66' ry='86' cx='100' cy='120' fill='%2397c5fe'/></svg>");
-setOrFallback('bal4', "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='300'><ellipse rx='58' ry='78' cx='100' cy='120' fill='%23c5e1a5'/></svg>");
-setOrFallback('bal5', "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='300'><ellipse rx='60' ry='80' cx='100' cy='120' fill='%23f8bbd0'/></svg>");
-
-/* fingerprint image */
-if(FINGER_IMG && FINGER_IMG.trim()!=='') document.getElementById('fingerImg').src = FINGER_IMG;
-else document.getElementById('fingerImg').src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><circle cx='100' cy='100' r='90' fill='%23efe7df'/></svg>";
-
-/* music */
-document.getElementById('musicLabel').textContent = MUSIC_LABEL;
-if(MUSIC_SRC) document.getElementById('bgMusic').src = MUSIC_SRC;
-
-/* ========== flow logic ========== */
-
-/* password */
-const PASSWORD = 'arjingga25';
-const pwdInput = document.getElementById('pwdInput');
-const pwdNext = document.getElementById('pwdNext');
-const pwdError = document.getElementById('pwdError');
-
-pwdNext.addEventListener('click', tryPassword);
-pwdInput.addEventListener('keydown', e => { if(e.key==='Enter') tryPassword(); });
-
-function tryPassword(){
-  const v = pwdInput.value.trim();
-  if(v === PASSWORD){
-    document.getElementById('passwordBox').style.display = 'none';
-    setTimeout(()=> { document.getElementById('fingerModal').classList.add('show'); document.getElementById('backdrop').classList.add('show'); }, 160);
-  } else {
-    pwdError.style.display = 'block';
-    setTimeout(()=> pwdError.style.display = 'none', 2000);
+function spawnBalloons() {
+  const container = document.getElementById('balloons');
+  for (let i = 0; i < 15; i++) {
+    const balloon = document.createElement('div');
+    balloon.classList.add('balloon');
+    balloon.style.left = Math.random() * 100 + 'vw';
+    balloon.style.animationDelay = Math.random() * 5 + 's';
+    container.appendChild(balloon);
   }
 }
 
-/* fingerprint hold */
-const fingerImgEl = document.getElementById('fingerImg');
-const fingerFill = document.getElementById('fingerFill');
-let fill = 0, fillInt = null;
-function fingerStart(){ fill = 0; fingerFill.style.width='0%'; fillInt = setInterval(()=>{ fill += 6; fingerFill.style.width = fill+'%'; if(fill>=100) fingerComplete(); }, 80); }
-function fingerStop(){ clearInterval(fillInt); fingerFill.style.width='0%'; }
-function fingerComplete(){ clearInterval(fillInt); fingerFill.style.width='100%'; document.getElementById('fingerModal').classList.remove('show'); document.getElementById('backdrop').classList.remove('show'); setTimeout(()=> showFlipbook(), 300); }
-fingerImgEl.addEventListener('mousedown', fingerStart); fingerImgEl.addEventListener('touchstart', fingerStart);
-document.addEventListener('mouseup', fingerStop); document.addEventListener('touchend', fingerStop);
-
-/* flipbook behavior */
-const book = document.getElementById('book');
-const pages = document.querySelectorAll('.page');
-let current = 0;
-let proceeded = false;
-pages.forEach((page, index) => page.style.zIndex = pages.length - index);
-
-function showFlipbook(){
-  book.style.display = 'block';
-  book.classList.remove('fade-out');
-  // reset
-  current = 0; proceeded = false;
-  pages.forEach(p => p.classList.remove('flipped'));
-  document.getElementById('prev').style.display = 'inline-block';
-  document.getElementById('next').style.display = 'inline-block';
-  document.getElementById('next').focus();
-}
-
-/* next/prev */
-document.getElementById('next').addEventListener('click', () => {
-  if(current < pages.length){
-    pages[current].classList.add('flipped');
-    current++;
-    checkIfFinished();
-  }
-});
-document.getElementById('prev').addEventListener('click', () => {
-  if(current > 0){
-    current--;
-    pages[current].classList.remove('flipped');
-    document.getElementById('next').style.display = 'inline-block';
-  }
-});
-
-/* finished -> end modal (video removed) */
-function checkIfFinished(){
-  if(!proceeded && current >= pages.length){
-    proceeded = true;
-    // hide controls
-    const prevBtn = document.getElementById('prev'), nextBtn = document.getElementById('next');
-    if(prevBtn) prevBtn.style.display = 'none';
-    if(nextBtn) nextBtn.style.display = 'none';
-    // fade out book then show end modal
-    book.classList.add('fade-out');
-    setTimeout(()=> { book.style.display = 'none'; showEndModal(); }, 650);
-  }
-}
-
-/* end modal */
-function showEndModal(){
-  const endText = typeof END_TEXT !== 'undefined' ? END_TEXT : 'Terima kasih';
-  document.getElementById('endTextArea').textContent = endText;
-  document.getElementById('endModal').classList.add('show');
-  document.getElementById('backdrop').classList.add('show');
-}
-
-/* close end */
-document.getElementById('endClose').addEventListener('click', ()=>{ document.getElementById('endModal').classList.remove('show'); document.getElementById('backdrop').classList.remove('show'); });
-
-/* music */
-const audio = document.getElementById('bgMusic'), playBtn = document.getElementById('playBtn'), vol = document.getElementById('vol');
-playBtn.addEventListener('click', ()=>{ if(audio.paused){ audio.play().catch(()=>{}); playBtn.textContent='Pause'; } else { audio.pause(); playBtn.textContent='Play'; }});
-vol.addEventListener('input', e=>{ if(audio) audio.volume = e.target.value; });
-if(audio) audio.volume = vol.value;
-
-/* keyboard nav */
-document.addEventListener('keydown', (e)=>{ try{ if(e.key==='ArrowRight') document.getElementById('next').click(); if(e.key==='ArrowLeft') document.getElementById('prev').click(); if(e.key==='Escape'){ document.querySelectorAll('.modal.show').forEach(m=>m.classList.remove('show')); document.getElementById('backdrop').classList.remove('show'); } }catch(err){} });
-
-/* init */
-document.getElementById('pwdInput').focus();
-document.getElementById('endTextArea').textContent = END_TEXT;
-</script>
-</body>
+// Contoh format file background & balon yang bisa kamu ganti:
+// background: ganti nama file 'background.jpg'
+// balon: ganti nama file 'balloon.png'
+</script></body>
 </html>
